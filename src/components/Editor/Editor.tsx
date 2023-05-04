@@ -3,6 +3,8 @@ import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { useState } from 'react';
 import cl from './Editor.module.css';
+// import { graphql } from 'codemirror-graphql/cm6-legacy/mode';
+import { graphql } from 'cm6-graphql';
 
 export const Editor = () => {
   const [response, setResponse] = useState('');
@@ -58,7 +60,9 @@ export const Editor = () => {
               height="200px"
               theme={'light'}
               autoFocus={true}
-              extensions={[javascript({ jsx: true })]}
+              //TODO pass api schema to graphql()
+              extensions={[graphql()]}
+              // extensions={[javascript({ jsx: true })]}
               onChange={(value) => {
                 setQuery(value);
               }}
