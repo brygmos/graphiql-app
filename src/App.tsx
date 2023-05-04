@@ -1,10 +1,10 @@
 import './App.css';
-import Editor from './components/Editor/Editor';
+import EditorPage from './pages/EditorPage';
 
 function App() {
   return (
     <div className="App">
-      <Editor />
+      <EditorPage />
     </div>
   );
 }

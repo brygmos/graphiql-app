@@ -77,9 +77,6 @@ export const Editor = () => {
               placeholder="here will be api response"
               theme={'light'}
               extensions={[javascript({ jsx: true })]}
-              // onChange={(value, viewUpdate) => {
-              //   setQuery(value);
-              // }}
             />
           </div>
         </div>
