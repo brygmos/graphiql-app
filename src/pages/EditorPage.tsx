@@ -1,4 +1,5 @@
 import Editor from '../components/Editor/Editor';
+import { redirect } from 'react-router-dom';
 
 function EditorPage() {
   return (
