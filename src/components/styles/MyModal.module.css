@@ -16,9 +16,10 @@
     max-width: 90%;
     max-height: 90%;
     padding: 20px;
-    border-radius: 30px;
-    background-color: #161616;
-    color: white;
+    border-radius: 10px;
+    /*background-color: #161616;*/
+    background-color: cornflowerblue;
+    color: black;
 
 }
 

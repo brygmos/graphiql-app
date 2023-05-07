@@ -48,7 +48,7 @@ export const Editor = () => {
   }
 
   const showModal = () => {
-    setModal(true, 'Variables Editor', ImodalTextType.neutral);
+    setModal(true, 'Here will be introspection schema fetch', ImodalTextType.neutral);
   };
 
   const fetchUserData = () => {
@@ -78,18 +78,58 @@ export const Editor = () => {
           visible={modalVisibility}
           modalText={modalText}
           messageType={modalTextType}
+          style={{ textAlign: 'left' }}
           setModalVisibility={() => {
             setModalVisibility(false);
           }}
         >
-          <span>page</span>
-          <input type="number" />
+          <CodeMirror
+            value={
+              'query IntrospectionQuery {\n' +
+              '    __schema {\n' +
+              '        queryType {\n' +
+              '            name\n' +
+              '        }\n' +
+              '        types {\n' +
+              '            name\n' +
+              '            kind\n' +
+              '            description\n' +
+              '            fields {\n' +
+              '                name\n' +
+              '                description\n' +
+              '                args {\n' +
+              '                    name\n' +
+              '                    description\n' +
+              '                    type {\n' +
+              '                        name\n' +
+              '                        kind\n' +
+              '                        ofType {\n' +
+              '                            name\n' +
+              '                            kind\n' +
+              '                        }\n' +
+              '                    }\n' +
+              '                }\n' +
+              '            }\n' +
+              '        }\n' +
+              '    }\n' +
+              '}'
+            }
+            // width={'50%'}
+            theme={theme}
+            autoFocus={true}
+            //TODO pass api schema to graphql()
+            extensions={[graphql()]}
+            // extensions={[javascript({ jsx: true })]}
+            onChange={(value) => {
+              setQuery(value);
+            }}
+          />
         </MyModal>
       )}
       <div className={cl.container}>
         <div className={cl.container__left}>
           <div className={cl.editor}>
-            <label style={{ color: 'white' }}>Enter your query:</label>
+            <label style={{ color: 'white' }}>Query Editor:</label>
             <CodeMirror
               value={query}
               height="200px"
@@ -102,6 +142,19 @@ export const Editor = () => {
                 setQuery(value);
               }}
             />
+            <label style={{ color: 'white' }}>Variables Editor:</label>
+            <CodeMirror
+              value={'{\n\t"page": 1\n}'}
+              height="200px"
+              theme={theme}
+              autoFocus={true}
+              extensions={[graphql()]}
+              // extensions={[javascript({ jsx: true })]}
+              onChange={(value) => {
+                setQuery(value);
+              }}
+            />
+            <br />
             <button onClick={handleClick}>SEND</button>
             <button
               onClick={() => {
@@ -115,7 +168,7 @@ export const Editor = () => {
                 showModal();
               }}
             >
-              edit vars
+              show schema
             </button>
           </div>
         </div>

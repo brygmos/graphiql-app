@@ -7,6 +7,7 @@ type Props = {
   setModalVisibility: () => void;
   children?: React.ReactNode;
   messageType?: string;
+  style?: React.CSSProperties;
 };
 
 const MyModal: FC<Props> = ({
@@ -15,9 +16,11 @@ const MyModal: FC<Props> = ({
   children,
   modalText,
   messageType = 'neutral',
+  style,
 }) => {
   return (
     <div
+      style={style}
       onClick={() => {
         setModalVisibility();
       }}
