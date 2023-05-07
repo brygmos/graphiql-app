@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { useState } from 'react';
 import cl from './Editor.module.css';
-// import { graphql } from 'codemirror-graphql/cm6-legacy/mode';
 import { graphql } from 'cm6-graphql';
+import { ImodalTextType } from '../../types/ImodalTextType';
+import MyModal from '../MyModal';
 
 export const Editor = () => {
   const [response, setResponse] = useState('');
+  const [theme, setTheme] = useState<'dark' | 'light'>('light');
+  const [modalVisibility, setModalVisibility] = useState(false);
+  const [modalText, setModalText] = useState('');
+  const [modalTextType, setModalTextType] = useState(ImodalTextType.neutral);
   const [query, setQuery] = useState(
     'query AllCharacters {\n' +
       '  characters {\n' +
@@ -18,6 +23,13 @@ export const Editor = () => {
       '}'
   );
 
+  const prefersDarkMode =
+    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  useEffect(() => {
+    prefersDarkMode ? setTheme('dark') : setTheme('light');
+  }, [prefersDarkMode]);
+
   const extractQueryName = (query: string) => {
     const text = query;
     const regex = /query\s+(\w+)/;
@@ -27,6 +39,16 @@ export const Editor = () => {
     } else {
       return 'query name not found';
     }
+  };
+
+  function setModal(visible: boolean, text: string, type: ImodalTextType) {
+    setModalVisibility(visible);
+    setModalText(text);
+    setModalTextType(type);
+  }
+
+  const showModal = () => {
+    setModal(true, 'Variables Editor', ImodalTextType.neutral);
   };
 
   const fetchUserData = () => {
@@ -51,6 +73,19 @@ export const Editor = () => {
 
   return (
     <>
+      {modalVisibility && (
+        <MyModal
+          visible={modalVisibility}
+          modalText={modalText}
+          messageType={modalTextType}
+          setModalVisibility={() => {
+            setModalVisibility(false);
+          }}
+        >
+          <span>page</span>
+          <input type="number" />
+        </MyModal>
+      )}
       <div className={cl.container}>
         <div className={cl.container__left}>
           <div className={cl.editor}>
@@ -58,7 +93,7 @@ export const Editor = () => {
             <CodeMirror
               value={query}
               height="200px"
-              theme={'light'}
+              theme={theme}
               autoFocus={true}
               //TODO pass api schema to graphql()
               extensions={[graphql()]}
@@ -68,6 +103,20 @@ export const Editor = () => {
               }}
             />
             <button onClick={handleClick}>SEND</button>
+            <button
+              onClick={() => {
+                theme == 'dark' ? setTheme('light') : setTheme('dark');
+              }}
+            >
+              change theme
+            </button>
+            <button
+              onClick={() => {
+                showModal();
+              }}
+            >
+              edit vars
+            </button>
           </div>
         </div>
         <div className={cl.container__right}>
@@ -76,10 +125,9 @@ export const Editor = () => {
               basicSetup={{ lineNumbers: false }}
               value={JSON.stringify(response, null, 2)}
               height="400px"
+              theme={theme}
               readOnly={true}
-              style={{ overflowY: 'scroll' }}
               placeholder="here will be api response"
-              theme={'light'}
               extensions={[javascript({ jsx: true })]}
             />
           </div>
