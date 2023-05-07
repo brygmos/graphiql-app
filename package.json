@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@codemirror/lang-javascript": "6.0.1",
+    "@codemirror/lang-json": "^6.0.1",
     "@types/codemirror": "^5.60.7",
     "@uiw/react-codemirror": "4.10.4",
     "cm6-graphql": "^0.0.5",

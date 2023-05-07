@@ -1,16 +1,16 @@
 import React, { FC } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-// import { javascript } from '@codemirror/lang-javascript';
 import { useState } from 'react';
 import { graphql } from 'cm6-graphql';
 import { ThemeType } from '../../types/ThemeType';
 
 type Props = {
   theme?: ThemeType;
+  setQuery?: (arg0: string) => void;
 };
 
-export const QueryEditor: FC<Props> = ({ theme }) => {
-  const [query, setQuery] = useState(
+export const QueryEditor: FC<Props> = ({ theme, setQuery }) => {
+  const [query, setQQQuery] = useState(
     'query AllCharacters {\n' +
       '  characters {\n' +
       '    results {\n' +
@@ -19,6 +19,10 @@ export const QueryEditor: FC<Props> = ({ theme }) => {
       '  }\n' +
       '}'
   );
+
+  const passToParent = () => {
+    setQuery && setQuery(query);
+  };
 
   const extractQueryName = (query: string) => {
     const text = query;
@@ -32,7 +36,11 @@ export const QueryEditor: FC<Props> = ({ theme }) => {
   };
 
   return (
-    <>
+    <div
+      onBlur={() => {
+        passToParent();
+      }}
+    >
       <label style={{ color: 'white' }}>Query editor:</label>
       <CodeMirror
         value={query}
@@ -43,10 +51,11 @@ export const QueryEditor: FC<Props> = ({ theme }) => {
         extensions={[graphql()]}
         // extensions={[javascript({ jsx: true })]}
         onChange={(value) => {
-          setQuery(value);
+          setQQQuery(value);
+          setQuery && setQuery(value);
         }}
       />
-    </>
+    </div>
   );
 };
 

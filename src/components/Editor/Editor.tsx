@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
 import cl from './Editor.module.css';
 import { graphql } from 'cm6-graphql';
 import { ImodalTextType } from '../../types/ImodalTextType';
@@ -8,10 +7,12 @@ import MyModal from '../MyModal';
 import VarsEditor from '../VarsEditor/VarsEditor';
 import QueryEditor from '../QueryEditor/QueryEditor';
 import { ThemeType } from '../../types/ThemeType';
+import { json } from '@codemirror/lang-json';
 
 export const Editor = () => {
   const [response, setResponse] = useState('');
   const [theme, setTheme] = useState(ThemeType.light);
+  const [responseError, setResponseError] = useState(null);
   const [modalVisibility, setModalVisibility] = useState(false);
   const [modalText, setModalText] = useState('');
   const [modalTextType, setModalTextType] = useState(ImodalTextType.neutral);
@@ -66,6 +67,7 @@ export const Editor = () => {
       })
       .then((data) => {
         setResponse(data);
+        data.errors && setResponseError(data.errors[0].message);
       });
   };
 
@@ -132,14 +134,19 @@ export const Editor = () => {
       <div className={cl.container}>
         <div className={cl.container__left}>
           <div className={cl.editor}>
-            <QueryEditor theme={theme} />
+            <QueryEditor
+              setQuery={(q) => {
+                setQuery(q);
+              }}
+              theme={theme}
+            />
             <VarsEditor theme={theme} />
             <br />
             <button
               style={{ backgroundColor: '#01e001', color: 'white' }}
               onClick={handleSendClick}
             >
-              SEND
+              send
             </button>
             <button
               onClick={() => {
@@ -160,6 +167,7 @@ export const Editor = () => {
         <div className={cl.container__right}>
           <div className={cl.response}>
             <label style={{ color: 'white' }}>Server response:</label>
+            {responseError && <span>{responseError}</span>}
             <CodeMirror
               basicSetup={{ lineNumbers: false }}
               value={JSON.stringify(response, null, 2)}
@@ -167,7 +175,7 @@ export const Editor = () => {
               theme={theme}
               readOnly={true}
               placeholder="here will be api response"
-              extensions={[javascript({ jsx: true })]}
+              extensions={[json()]}
             />
           </div>
         </div>

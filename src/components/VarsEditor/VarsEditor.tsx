@@ -1,8 +1,8 @@
 import React, { FC, useEffect } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { useState } from 'react';
-import { graphql } from 'cm6-graphql';
 import { ThemeType } from '../../types/ThemeType';
+import { json } from '@codemirror/lang-json';
 
 type Props = {
   theme?: ThemeType;
@@ -36,14 +36,14 @@ export const VarsEditor: FC<Props> = ({ theme }) => {
         handleParse();
       }}
     >
-      {parsedVars && <pre>{JSON.stringify(parsedVars, null, 2)}</pre>}
+      {/*{parsedVars && <pre>{JSON.stringify(parsedVars, null, 2)}</pre>}*/}
       <label style={{ color: 'white' }}>Variables editor:</label>
       {parseError && <span style={{ color: 'brown' }}> {parseError}</span>}
       <CodeMirror
         value={vars}
         height="200px"
         theme={theme}
-        extensions={[graphql()]}
+        extensions={[json()]}
         // extensions={[javascript({ jsx: true })]}
         onChange={(vars) => {
           setVars(vars);
