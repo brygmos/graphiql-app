@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
-import { useState } from 'react';
 import cl from './Editor.module.css';
 import { graphql } from 'cm6-graphql';
 import { ImodalTextType } from '../../types/ImodalTextType';
 import MyModal from '../MyModal';
+import VarsEditor from '../VarsEditor/VarsEditor';
+import QueryEditor from '../QueryEditor/QueryEditor';
+import { ThemeType } from '../../types/ThemeType';
 
 export const Editor = () => {
   const [response, setResponse] = useState('');
-  const [theme, setTheme] = useState<'dark' | 'light'>('light');
+  const [theme, setTheme] = useState(ThemeType.light);
   const [modalVisibility, setModalVisibility] = useState(false);
   const [modalText, setModalText] = useState('');
   const [modalTextType, setModalTextType] = useState(ImodalTextType.neutral);
@@ -27,7 +29,7 @@ export const Editor = () => {
     window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
   useEffect(() => {
-    prefersDarkMode ? setTheme('dark') : setTheme('light');
+    prefersDarkMode ? setTheme(ThemeType.dark) : setTheme(ThemeType.light);
   }, [prefersDarkMode]);
 
   const extractQueryName = (query: string) => {
@@ -51,7 +53,7 @@ export const Editor = () => {
     setModal(true, 'Here will be introspection schema fetch', ImodalTextType.neutral);
   };
 
-  const fetchUserData = () => {
+  const fetchQuery = () => {
     const operationName = extractQueryName(query);
     const requestOptions = {
       method: 'POST',
@@ -67,72 +69,54 @@ export const Editor = () => {
       });
   };
 
-  const handleClick = () => {
-    fetchUserData();
+  const handleSendClick = () => {
+    fetchQuery();
   };
 
   return (
-    <>
-      {modalVisibility && (
-        <MyModal
-          visible={modalVisibility}
-          modalText={modalText}
-          messageType={modalTextType}
-          style={{ textAlign: 'left' }}
-          setModalVisibility={() => {
-            setModalVisibility(false);
-          }}
-        >
-          <CodeMirror
-            value={
-              'query IntrospectionQuery {\n' +
-              '    __schema {\n' +
-              '        queryType {\n' +
-              '            name\n' +
-              '        }\n' +
-              '        types {\n' +
-              '            name\n' +
-              '            kind\n' +
-              '            description\n' +
-              '            fields {\n' +
-              '                name\n' +
-              '                description\n' +
-              '                args {\n' +
-              '                    name\n' +
-              '                    description\n' +
-              '                    type {\n' +
-              '                        name\n' +
-              '                        kind\n' +
-              '                        ofType {\n' +
-              '                            name\n' +
-              '                            kind\n' +
-              '                        }\n' +
-              '                    }\n' +
-              '                }\n' +
-              '            }\n' +
-              '        }\n' +
-              '    }\n' +
-              '}'
-            }
-            // width={'50%'}
-            theme={theme}
-            autoFocus={true}
-            //TODO pass api schema to graphql()
-            extensions={[graphql()]}
-            // extensions={[javascript({ jsx: true })]}
-            onChange={(value) => {
-              setQuery(value);
+    <div style={{ color: 'black' }}>
+      <>
+        {modalVisibility && (
+          <MyModal
+            visible={modalVisibility}
+            modalText={modalText}
+            messageType={modalTextType}
+            style={{ textAlign: 'left' }}
+            setModalVisibility={() => {
+              setModalVisibility(false);
             }}
-          />
-        </MyModal>
-      )}
-      <div className={cl.container}>
-        <div className={cl.container__left}>
-          <div className={cl.editor}>
-            <label style={{ color: 'white' }}>Query Editor:</label>
+          >
             <CodeMirror
-              value={query}
-              height="200px"
+              value={
+                'query IntrospectionQuery {\n' +
+                '    __schema {\n' +
+                '        queryType {\n' +
+                '            name\n' +
+                '        }\n' +
+                '        types {\n' +
+                '            name\n' +
+                '            kind\n' +
+                '            description\n' +
+                '            fields {\n' +
+                '                name\n' +
+                '                description\n' +
+                '                args {\n' +
+                '                    name\n' +
+                '                    description\n' +
+                '                    type {\n' +
+                '                        name\n' +
+                '                        kind\n' +
+                '                        ofType {\n' +
+                '                            name\n' +
+                '                            kind\n' +
+                '                        }\n' +
+                '                    }\n' +
+                '                }\n' +
+                '            }\n' +
+                '        }\n' +
+                '    }\n' +
+                '}'
+              }
               theme={theme}
               autoFocus={true}
               //TODO pass api schema to graphql()
@@ -142,23 +126,24 @@ export const Editor = () => {
                 setQuery(value);
               }}
             />
-            <label style={{ color: 'white' }}>Variables Editor:</label>
-            <CodeMirror
-              value={'{\n\t"page": 1\n}'}
-              height="200px"
-              theme={theme}
-              autoFocus={true}
-              extensions={[graphql()]}
-              // extensions={[javascript({ jsx: true })]}
-              onChange={(value) => {
-                setQuery(value);
-              }}
-            />
+          </MyModal>
+        )}
+      </>
+      <div className={cl.container}>
+        <div className={cl.container__left}>
+          <div className={cl.editor}>
+            <QueryEditor theme={theme} />
+            <VarsEditor theme={theme} />
             <br />
-            <button onClick={handleClick}>SEND</button>
+            <button
+              style={{ backgroundColor: '#01e001', color: 'white' }}
+              onClick={handleSendClick}
+            >
+              SEND
+            </button>
             <button
               onClick={() => {
-                theme == 'dark' ? setTheme('light') : setTheme('dark');
+                theme == 'dark' ? setTheme(ThemeType.light) : setTheme(ThemeType.dark);
               }}
             >
               change theme
@@ -174,6 +159,7 @@ export const Editor = () => {
         </div>
         <div className={cl.container__right}>
           <div className={cl.response}>
+            <label style={{ color: 'white' }}>Server response:</label>
             <CodeMirror
               basicSetup={{ lineNumbers: false }}
               value={JSON.stringify(response, null, 2)}
@@ -186,7 +172,7 @@ export const Editor = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
