@@ -16,8 +16,13 @@ export const Editor = () => {
   const [modalVisibility, setModalVisibility] = useState(false);
   const [modalText, setModalText] = useState('');
   const [modalTextType, setModalTextType] = useState(ImodalTextType.neutral);
-  const [vars, setVars] = useState({});
+  const [vars, setVars] = useState({ page: 1, filter: { name: 'beth' } } as object);
+  const [varsString, setVarsString] = useState(
+    '{\n  "page": 1,\n  "filter": {\n    "name": "beth"\n  }\n}'
+  );
+  // const [vars, setVars] = useState('{\n  "page": 1,\n  "filter": {\n    "name": "beth"\n  }\n}');
   const [query, setQuery] = useState('');
+  const [parseError, setParseError] = useState<string | null>(null);
 
   const prefersDarkMode =
     window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -48,6 +53,8 @@ export const Editor = () => {
   };
 
   const fetchQuery = () => {
+    setResponse('');
+    if (parseError) return;
     const operationName = extractQueryName(query);
     const requestOptions = {
       method: 'POST',
@@ -68,9 +75,23 @@ export const Editor = () => {
     fetchQuery();
   };
 
+  const handleParse = async (varsString: string) => {
+    // setVarsString(varsString);
+    let result;
+    try {
+      varsString == '' ? (result = {}) : (result = await JSON.parse(varsString));
+      setParseError(null);
+      setVars(result);
+      setVarsString(varsString);
+    } catch (error) {
+      if (error instanceof Error) {
+        setParseError(error.message);
+      }
+    }
+  };
+
   return (
     <div style={{ color: 'black' }}>
-      {/*MODAL*/}
       <>
         {modalVisibility && (
           <MyModal
@@ -136,9 +157,11 @@ export const Editor = () => {
             />
             <VarsEditor
               setVarsToParent={(q) => {
-                setVars(q);
+                handleParse(q);
               }}
               theme={theme}
+              vars={varsString}
+              parseError={parseError}
             />
             <br />
             <button
@@ -168,7 +191,7 @@ export const Editor = () => {
             <ResponceWindow
               theme={theme}
               setResponce={(q) => {
-                setResponse(q);
+                handleParse(q);
               }}
               response={response}
               responseError={responseError}

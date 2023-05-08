@@ -24,17 +24,6 @@ export const QueryEditor: FC<Props> = ({ theme, setQuery }) => {
     setQuery && setQuery(query);
   };
 
-  const extractQueryName = (query: string) => {
-    const text = query;
-    const regex = /query\s+(\w+)/;
-    const match = text.match(regex);
-    if (match) {
-      return match[1];
-    } else {
-      return 'query name not found';
-    }
-  };
-
   return (
     <div
       onBlur={() => {
@@ -49,7 +38,6 @@ export const QueryEditor: FC<Props> = ({ theme, setQuery }) => {
         autoFocus={true}
         //TODO pass api schema to graphql()
         extensions={[graphql()]}
-        // extensions={[javascript({ jsx: true })]}
         onChange={(value) => {
           setQQQuery(value);
           setQuery && setQuery(value);
