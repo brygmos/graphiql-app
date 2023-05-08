@@ -11,17 +11,16 @@ type Props = {
 
 export const VarsEditor: FC<Props> = ({ theme, setVarsToParent }) => {
   const [vars, setVars] = useState('{\n  "page": 1,\n  "filter": {\n    "name": "beth"\n  }\n}');
-  const [parsedVars, setParsedVars] = useState(null);
   const [parseError, setParseError] = useState<string | null>(null);
 
   const handleParse = async () => {
     try {
       const result = await JSON.parse(vars);
-      setParsedVars(result);
+      // setParsedVars(result);
       setParseError(null);
       setVarsToParent && setVarsToParent(result);
     } catch (error) {
-      setParsedVars(null);
+      // setParsedVars(null);
       if (error instanceof Error) {
         setParseError(error.message);
       }
