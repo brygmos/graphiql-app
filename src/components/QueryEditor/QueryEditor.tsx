@@ -11,8 +11,8 @@ type Props = {
 
 export const QueryEditor: FC<Props> = ({ theme, setQuery }) => {
   const [query, setQQQuery] = useState(
-    'query AllCharacters {\n' +
-      '  characters {\n' +
+    'query AllCharacters($page: Int, $filter: FilterCharacter) {\n' +
+      '  characters(page: $page, filter: $filter) {\n' +
       '    results {\n' +
       '      name\n' +
       '    }\n' +

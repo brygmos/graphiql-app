@@ -6,10 +6,11 @@ import { json } from '@codemirror/lang-json';
 
 type Props = {
   theme?: ThemeType;
+  setVarsToParent?: (arg0: object) => void;
 };
 
-export const VarsEditor: FC<Props> = ({ theme }) => {
-  const [vars, setVars] = useState('{\n  "page": 1\n}');
+export const VarsEditor: FC<Props> = ({ theme, setVarsToParent }) => {
+  const [vars, setVars] = useState('{\n  "page": 1,\n  "filter": {\n    "name": "beth"\n  }\n}');
   const [parsedVars, setParsedVars] = useState(null);
   const [parseError, setParseError] = useState<string | null>(null);
 
@@ -18,6 +19,8 @@ export const VarsEditor: FC<Props> = ({ theme }) => {
       const result = await JSON.parse(vars);
       setParsedVars(result);
       setParseError(null);
+      setVarsToParent && setVarsToParent(result);
+      console.log('handleParse');
     } catch (error) {
       setParsedVars(null);
       if (error instanceof Error) {

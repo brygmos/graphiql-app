@@ -16,15 +16,8 @@ export const Editor = () => {
   const [modalVisibility, setModalVisibility] = useState(false);
   const [modalText, setModalText] = useState('');
   const [modalTextType, setModalTextType] = useState(ImodalTextType.neutral);
-  const [query, setQuery] = useState(
-    'query AllCharacters {\n' +
-      '  characters {\n' +
-      '    results {\n' +
-      '      name\n' +
-      '    }\n' +
-      '  }\n' +
-      '}'
-  );
+  const [vars, setVars] = useState({});
+  const [query, setQuery] = useState('');
 
   const prefersDarkMode =
     window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -59,7 +52,7 @@ export const Editor = () => {
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ operationName: operationName, query: query }),
+      body: JSON.stringify({ operationName: operationName, query: query, variables: vars }),
     };
     fetch('https://rickandmortyapi.com/graphql', requestOptions)
       .then((response) => {
@@ -140,27 +133,32 @@ export const Editor = () => {
               }}
               theme={theme}
             />
-            <VarsEditor theme={theme} />
+            <VarsEditor
+              setVarsToParent={(q) => {
+                setVars(q);
+              }}
+              theme={theme}
+            />
             <br />
             <button
               style={{ backgroundColor: '#01e001', color: 'white' }}
               onClick={handleSendClick}
             >
-              send
+              Send
             </button>
             <button
               onClick={() => {
                 theme == 'dark' ? setTheme(ThemeType.light) : setTheme(ThemeType.dark);
               }}
             >
-              change theme
+              Change theme
             </button>
             <button
               onClick={() => {
                 showModal();
               }}
             >
-              show schema
+              Show schema
             </button>
           </div>
         </div>
