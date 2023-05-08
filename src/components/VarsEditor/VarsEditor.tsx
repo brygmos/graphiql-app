@@ -20,7 +20,6 @@ export const VarsEditor: FC<Props> = ({ theme, setVarsToParent }) => {
       setParsedVars(result);
       setParseError(null);
       setVarsToParent && setVarsToParent(result);
-      console.log('handleParse');
     } catch (error) {
       setParsedVars(null);
       if (error instanceof Error) {

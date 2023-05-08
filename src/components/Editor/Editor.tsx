@@ -7,12 +7,12 @@ import MyModal from '../MyModal';
 import VarsEditor from '../VarsEditor/VarsEditor';
 import QueryEditor from '../QueryEditor/QueryEditor';
 import { ThemeType } from '../../types/ThemeType';
-import { json } from '@codemirror/lang-json';
+import ResponceWindow from '../ResponseWindow/ResponseWindow';
 
 export const Editor = () => {
   const [response, setResponse] = useState('');
   const [theme, setTheme] = useState(ThemeType.light);
-  const [responseError, setResponseError] = useState(null);
+  const [responseError, setResponseError] = useState('');
   const [modalVisibility, setModalVisibility] = useState(false);
   const [modalText, setModalText] = useState('');
   const [modalTextType, setModalTextType] = useState(ImodalTextType.neutral);
@@ -70,6 +70,7 @@ export const Editor = () => {
 
   return (
     <div style={{ color: 'black' }}>
+      {/*MODAL*/}
       <>
         {modalVisibility && (
           <MyModal
@@ -164,16 +165,13 @@ export const Editor = () => {
         </div>
         <div className={cl.container__right}>
           <div className={cl.response}>
-            <label style={{ color: 'white' }}>Server response:</label>
-            {responseError && <span>{responseError}</span>}
-            <CodeMirror
-              basicSetup={{ lineNumbers: false }}
-              value={JSON.stringify(response, null, 2)}
-              height="400px"
+            <ResponceWindow
               theme={theme}
-              readOnly={true}
-              placeholder="here will be api response"
-              extensions={[json()]}
+              setResponce={(q) => {
+                setResponse(q);
+              }}
+              response={response}
+              responseError={responseError}
             />
           </div>
         </div>
