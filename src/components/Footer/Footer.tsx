@@ -1,4 +1,4 @@
-// import * as React from 'react';
+import classes from './Footer.module.css';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Image from 'mui-image';
@@ -26,13 +26,14 @@ export const Footer = () => {
       >
         <Container 
         maxWidth="lg"
+        className={classes.links__wrap}
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
         }}
         >
-          <Box sx={{display: 'flex', flexWrap: 'wrap'}}>
+          <Box className={classes.links}>
             <Link
             href='https://github.com/brygmos'
             underline='hover'
@@ -62,9 +63,9 @@ export const Footer = () => {
             </Link>
           </Box>
           <Box>
-          <Link href='https://rs.school/react/' target='_blank' rel='noopener'>
-            <Image src="https://rs.school/images/rs_school_js.svg" />
-          </Link>
+            <Link href='https://rs.school/react/' target='_blank' rel='noopener'>
+              <Image className={classes.img} src="https://rs.school/images/rs_school_js.svg" />
+            </Link>
           </Box>
         </Container>
       </Box>
