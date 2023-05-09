@@ -10,7 +10,7 @@ type Props = {
   responseError?: string;
 };
 
-export const ResponceWindow: FC<Props> = ({ theme, response, responseError }) => {
+export const ResponseWindow: FC<Props> = ({ theme, response, responseError }) => {
   const [copyButtonText, setCopyButtonText] = useState('Copy');
 
   useEffect(() => {
@@ -47,4 +47,4 @@ export const ResponceWindow: FC<Props> = ({ theme, response, responseError }) =>
   );
 };
 
-export default ResponceWindow;
+export default ResponseWindow;

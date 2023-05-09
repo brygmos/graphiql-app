@@ -1,5 +1,6 @@
 import './App.css';
 import EditorPage from './pages/EditorPage';
+import ObjectExplorer from './components/test';
 
 function App() {
   return (
