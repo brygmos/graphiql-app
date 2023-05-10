@@ -13,13 +13,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import { Language } from '../Languages/Languages';
+import { Link } from 'react-router-dom';
 
 interface Props {
   window?: () => Window;
 }
 
 const drawerWidth = 240;
-const navItems = ['Welcome', 'Editor'];
 
 export const Header = (props: Props) => {
   const { window } = props;
@@ -31,14 +31,20 @@ export const Header = (props: Props) => {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+      
       <List>
-        {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item} />
-            </ListItemButton>
+          <ListItem component={ Link } to="/"
+            sx={{ textTransform: 'uppercase' }}>
+              <ListItemButton sx={{ textAlign: 'center' }}>
+                  <ListItemText primary="Welcome" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem component={ Link } to="/editor"
+            sx={{ textTransform: 'uppercase' }}>
+              <ListItemButton sx={{ textAlign: 'center' }}>
+                  <ListItemText primary="Editor" />
+              </ListItemButton>
           </ListItem>
-        ))}
       </List>
       <Divider />
     </Box>
@@ -60,25 +66,20 @@ export const Header = (props: Props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-around',
-              width: '100%',
-              alignItems: 'center',
-            }}
-          >
+          <Box sx={{display: 'flex', justifyContent: 'space-around', width: '100%', alignItems: 'center'}}>
             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-              {navItems.map((item) => (
-                <Button key={item} sx={{ color: '#fff' }}>
-                  {item}
-                </Button>
-              ))}
+              <Button component={Link} to='/' sx={{ color: '#fff' }}>
+                Welcome
+              </Button>
+              <Button component={Link} to='/editor' sx={{ color: '#fff' }}>
+                Editor
+              </Button>
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
               <Button color="inherit">Login</Button>
               <Language />
             </Box>
+          
           </Box>
         </Toolbar>
       </AppBar>
@@ -99,6 +100,7 @@ export const Header = (props: Props) => {
           {drawer}
         </Drawer>
       </Box>
+
     </Box>
   );
-};
+}
