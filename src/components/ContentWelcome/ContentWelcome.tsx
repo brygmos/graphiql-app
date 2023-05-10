@@ -5,7 +5,7 @@ import classes from './ContentWelcome.module.css';
 export const ContentWelcome = () => {
     return (
         <>
-          <Image className={classes.img} src='src/assets/ram.png' />
+          <Image className={classes.img} src='src/assets/ram1.png' />
           <Typography align='center' className={classes.title} >
           Welcome to the request editor for https://rickandmortyapi.com/
           </Typography>
