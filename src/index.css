@@ -13,6 +13,9 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+#root {
+  width: 100%;
+}
 
 a {
   font-weight: 500;
@@ -60,6 +63,7 @@ button:focus-visible {
   :root {
     color: #213547;
     background-color: #ffffff;
+    width: 100%;
   }
   a:hover {
     color: #747bff;
