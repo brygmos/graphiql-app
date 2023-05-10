@@ -6,6 +6,9 @@ import VarsEditor from '../VarsEditor/VarsEditor';
 import QueryEditor from '../QueryEditor/QueryEditor';
 import { ThemeType } from '../../types/ThemeType';
 import ResponseWindow from '../ResponseWindow/ResponseWindow';
+import Button from '@mui/material/Button';
+import { CircularProgress, Tab, Tabs } from '@mui/material';
+import Box from '@mui/material/Box';
 
 export const Editor = () => {
   const [response, setResponse] = useState<string | void | object>();
@@ -126,7 +129,7 @@ export const Editor = () => {
               setModalVisibility(false);
             }}
           >
-            <Suspense fallback={<h1>Loading...</h1>}>
+            <Suspense fallback={<CircularProgress color="success" />}>
               <LazySchema data={introspectionResponse} />
               {/*<ResponseWindow*/}
               {/*  theme={theme}*/}
@@ -155,6 +158,10 @@ export const Editor = () => {
               parseError={parseError}
             />
             <br />
+            <Button variant="contained" disabled={parseError} onClick={handleSendClick}>
+              Send
+            </Button>
+            <Button variant="outlined">Contained</Button>
             <button
               style={{ backgroundColor: '#01e001', color: 'white' }}
               onClick={handleSendClick}

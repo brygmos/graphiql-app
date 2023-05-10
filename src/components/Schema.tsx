@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { CircularProgress } from '@mui/material';
 
 type Props = {
   data?: object;
@@ -14,7 +15,12 @@ const Schema: FC<Props> = ({ data }) => {
   };
 
   if (!data) {
-    return <h1>fetching data...</h1>;
+    return (
+      <>
+        <h1>fetching data...</h1>
+        <CircularProgress color="success" />
+      </>
+    );
   }
 
   const queryNames = data.data.__schema.types[0].fields;

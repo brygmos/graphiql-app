@@ -14,15 +14,12 @@ export const Language = () => {
   return (
     <div>
       <FormControl sx={{ m: 1, minWidth: 120 }}>
-      <InputLabel id="lang">Language</InputLabel>
-        <Select
-          value={language}
-          onChange={handleChange}
-        >
+        <InputLabel id="lang">Language</InputLabel>
+        <Select value={language} onChange={handleChange}>
           <MenuItem value={'en'}>English</MenuItem>
           <MenuItem value={'ru'}>Russian</MenuItem>
         </Select>
       </FormControl>
     </div>
   );
-}
+};

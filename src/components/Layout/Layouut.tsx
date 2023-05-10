@@ -3,11 +3,11 @@ import { Header } from '../Header/Header';
 import { Footer } from '../Footer/Footer';
 
 export const Layout = () => {
-    return (
-        <>
-        <Header />
-          <Outlet />
-        <Footer />
-        </>
-    ) 
-}
+  return (
+    <>
+      <Header />
+      <Outlet />
+      <Footer />
+    </>
+  );
+};

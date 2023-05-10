@@ -2,6 +2,8 @@ import React, { FC, useEffect, useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { ThemeType } from '../../types/ThemeType';
 import { json } from '@codemirror/lang-json';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import Button from '@mui/material/Button';
 
 type Props = {
   theme?: ThemeType;
@@ -36,13 +38,15 @@ export const ResponseWindow: FC<Props> = ({ theme, response, responseError }) =>
         extensions={[json()]}
       />
       <br />
-      <button
+      <Button
         onClick={() => {
           copyHandler();
         }}
+        variant="contained"
+        startIcon={<FileCopyIcon />}
       >
         {copyButtonText}
-      </button>
+      </Button>
     </div>
   );
 };

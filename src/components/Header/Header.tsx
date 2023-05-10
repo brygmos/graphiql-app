@@ -31,7 +31,6 @@ export const Header = (props: Props) => {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      
       <List>
         {navItems.map((item) => (
           <ListItem key={item} disablePadding>
@@ -61,20 +60,25 @@ export const Header = (props: Props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Box sx={{display: 'flex', justifyContent: 'space-around', width: '100%', alignItems: 'center'}}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-around',
+              width: '100%',
+              alignItems: 'center',
+            }}
+          >
             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
-              </Button>
-            ))}
-            
+              {navItems.map((item) => (
+                <Button key={item} sx={{ color: '#fff' }}>
+                  {item}
+                </Button>
+              ))}
             </Box>
-            <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <Button color="inherit">Login</Button>
               <Language />
             </Box>
-          
           </Box>
         </Toolbar>
       </AppBar>
@@ -95,7 +99,6 @@ export const Header = (props: Props) => {
           {drawer}
         </Drawer>
       </Box>
-
     </Box>
   );
-}
+};

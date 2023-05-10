@@ -3,7 +3,6 @@ import './App.css';
 import { Welcome } from './pages/Welcome/Welcome';
 import { Layout } from './components/Layout/Layouut';
 import EditorPage from './pages/EditorPage';
-import ObjectExplorer from './components/test';
 
 function App() {
   return (
