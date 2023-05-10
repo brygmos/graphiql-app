@@ -9,9 +9,9 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../store/slices/userSlice';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { setUser } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 interface User {
@@ -19,9 +19,10 @@ interface User {
   password: string;
 }
 
-export default function SignInPage() {
+export default function SignUpPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -30,7 +31,8 @@ export default function SignInPage() {
       password: data.get('password')!.toString(),
     };
     const auth = getAuth();
-    signInWithEmailAndPassword(auth, user.email, user.password)
+    console.log(user);
+    createUserWithEmailAndPassword(auth, user.email, user.password)
       .then(({ user }) => {
         console.log(user.refreshToken, user.uid, user.email);
         dispatch(
@@ -40,7 +42,7 @@ export default function SignInPage() {
             token: user.refreshToken,
           })
         );
-        navigate('/');
+        navigate('/editor');
       })
       .catch(console.error);
   };
@@ -60,7 +62,7 @@ export default function SignInPage() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign Up
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -84,12 +86,12 @@ export default function SignInPage() {
             autoComplete="current-password"
           />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Sign In
+            Sign Up
           </Button>
           <Grid container justifyContent="center">
             <Grid item>
-              <Link href="registration" variant="body2">
-                {"Don't have an account? Sign Up"}
+              <Link href="login" variant="body2">
+                Already have an account? Sign in
               </Link>
             </Grid>
           </Grid>

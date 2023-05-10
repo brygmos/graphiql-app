@@ -1,9 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
-import { Navigate } from 'react-router';
 import './App.css';
+import { Welcome } from './pages/Welcome/Welcome';
+import { Layout } from './components/Layout/Layouut';
 import EditorPage from './pages/EditorPage';
-import SignInPage from './pages/SignInPage';
-import SignUpPage from './pages/SignUpPage';
+import SignInPage from './pages/SignIn/SignInPage';
+import SignUpPage from './pages/SignUp/SignUpPage';
 import { useSelector } from 'react-redux';
 
 interface User {
@@ -23,10 +24,12 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={user.token ? <EditorPage /> : <SignInPage />} />
-        <Route path="/login" element={<SignInPage />} />
-        <Route path="/registration" element={<SignUpPage />} />
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Welcome />} />
+          <Route path="/editor" element={user.token ? <EditorPage /> : <SignInPage />} />
+          <Route path="/login" element={<SignInPage />} />
+          <Route path="/registration" element={<SignUpPage />} />
+        </Route>
       </Routes>
     </div>
   );

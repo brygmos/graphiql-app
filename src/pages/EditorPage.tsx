@@ -22,7 +22,7 @@ function EditorPage() {
 
   const handleClick = () => {
     dispatch(removeUser());
-    navigate('/login');
+    navigate('/');
   };
   return (
     <div className="App">
