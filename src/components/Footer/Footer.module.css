@@ -1,0 +1,17 @@
+.links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    width: 100%;
+}
+.img {max-width: 150px; width: 100%;}
+
+@media (max-width: 420px) {
+    .links__wrap, .links {
+        flex-wrap: wrap;
+        justify-content: center !important;
+    }
+    .links {margin-bottom: 2rem;}
+    .img {margin: 0 auto;}
+}
