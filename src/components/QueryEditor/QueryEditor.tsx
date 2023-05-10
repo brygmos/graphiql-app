@@ -33,7 +33,7 @@ export const QueryEditor: FC<Props> = ({ theme, setQuery }) => {
       <label style={{ color: 'white' }}>Query editor:</label>
       <CodeMirror
         value={query}
-        height="200px"
+        height="400px"
         theme={theme}
         autoFocus={true}
         //TODO pass api schema to graphql()

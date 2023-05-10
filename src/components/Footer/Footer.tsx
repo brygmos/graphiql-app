@@ -1,6 +1,6 @@
 import classes from './Footer.module.css';
 import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
+import Box from '@mui/material/Box/Box';
 import Image from 'mui-image';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';

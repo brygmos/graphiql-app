@@ -7,12 +7,16 @@ import QueryEditor from '../QueryEditor/QueryEditor';
 import { ThemeType } from '../../types/ThemeType';
 import ResponseWindow from '../ResponseWindow/ResponseWindow';
 import Button from '@mui/material/Button';
-import { CircularProgress, Tab, Tabs } from '@mui/material';
-import Box from '@mui/material/Box';
+import { CircularProgress } from '@mui/material';
+import HeadersEditor from '../HeadersEditor/HeadersEditor';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import IconButton from '@mui/material/IconButton';
 
 export const Editor = () => {
   const [response, setResponse] = useState<string | void | object>();
   const [theme, setTheme] = useState(ThemeType.light);
+  const [varsVisibility, setVarsVisibility] = useState(false);
+  const [headersVisibility, setHeadersVisibility] = useState(false);
   const [responseError, setResponseError] = useState('');
   const [modalVisibility, setModalVisibility] = useState(false);
   const [modalText, setModalText] = useState('');
@@ -131,11 +135,6 @@ export const Editor = () => {
           >
             <Suspense fallback={<CircularProgress color="success" />}>
               <LazySchema data={introspectionResponse} />
-              {/*<ResponseWindow*/}
-              {/*  theme={theme}*/}
-              {/*  response={introspectionResponse}*/}
-              {/*  responseError={responseError}*/}
-              {/*/>*/}
             </Suspense>
           </MyModal>
         )}
@@ -149,39 +148,75 @@ export const Editor = () => {
               }}
               theme={theme}
             />
-            <VarsEditor
-              setVarsToParent={(q) => {
-                handleParse(q);
-              }}
-              theme={theme}
-              vars={varsString}
-              parseError={parseError}
-            />
+            {varsVisibility && (
+              <VarsEditor
+                setVarsToParent={(q) => {
+                  handleParse(q);
+                }}
+                theme={theme}
+                vars={varsString}
+                parseError={parseError}
+              />
+            )}
+            {headersVisibility && (
+              <HeadersEditor
+                setVarsToParent={(q) => {
+                  handleParse(q);
+                }}
+                theme={theme}
+                vars={varsString}
+                parseError={parseError}
+              />
+            )}
             <br />
-            <Button variant="contained" disabled={parseError} onClick={handleSendClick}>
-              Send
-            </Button>
-            <Button variant="outlined">Contained</Button>
-            <button
-              style={{ backgroundColor: '#01e001', color: 'white' }}
+            <Button
+              variant="contained"
+              color={'success'}
+              disabled={parseError}
               onClick={handleSendClick}
             >
               Send
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="contained"
               onClick={() => {
-                theme == 'dark' ? setTheme(ThemeType.light) : setTheme(ThemeType.dark);
+                setVarsVisibility(!varsVisibility);
               }}
             >
-              Change theme
-            </button>
-            <button
+              Vars
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setHeadersVisibility(!headersVisibility);
+              }}
+            >
+              Headers
+            </Button>
+            <Button
+              variant="contained"
               onClick={() => {
                 showSchemaHandler();
               }}
             >
-              Show schema
-            </button>
+              Schema
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                theme == 'dark' ? setTheme(ThemeType.light) : setTheme(ThemeType.dark);
+              }}
+              startIcon={<Brightness4Icon />}
+            >
+              mode
+            </Button>
+            <IconButton
+              onClick={() => {
+                theme == 'dark' ? setTheme(ThemeType.light) : setTheme(ThemeType.dark);
+              }}
+            >
+              <Brightness4Icon />
+            </IconButton>
           </div>
         </div>
         <div className={cl.container__right}>
