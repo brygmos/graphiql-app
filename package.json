@@ -6,27 +6,29 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "lint": "eslint src"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@codemirror/lang-javascript": "6.0.1",
-    "@codemirror/lang-json": "^6.0.1",
-    "@types/codemirror": "^5.60.7",
-    "@uiw/react-codemirror": "4.10.4",
-    "cm6-graphql": "^0.0.5",
-    "codemirror": "^5.65.13",
-    "codemirror-graphql": "^2.0.6",
-    "graphql": "^16.6.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "@emotion/react": "^11.10.8",
     "@emotion/styled": "^11.10.8",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.12.3",
+    "@mui/styled-engine-sc": "^5.12.0",
+    "@mui/system": "^5.12.3",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@types/codemirror": "^5.60.7",
     "@types/react-router-dom": "^5.3.3",
+    "@uiw/react-codemirror": "4.10.4",
+    "codemirror": "^5.65.13",
+    "firebase": "^9.6.11",
+    "graphql": "^16.6.0",
     "mui-image": "^1.0.7",
-    "react-router-dom": "^6.11.1"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.11.1",
+    "styled-components": "^5.3.10"
   },
   "devDependencies": {
     "@types/mui-image": "^1.0.1",
