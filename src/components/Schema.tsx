@@ -55,11 +55,11 @@
 //
 // export default Schema;
 
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { CircularProgress } from '@mui/material';
 
 type Props = {
-  data?: any;
+  data: ReactNode;
 };
 
 const Schema: FC<Props> = ({ data }) => {
@@ -74,36 +74,31 @@ const Schema: FC<Props> = ({ data }) => {
 
   // const queryNames: Array<object> = data.data.__schema.types[0].fields;
 
-  function renderData(data: any) {
+  function renderData(data: ReactNode): ReactNode {
     if (!data) {
       return <span>*empty*</span>;
     }
     if (typeof data == 'string' || typeof data == 'number') {
       return <span>{data}</span>;
     }
-
-    // if (typeof data == 'undefined' || typeof data == 'undefined') {
-    //   // console.log('undef or null');
-    //   return <p>undefined or null</p>;
-    // }
-
     if (Array.isArray(data)) {
-      data.map((el) => {
-        renderData(el);
+      const render: ReactNode[] = data.map((el) => {
+        return renderData(el);
       });
+      return render as ReactNode;
     }
-    if (typeof data == 'object') {
+
+    if (typeof data == 'object' && !Array.isArray(data)) {
       return (
         <ul>
           {Object.entries(data).map(([key, value]) => (
-            <li>
+            <li key={key}>
               {key}: {renderData(value)}
             </li>
           ))}
         </ul>
       );
     }
-    return;
   }
 
   return (
