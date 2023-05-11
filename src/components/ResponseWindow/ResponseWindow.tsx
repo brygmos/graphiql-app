@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 type Props = {
   theme?: ThemeType;
   setResponce?: (arg0: string) => void;
-  response?: string;
+  response?: string | void | object;
   responseError?: string;
 };
 

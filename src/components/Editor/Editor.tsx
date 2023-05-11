@@ -1,4 +1,4 @@
-import React, { lazy, useEffect, useState, Suspense } from 'react';
+import React, { lazy, useEffect, useState, Suspense, ReactNode } from 'react';
 import cl from './Editor.module.css';
 import { ImodalTextType } from '../../types/ImodalTextType';
 import MyModal from '../MyModal';
@@ -22,7 +22,7 @@ export const Editor = () => {
   const [modalText, setModalText] = useState('');
   const [modalTextType, setModalTextType] = useState(ImodalTextType.neutral);
   const [vars, setVars] = useState({ page: 1, filter: { name: 'beth' } } as object);
-  const [introspectionResponse, setIntrospectionResponse] = useState<string | void | object>('');
+  const [introspectionResponse, setIntrospectionResponse] = useState<ReactNode>('');
   const [varsString, setVarsString] = useState(
     '{\n  "page": 1,\n  "filter": {\n    "name": "beth"\n  }\n}'
   );
@@ -70,7 +70,8 @@ export const Editor = () => {
   async function fetchQuery(
     fetchQuery: string = query,
     fetchVars: object = {}
-  ): Promise<string | void | object> {
+  ): Promise<ReactNode> {
+    // ): Promise<string | void | object> {
     setResponse('');
     if (parseError) return;
     const operationName = extractQueryName(fetchQuery);
