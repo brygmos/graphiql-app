@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@codemirror/lang-javascript": "6.0.1",
+    "@codemirror/lang-json": "^6.0.1",
     "@emotion/react": "^11.10.8",
     "@emotion/styled": "^11.10.8",
     "@mui/icons-material": "^5.11.16",
@@ -20,7 +21,9 @@
     "@types/codemirror": "^5.60.7",
     "@types/react-router-dom": "^5.3.3",
     "@uiw/react-codemirror": "4.10.4",
+    "cm6-graphql": "^0.0.5",
     "codemirror": "^5.65.13",
+    "codemirror-graphql": "^2.0.7",
     "firebase": "^9.6.11",
     "graphql": "^16.6.0",
     "mui-image": "^1.0.7",

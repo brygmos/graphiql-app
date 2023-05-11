@@ -172,7 +172,7 @@ export const Editor = () => {
             <Button
               variant="contained"
               color={'success'}
-              disabled={parseError}
+              // disabled={parseError}
               onClick={handleSendClick}
             >
               Send
