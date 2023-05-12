@@ -11,6 +11,7 @@ import { CircularProgress } from '@mui/material';
 import HeadersEditor from '../HeadersEditor/HeadersEditor';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import IconButton from '@mui/material/IconButton';
+import { SchemaServerResponce } from '../Schema';
 
 export const Editor = () => {
   const [response, setResponse] = useState<string | void | object>();
@@ -22,7 +23,8 @@ export const Editor = () => {
   const [modalText, setModalText] = useState('');
   const [modalTextType, setModalTextType] = useState(ImodalTextType.neutral);
   const [vars, setVars] = useState({ page: 1, filter: { name: 'beth' } } as object);
-  const [introspectionResponse, setIntrospectionResponse] = useState<ReactNode>('');
+  const [introspectionResponse, setIntrospectionResponse] = useState<unknown>(null);
+  // const [introspectionResponse, setIntrospectionResponse] = useState<ReactNode>(null);
   const [varsString, setVarsString] = useState(
     '{\n  "page": 1,\n  "filter": {\n    "name": "beth"\n  }\n}'
   );
@@ -135,7 +137,7 @@ export const Editor = () => {
             }}
           >
             <Suspense fallback={<CircularProgress color="success" />}>
-              <LazySchema data={introspectionResponse} />
+              <LazySchema data={introspectionResponse as SchemaServerResponce} />
             </Suspense>
           </MyModal>
         )}

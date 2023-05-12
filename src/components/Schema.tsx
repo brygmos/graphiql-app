@@ -55,14 +55,33 @@
 //
 // export default Schema;
 
-import React, { FC, ReactNode } from 'react';
+import React, { FC, ReactNode, useState } from 'react';
 import { CircularProgress } from '@mui/material';
 
 type Props = {
-  data: ReactNode;
+  data: SchemaServerResponce;
+};
+
+type Expanded = {
+  [key: string]: boolean;
+};
+
+export type SchemaServerResponce = {
+  data: {
+    __schema: {
+      types: [{ fields: object }];
+    };
+  };
 };
 
 const Schema: FC<Props> = ({ data }) => {
+  const [expanded, setExpanded] = useState<Expanded>({});
+  const toggleExpanded = (key: string) => {
+    setExpanded({
+      ...expanded,
+      [key]: !expanded[key],
+    });
+  };
   if (!data) {
     return (
       <>
@@ -72,9 +91,26 @@ const Schema: FC<Props> = ({ data }) => {
     );
   }
 
-  // const queryNames: Array<object> = data.data.__schema.types[0].fields;
+  const queryNames: object = data.data.__schema.types[0].fields;
 
-  function renderData(data: ReactNode): ReactNode {
+  function renderQuery(data: object) {
+    return (
+      <ul>
+        {Object.entries(data).map(([key, value]) => (
+          <>
+            {key == 'name' && (
+              <li key={key}>
+                <div onClick={() => toggleExpanded(value)}>{renderData(value)}</div>
+                <ul>{expanded[value] && renderData(data)}</ul>
+              </li>
+            )}
+          </>
+        ))}
+      </ul>
+    );
+  }
+
+  function renderData(data: object | string | number): ReactNode {
     if (!data) {
       return <span>*empty*</span>;
     }
@@ -83,6 +119,7 @@ const Schema: FC<Props> = ({ data }) => {
     }
     if (Array.isArray(data)) {
       const render: ReactNode[] = data.map((el) => {
+        if (el.name && el.description && el.args) return renderQuery(el);
         return renderData(el);
       });
       return render as ReactNode;
@@ -92,50 +129,27 @@ const Schema: FC<Props> = ({ data }) => {
       return (
         <ul>
           {Object.entries(data).map(([key, value]) => (
-            <li key={key}>
-              {key}: {renderData(value)}
-            </li>
+            <>
+              {
+                <li key={key} onClick={() => toggleExpanded(key)}>
+                  {key}: {renderData(value)}
+                </li>
+              }
+            </>
           ))}
         </ul>
       );
     }
   }
 
+  console.log(queryNames);
+
   return (
     <div style={{ color: 'white' }}>
       <h1>Available queries</h1>
-      <div>{renderData(data)}</div>
+      <div>{renderData(queryNames)}</div>
     </div>
   );
 };
 
 export default Schema;
-
-// const Schema: FC<Props> = ({ data }) => {
-//   const getType = (data) => {
-//     if (Array.isArray(data)) {
-//       return 'array';
-//     } else if (typeof data === 'object') {
-//       return 'object';
-//     } else {
-//       return 'primitive';
-//     }
-//   };
-//   const type = getType(data);
-//   let content;
-//   if (type === 'primitive') {
-//     content = data;
-//   } else if (type === 'array') {
-//     content = data.map((item, index) => <Schema key={index} data={item} />);
-//   } else {
-//     content = Object.keys(data).map((key) => (
-//       <div key={key}>
-//         <h3>{key}</h3>
-//         <Schema data={data[key]} />
-//       </div>
-//     ));
-//   }
-//   return <div>{content}</div>;
-// };
-//
-// export default Schema;
