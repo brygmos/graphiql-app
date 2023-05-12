@@ -9,6 +9,18 @@ type Expanded = {
   [key: string]: boolean;
 };
 
+type Query = {
+  [key: string]: string | object | ReactNode;
+  description: string;
+  args: [];
+};
+
+type ArgObj = {
+  [key: string]: string | object | ReactNode;
+  name: string;
+  type: { name: string };
+};
+
 export type SchemaServerResponce = {
   data: {
     __schema: {
@@ -44,12 +56,49 @@ const Schema: FC<Props> = ({ data }) => {
             {key == 'name' && (
               <li key={key}>
                 <div onClick={() => toggleExpanded(value)}>{renderData(value)}</div>
-                <ul>{expanded[value] && renderData(data)}</ul>
+                <ul>{expanded[value] && renderExpandedQuery(data as Query)}</ul>
               </li>
             )}
           </>
         ))}
       </ul>
+    );
+  }
+
+  function renderExpandedQuery(data: Query) {
+    return (
+      <>
+        <p>
+          <em>{data.description}</em>
+        </p>
+        <span>Arguments: (</span>
+        {data.args.map((argObj: ArgObj, idx) => {
+          const argName = argObj.name;
+          // if (argObj.length > 1 && idx ) return renderData(argName);
+          return (
+            <>
+              {' '}
+              <span key={idx}>
+                {renderData(argName)}: {renderData(argObj.type.name)}
+              </span>
+              <span>, </span>
+            </>
+          );
+        })}
+        <span>)</span>
+      </>
+      // <ul>
+      //   {Object.entries(data).map(([key, value]) => (
+      //     <>
+      //       {key == 'name' && (
+      //         <li key={key}>
+      //           <div onClick={() => toggleExpanded(value)}>{renderData(value)}</div>
+      //           <ul>{expanded[value] && renderData(data)}</ul>
+      //         </li>
+      //       )}
+      //     </>
+      //   ))}
+      // </ul>
     );
   }
 
@@ -84,8 +133,6 @@ const Schema: FC<Props> = ({ data }) => {
       );
     }
   }
-
-  console.log(queryNames);
 
   return (
     <div style={{ color: 'white' }}>
