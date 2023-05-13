@@ -27,7 +27,6 @@ export const ResponseWindow: FC<Props> = ({ theme, response, responseError }) =>
   return (
     <div style={{ color: 'black' }}>
       <label style={{ color: 'white' }}>Server response:</label>
-      {responseError && <span>{responseError}</span>}
       <CodeMirror
         basicSetup={{ lineNumbers: false }}
         value={JSON.stringify(response, null, 2)}

@@ -7,7 +7,7 @@ import QueryEditor from '../QueryEditor/QueryEditor';
 import { ThemeType } from '../../types/ThemeType';
 import ResponseWindow from '../ResponseWindow/ResponseWindow';
 import Button from '@mui/material/Button';
-import { CircularProgress } from '@mui/material';
+import { Alert, CircularProgress, Snackbar } from '@mui/material';
 import HeadersEditor from '../HeadersEditor/HeadersEditor';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import IconButton from '@mui/material/IconButton';
@@ -125,6 +125,23 @@ export const Editor = () => {
 
   return (
     <div style={{ color: 'black' }}>
+      <Snackbar
+        open={responseError ? true : false}
+        autoHideDuration={50000}
+        onClose={() => {
+          setResponseError('');
+        }}
+      >
+        <Alert
+          onClose={() => {
+            setResponseError('');
+          }}
+          severity="error"
+          sx={{ width: '100%' }}
+        >
+          {responseError}
+        </Alert>
+      </Snackbar>
       <>
         {modalVisibility && (
           <MyModal
