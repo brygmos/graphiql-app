@@ -120,9 +120,6 @@ const Schema: FC<Props> = ({ data }) => {
         <TreeItem nodeId="1" label="Queries">
           {renderData(queryNames)}
         </TreeItem>
-        <TreeItem nodeId="types" label="Types">
-          {renderData(data.data.__schema.types)}
-        </TreeItem>
       </TreeView>
     </div>
   );

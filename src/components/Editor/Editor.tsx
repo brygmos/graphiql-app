@@ -126,7 +126,7 @@ export const Editor = () => {
   return (
     <div style={{ color: 'black' }}>
       <Snackbar
-        open={responseError ? true : false}
+        open={!!responseError}
         autoHideDuration={50000}
         onClose={() => {
           setResponseError('');
@@ -230,13 +230,6 @@ export const Editor = () => {
             >
               mode
             </Button>
-            <IconButton
-              onClick={() => {
-                theme == 'dark' ? setTheme(ThemeType.light) : setTheme(ThemeType.dark);
-              }}
-            >
-              <Brightness4Icon />
-            </IconButton>
           </div>
         </div>
         <div className={cl.container__right}>
