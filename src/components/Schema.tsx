@@ -1,5 +1,9 @@
 import React, { FC, ReactNode, useState } from 'react';
 import { CircularProgress } from '@mui/material';
+import TreeView from '@mui/lab/TreeView';
+import { TreeItem } from '@mui/lab';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 type Props = {
   data: SchemaServerResponce;
@@ -49,65 +53,43 @@ const Schema: FC<Props> = ({ data }) => {
   const queryNames: object = data.data.__schema.types[0].fields;
 
   function renderQuery(data: object) {
-    return (
-      <ul>
-        {Object.entries(data).map(([key, value]) => (
-          <>
-            {key == 'name' && (
-              <li key={key}>
-                <div onClick={() => toggleExpanded(value)}>{renderData(value)}</div>
-                <ul>{expanded[value] && renderExpandedQuery(data as Query)}</ul>
-              </li>
-            )}
-          </>
-        ))}
-      </ul>
-    );
+    return Object.entries(data).map(([key, value]) => (
+      <>
+        {key == 'name' && (
+          <TreeItem nodeId={value} label={value}>
+            {renderExpandedQuery(data as Query)}
+          </TreeItem>
+        )}
+      </>
+    ));
   }
 
   function renderExpandedQuery(data: Query) {
     return (
       <>
-        <p>
-          <em>{data.description}</em>
-        </p>
-        <span>Arguments: (</span>
-        {data.args.map((argObj: ArgObj, idx) => {
-          const argName = argObj.name;
-          // if (argObj.length > 1 && idx ) return renderData(argName);
-          return (
-            <>
-              {' '}
-              <span key={idx}>
-                {renderData(argName)}: {renderData(argObj.type.name)}
-              </span>
-              <span>, </span>
-            </>
-          );
-        })}
-        <span>)</span>
+        <TreeItem nodeId="4" label={data.description} />
+        <TreeItem nodeId={data.description} label="arguments">
+          {data.args.map((argObj: ArgObj, idx) => {
+            const argName = argObj.name;
+            return (
+              <TreeItem
+                nodeId={argName}
+                label={argName + ': ' + argObj.type.name}
+                key={data.description}
+              ></TreeItem>
+            );
+          })}
+        </TreeItem>
       </>
-      // <ul>
-      //   {Object.entries(data).map(([key, value]) => (
-      //     <>
-      //       {key == 'name' && (
-      //         <li key={key}>
-      //           <div onClick={() => toggleExpanded(value)}>{renderData(value)}</div>
-      //           <ul>{expanded[value] && renderData(data)}</ul>
-      //         </li>
-      //       )}
-      //     </>
-      //   ))}
-      // </ul>
     );
   }
 
   function renderData(data: object | string | number): ReactNode {
     if (!data) {
-      return <span>*empty*</span>;
+      return <TreeItem nodeId="2" label="*empty*"></TreeItem>;
     }
     if (typeof data == 'string' || typeof data == 'number') {
-      return <span>{data}</span>;
+      return <TreeItem nodeId="2" label={data} />;
     }
     if (Array.isArray(data)) {
       const render: ReactNode[] = data.map((el) => {
@@ -118,26 +100,30 @@ const Schema: FC<Props> = ({ data }) => {
     }
 
     if (typeof data == 'object' && !Array.isArray(data)) {
-      return (
-        <ul>
-          {Object.entries(data).map(([key, value]) => (
-            <>
-              {
-                <li key={key} onClick={() => toggleExpanded(key)}>
-                  {key}: {renderData(value)}
-                </li>
-              }
-            </>
-          ))}
-        </ul>
-      );
+      return Object.entries(data).map(([key, value]) => (
+        <TreeItem nodeId={key} key={key}>
+          {key}: {renderData(value)}
+        </TreeItem>
+      ));
     }
   }
 
   return (
     <div style={{ color: 'white' }}>
-      <h1>Available queries</h1>
-      <div>{renderData(queryNames)}</div>
+      <h1>Available graphQL requests</h1>
+      <TreeView
+        aria-label="file system navigator"
+        defaultCollapseIcon={<ExpandMoreIcon />}
+        defaultExpandIcon={<ChevronRightIcon />}
+        sx={{ height: 400, flexGrow: 1, maxWidth: 800, overflowY: 'auto' }}
+      >
+        <TreeItem nodeId="1" label="Queries">
+          {renderData(queryNames)}
+        </TreeItem>
+        <TreeItem nodeId="types" label="Types">
+          {renderData(data.data.__schema.types)}
+        </TreeItem>
+      </TreeView>
     </div>
   );
 };
