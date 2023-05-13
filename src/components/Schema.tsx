@@ -68,7 +68,7 @@ const Schema: FC<Props> = ({ data }) => {
     return (
       <>
         <TreeItem nodeId="4" label={data.description} />
-        <TreeItem nodeId={data.description} label="arguments:">
+        <TreeItem nodeId={data.description} label="arguments">
           {data.args.map((argObj: ArgObj, idx) => {
             const argName = argObj.name;
             return (
@@ -76,15 +76,7 @@ const Schema: FC<Props> = ({ data }) => {
                 nodeId={argName}
                 label={argName + ': ' + argObj.type.name}
                 key={data.description}
-              >
-                {/*{argName}: {argObj.type.name}*/}
-              </TreeItem>
-              // <TreeItem nodeId="fghfghf">
-              //   {argName}: {argObj.type.name}
-              // </TreeItem>
-              // <p>
-              //   {argName}: {argObj.type.name}
-              // </p>
+              ></TreeItem>
             );
           })}
         </TreeItem>
@@ -118,15 +110,18 @@ const Schema: FC<Props> = ({ data }) => {
 
   return (
     <div style={{ color: 'white' }}>
-      <h1>Available queries</h1>
+      <h1>Available graphQL requests</h1>
       <TreeView
         aria-label="file system navigator"
         defaultCollapseIcon={<ExpandMoreIcon />}
         defaultExpandIcon={<ChevronRightIcon />}
-        sx={{ height: 400, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
+        sx={{ height: 400, flexGrow: 1, maxWidth: 800, overflowY: 'auto' }}
       >
         <TreeItem nodeId="1" label="Queries">
           {renderData(queryNames)}
+        </TreeItem>
+        <TreeItem nodeId="types" label="Types">
+          {renderData(data.data.__schema.types)}
         </TreeItem>
       </TreeView>
     </div>
