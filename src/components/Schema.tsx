@@ -22,15 +22,38 @@ type Query = {
 type ArgObj = {
   [key: string]: string | object | ReactNode;
   name: string;
-  type: { name: string };
+  description: string;
+  type: ArgTypeObj;
+};
+
+type ArgTypeObj = {
+  // [key: string]: string | object | ReactNode;
+  // name: string | null;
+  name: string;
+  kind: string;
+  ofType: ArgNameTypeObj;
+};
+
+type ArgNameTypeObj = {
+  // [key: string]: string | object | ReactNode;
+  name: string | null;
+  // ofType: null | string;
+  kind: string | null;
 };
 
 export type SchemaServerResponce = {
   data: {
     __schema: {
-      types: [{ fields: object }];
+      types: SchemaType[];
     };
   };
+};
+
+type SchemaType = {
+  description: string;
+  fields: [];
+  kind: string;
+  name: string;
 };
 
 const Schema: FC<Props> = ({ data }) => {
@@ -51,6 +74,7 @@ const Schema: FC<Props> = ({ data }) => {
   }
 
   const queryNames: object = data.data.__schema.types[0].fields;
+  const graphQLTypes: SchemaType[] = data.data.__schema.types;
 
   function renderQuery(data: object) {
     return Object.entries(data).map(([key, value]) => (
@@ -67,19 +91,59 @@ const Schema: FC<Props> = ({ data }) => {
   function renderExpandedQuery(data: Query) {
     return (
       <>
-        <TreeItem nodeId="4" label={data.description} />
+        <TreeItem nodeId="4" label={'*' + data.description + '*'} />
         <TreeItem nodeId={data.description} label="arguments">
           {data.args.map((argObj: ArgObj, idx) => {
             const argName = argObj.name;
+            if (argObj.type.name) {
+              return (
+                <TreeItem nodeId={argName} key={idx} label={argName + ': ' + argObj.type.name}>
+                  {renderType(argObj.type.name)}
+                </TreeItem>
+              );
+            }
+            if (argObj.type.ofType.name) {
+              renderType(argObj.type.ofType.name);
+              return (
+                <TreeItem
+                  nodeId={argName}
+                  key={idx}
+                  label={argName + ': ' + argObj.type.ofType.name}
+                >
+                  {renderType(argObj.type.ofType.name)}
+                </TreeItem>
+              );
+            }
             return (
               <TreeItem
                 nodeId={argName}
-                label={argName + ': ' + argObj.type.name}
-                key={data.description}
-              ></TreeItem>
+                key={idx}
+                label={argName + ': ' + '*second level or array*'}
+              >
+                <span>complex type</span>
+              </TreeItem>
             );
           })}
         </TreeItem>
+      </>
+    );
+  }
+
+  function findType(typeName: string) {
+    const result = graphQLTypes.find((type) => {
+      return typeName == type.name;
+    });
+    return result;
+  }
+
+  function renderType(typeName: string) {
+    console.log('renderType 161');
+    const typeObj = findType(typeName);
+    return (
+      <>
+        <TreeItem nodeId={typeObj.name} label={typeObj.description} />
+        <hr />
+        <TreeItem nodeId={typeObj.kind} label={'kind: ' + typeObj.kind} />
       </>
     );
   }
