@@ -5,8 +5,11 @@ import Image from 'mui-image';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import IconGit from '../Icons/IconGit';
+import { useTranslation } from 'react-i18next';
 
 export const Footer = () => {
+  const { t } = useTranslation();
+  
   return (
     <Box
       sx={{
@@ -41,7 +44,7 @@ export const Footer = () => {
             rel='noopener'
             sx={{mr: '15px'}}
             >
-              <IconGit /> Daniil Russkikh
+              <IconGit /> {t('footer.danik')}
             </Link>
             <Link
             href='https://github.com/sashagayko'
@@ -50,7 +53,7 @@ export const Footer = () => {
             rel='noopener'
             sx={{mr: '15px'}}
             >
-              <IconGit /> Alexandr Gayko
+              <IconGit /> {t('footer.sasha')}
             </Link>
             <Link
             href='https://github.com/ksankakovsh'
@@ -59,7 +62,7 @@ export const Footer = () => {
             rel='noopener'
             sx={{mr: '15px'}}
             >
-              <IconGit /> Oksana Kovsh
+              <IconGit /> {t('footer.ksanka')}
             </Link>
           </Box>
           <Box>

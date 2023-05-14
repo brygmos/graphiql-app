@@ -3,9 +3,11 @@ import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { useState } from 'react';
 import cl from './Editor.module.css';
+import { useTranslation } from 'react-i18next';
 
 export const Editor = () => {
   const [response, setResponse] = useState('');
+  const { t } = useTranslation();
   const [query, setQuery] = useState(
     'query AllCharacters {\n' +
       '  characters {\n' +
@@ -52,7 +54,7 @@ export const Editor = () => {
       <div className={cl.container}>
         <div className={cl.container__left}>
           <div className={cl.editor}>
-            <label style={{ color: 'white' }}>Enter your query:</label>
+            <label style={{ color: 'white' }}>{t('editor.query')}</label>
             <CodeMirror
               value={query}
               height="200px"
@@ -63,7 +65,7 @@ export const Editor = () => {
                 setQuery(value);
               }}
             />
-            <button onClick={handleClick}>SEND</button>
+            <button onClick={handleClick}>{t('editor.send')}</button>
           </div>
         </div>
         <div className={cl.container__right}>

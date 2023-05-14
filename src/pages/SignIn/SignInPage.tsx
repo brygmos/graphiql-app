@@ -13,6 +13,8 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
 
 interface User {
   email: string;
@@ -22,6 +24,7 @@ interface User {
 export default function SignInPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -60,7 +63,7 @@ export default function SignInPage() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+        {t('auth.in')}
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -68,7 +71,7 @@ export default function SignInPage() {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label={t('auth.mail')}
             name="email"
             autoComplete="email"
             autoFocus
@@ -78,18 +81,18 @@ export default function SignInPage() {
             required
             fullWidth
             name="password"
-            label="Password"
+            label={t('auth.password')}
             type="password"
             id="password"
             autoComplete="current-password"
           />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Sign In
+          {t('auth.in')}
           </Button>
           <Grid container justifyContent="center">
             <Grid item>
               <Link href="registration" variant="body2">
-                {"Don't have an account? Sign Up"}
+              {t('auth.acc2')}
               </Link>
             </Grid>
           </Grid>

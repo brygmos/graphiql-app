@@ -1,0 +1,38 @@
+{
+    "welcome": {
+        "welcome": "Welcome to the request editor for",
+        "toUse": "To use the editor, please log in."
+    },
+    "header": {
+        "welcome": "Welcome",
+        "editor": "Editor",
+        "login": "Login",
+        "main": "Main"
+    },
+    "footer": {
+        "danik": "Daniil Russkikh",
+        "sasha": "Alexandr Gayko",
+        "ksanka": "Oksana Kovsh"
+    },
+    "editor": {
+        "send": "Send",
+        "title": "Editor Page",
+        "log": "Log out from",
+        "query": "Enter your query:",
+        "res": "here will be api response"
+    },
+    "auth": {
+        "in": "Sign In",
+        "up": "Sign Up",
+        "acc": "Already have an account? Sign in",
+        "mail": "Email Address",
+        "password": "Password",
+        "acc2": "Don't have an account? Sign Up"
+    },
+    "lang": {
+        "langs": "Languages",
+        "en": "English",
+        "by": "Belarusian",
+        "ru": "Russian"
+    }
+}
