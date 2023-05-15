@@ -57,17 +57,10 @@ type SchemaType = {
 };
 
 const Schema: FC<Props> = ({ data }) => {
-  const [expanded, setExpanded] = useState<Expanded>({});
-  const toggleExpanded = (key: string) => {
-    setExpanded({
-      ...expanded,
-      [key]: !expanded[key],
-    });
-  };
   if (!data) {
     return (
       <>
-        <h1>fetching data...</h1>
+        <h1>Fetching data...</h1>
         <CircularProgress color="success" />
       </>
     );
@@ -119,9 +112,12 @@ const Schema: FC<Props> = ({ data }) => {
                 // return renderData(argObj.type.kind);
                 return (
                   <>
-                    <TreeItem nodeId={argObj.type.kind} label={argObj.type.kind} />
+                    {/*<TreeItem nodeId={argObj.type.kind} label={argObj.type.kind} />*/}
+                    {argObj.type.kind && <Chip label={argObj.type.kind} color="success" />}
+                    <br />
                     {argObj.type.ofType.kind && (
-                      <TreeItem nodeId={argObj.type.ofType.kind} label={argObj.type.ofType.kind} />
+                      <Chip label={argObj.type.ofType.kind} color="success" />
+                      // <TreeItem nodeId={argObj.type.ofType.kind} label={argObj.type.ofType.kind} />
                     )}
                   </>
                 );
