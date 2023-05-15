@@ -115,6 +115,17 @@ const Schema: FC<Props> = ({ data }) => {
                   </TreeItem>
                 );
               }
+              if (argObj.type.kind) {
+                // return renderData(argObj.type.kind);
+                return (
+                  <>
+                    <TreeItem nodeId={argObj.type.kind} label={argObj.type.kind} />
+                    {argObj.type.ofType.kind && (
+                      <TreeItem nodeId={argObj.type.ofType.kind} label={argObj.type.ofType.kind} />
+                    )}
+                  </>
+                );
+              }
               return (
                 <TreeItem
                   nodeId={argName}
@@ -180,8 +191,6 @@ const Schema: FC<Props> = ({ data }) => {
         if (el.name && el.description == '' && el.args && el.args.length == 0)
           return renderData(el.name);
         if (el.name && el.description && el.args) return renderQuery(el);
-        // if (el.name && el.kind && el.description && !el.args) return <p>GGG</p>;
-        // if (el.name && el.kind && el.description && !el.args) return renderType(el);
         if (el.name.includes('__')) return;
         if (el.name && el.kind) return renderType(el);
         return renderData(el);
@@ -190,7 +199,7 @@ const Schema: FC<Props> = ({ data }) => {
     }
 
     if (typeof data == 'object' && !Array.isArray(data)) {
-      if (data.name && data.description && data.kind && data.kind > 0) return renderQuery(el);
+      if (data.name && data.description && data.kind && data.kind > 0) return renderQuery(data);
       return Object.entries(data).map(([key, value]) => (
         <TreeItem nodeId={key} key={key}>
           {key}: {renderData(value)}
