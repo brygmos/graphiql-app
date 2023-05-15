@@ -13,19 +13,9 @@ import HeadersEditor from '../HeadersEditor/HeadersEditor';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import { SchemaServerResponce } from '../Schema';
 
-export const Editor = () => {
-  const [response, setResponse] = useState('');
-  const { t } = useTranslation();
-  const [query, setQuery] = useState(
-    'query AllCharacters {\n' +
-      '  characters {\n' +
-      '    results {\n' +
-      '      name\n' +
-      '    }\n' +
-      '  }\n' +
-      '}'
 const Editor = () => {
   const [response, setResponse] = useState<string | void | object>();
+  const { t } = useTranslation();
   const [theme, setTheme] = useState(ThemeType.light);
   const [varsVisibility, setVarsVisibility] = useState(false);
   const [headersVisibility, setHeadersVisibility] = useState(false);
@@ -199,8 +189,9 @@ const Editor = () => {
               disabled={!!parseError}
               onClick={handleSendClick}
             >
-              Send
+              {t('editor.send')}
             </Button>
+            {/*<button onClick={handleClick}>{t('editor.send')}</button>*/}
             <Button
               variant="contained"
               onClick={() => {
@@ -234,8 +225,6 @@ const Editor = () => {
             >
               mode
             </Button>
-            />
-            <button onClick={handleClick}>{t('editor.send')}</button>
           </div>
         </div>
         <div className={cl.container__right}>

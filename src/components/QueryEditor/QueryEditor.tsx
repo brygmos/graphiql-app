@@ -3,6 +3,7 @@ import CodeMirror from '@uiw/react-codemirror';
 import { useState } from 'react';
 import { graphql } from 'cm6-graphql';
 import { ThemeType } from '../../types/ThemeType';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   theme?: ThemeType;
@@ -19,6 +20,7 @@ export const QueryEditor: FC<Props> = ({ theme, setQuery }) => {
       '  }\n' +
       '}'
   );
+  const { t } = useTranslation();
 
   const passToParent = () => {
     setQuery && setQuery(query);
@@ -30,7 +32,8 @@ export const QueryEditor: FC<Props> = ({ theme, setQuery }) => {
         passToParent();
       }}
     >
-      <label style={{ color: 'white' }}>Query editor:</label>
+      {/*<label style={{ color: 'white' }}>Query editor:</label>*/}
+      <label style={{ color: 'white' }}>{t('editor.query')}</label>
       <CodeMirror
         value={query}
         height="400px"
