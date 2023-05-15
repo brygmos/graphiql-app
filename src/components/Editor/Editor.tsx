@@ -1,5 +1,6 @@
 import React, { lazy, useEffect, useState, Suspense, ReactNode } from 'react';
 import cl from './Editor.module.css';
+import { useTranslation } from 'react-i18next';
 import { ImodalTextType } from '../../types/ImodalTextType';
 import MyModal from '../MyModal';
 import VarsEditor from '../VarsEditor/VarsEditor';
@@ -12,6 +13,17 @@ import HeadersEditor from '../HeadersEditor/HeadersEditor';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import { SchemaServerResponce } from '../Schema';
 
+export const Editor = () => {
+  const [response, setResponse] = useState('');
+  const { t } = useTranslation();
+  const [query, setQuery] = useState(
+    'query AllCharacters {\n' +
+      '  characters {\n' +
+      '    results {\n' +
+      '      name\n' +
+      '    }\n' +
+      '  }\n' +
+      '}'
 const Editor = () => {
   const [response, setResponse] = useState<string | void | object>();
   const [theme, setTheme] = useState(ThemeType.light);
@@ -222,6 +234,8 @@ const Editor = () => {
             >
               mode
             </Button>
+            />
+            <button onClick={handleClick}>{t('editor.send')}</button>
           </div>
         </div>
         <div className={cl.container__right}>

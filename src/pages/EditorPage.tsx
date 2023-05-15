@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Editor from '../components/Editor/Editor';
 import { removeUser } from '../store/slices/userSlice';
 import { useDispatch } from 'react-redux';
@@ -16,8 +17,8 @@ interface Store {
 
 function EditorPage() {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const user = useSelector((state: Store) => state.user);
 
   const handleClick = () => {
@@ -26,8 +27,8 @@ function EditorPage() {
   };
   return (
     <div className="App">
-      <h1>EditorPage</h1>
-      <button onClick={handleClick}>Log out from {user.email}</button>
+      <h1>{t('editor.title')}</h1>
+      <button onClick={handleClick}>{t('editor.log')} {user.email}</button>
       <Editor />
     </div>
   );
