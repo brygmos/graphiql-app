@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useState } from 'react';
-import { CircularProgress } from '@mui/material';
+import { Chip, CircularProgress } from '@mui/material';
 import TreeView from '@mui/lab/TreeView';
 import { TreeItem } from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -92,39 +92,41 @@ const Schema: FC<Props> = ({ data }) => {
     return (
       <>
         <TreeItem nodeId="4" label={'*' + data.description + '*'} />
-        <TreeItem nodeId={data.description} label="arguments">
-          {data.args.map((argObj: ArgObj, idx) => {
-            const argName = argObj.name;
-            if (argObj.type.name) {
-              return (
-                <TreeItem nodeId={argName} key={idx} label={argName + ': ' + argObj.type.name}>
-                  {renderType(argObj.type.name)}
-                </TreeItem>
-              );
-            }
-            if (argObj.type.ofType.name) {
-              renderType(argObj.type.ofType.name);
+        {data.args.length > 0 && (
+          <TreeItem nodeId={data.description} label="arguments">
+            {data.args.map((argObj: ArgObj, idx) => {
+              const argName = argObj.name;
+              if (argObj.type.name) {
+                return (
+                  <TreeItem nodeId={argName} key={idx} label={argName + ': ' + argObj.type.name}>
+                    {renderType(argObj.type.name)}
+                  </TreeItem>
+                );
+              }
+              if (argObj.type.ofType.name) {
+                renderType(argObj.type.ofType.name);
+                return (
+                  <TreeItem
+                    nodeId={argName}
+                    key={idx}
+                    label={argName + ': ' + argObj.type.ofType.name}
+                  >
+                    {renderType(argObj.type.ofType.name)}
+                  </TreeItem>
+                );
+              }
               return (
                 <TreeItem
                   nodeId={argName}
                   key={idx}
-                  label={argName + ': ' + argObj.type.ofType.name}
+                  label={argName + ': ' + '*second level or array*'}
                 >
-                  {renderType(argObj.type.ofType.name)}
+                  <span>complex type</span>
                 </TreeItem>
               );
-            }
-            return (
-              <TreeItem
-                nodeId={argName}
-                key={idx}
-                label={argName + ': ' + '*second level or array*'}
-              >
-                <span>complex type</span>
-              </TreeItem>
-            );
-          })}
-        </TreeItem>
+            })}
+          </TreeItem>
+        )}
       </>
     );
   }
@@ -136,28 +138,50 @@ const Schema: FC<Props> = ({ data }) => {
     return result;
   }
 
-  function renderType(typeName: string) {
-    console.log('renderType 161');
-    const typeObj = findType(typeName);
-    return (
-      <>
-        <TreeItem nodeId={typeObj.name} label={typeObj.description} />
-        <hr />
-        <TreeItem nodeId={typeObj.kind} label={'kind: ' + typeObj.kind} />
-      </>
-    );
+  function renderType(type: string | object) {
+    if (typeof type == 'string') {
+      const typeObj = findType(type);
+      return (
+        <>
+          <TreeItem nodeId={typeObj.name} label={typeObj.description} />
+          <hr />
+          {/*<TreeItem nodeId={typeObj.kind} label={'kind: ' + typeObj.kind} />*/}
+          {typeObj.kind && <Chip label={typeObj.kind} color="success" />}
+        </>
+      );
+    }
+    if (typeof type == 'object') {
+      return (
+        <>
+          <TreeItem nodeId={type.name} label={type.name}>
+            {type.description && renderData(type.description)}
+            <hr />
+            {type.kind && <Chip label={type.kind} color="success" />}
+            {type.fields && (
+              <TreeItem label="Fields" nodeId={type.name + 'FIELDS'}>
+                {renderData(type.fields)}
+              </TreeItem>
+            )}
+          </TreeItem>
+        </>
+      );
+    }
+    return <span>*exception*</span>;
   }
 
   function renderData(data: object | string | number): ReactNode {
     if (!data) {
-      return <TreeItem nodeId="2" label="*empty*"></TreeItem>;
+      return <TreeItem nodeId="2" label="*data empty*"></TreeItem>;
     }
     if (typeof data == 'string' || typeof data == 'number') {
-      return <TreeItem nodeId="2" label={data} />;
+      return <TreeItem nodeId={data + 'STRING'} label={data} />;
     }
     if (Array.isArray(data)) {
+      console.log(data);
       const render: ReactNode[] = data.map((el) => {
         if (el.name && el.description && el.args) return renderQuery(el);
+        if (el.name.includes('__')) return null;
+        if (el.name && el.kind) return renderType(el);
         return renderData(el);
       });
       return render as ReactNode;
@@ -174,15 +198,18 @@ const Schema: FC<Props> = ({ data }) => {
 
   return (
     <div style={{ color: 'white' }}>
-      <h1>Available graphQL requests</h1>
+      <h1>Documentation</h1>
       <TreeView
         aria-label="file system navigator"
         defaultCollapseIcon={<ExpandMoreIcon />}
         defaultExpandIcon={<ChevronRightIcon />}
         sx={{ height: 400, flexGrow: 1, maxWidth: 800, overflowY: 'auto' }}
       >
-        <TreeItem nodeId="1" label="Queries">
+        <TreeItem nodeId="queries" label="Queries">
           {renderData(queryNames)}
+        </TreeItem>
+        <TreeItem nodeId="types" label="Types">
+          {renderData(graphQLTypes)}
         </TreeItem>
       </TreeView>
     </div>
