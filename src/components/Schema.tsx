@@ -144,26 +144,23 @@ const Schema: FC<Props> = ({ data }) => {
       return (
         <>
           <TreeItem nodeId={typeObj.name} label={typeObj.description} />
-          <hr />
-          {/*<TreeItem nodeId={typeObj.kind} label={'kind: ' + typeObj.kind} />*/}
           {typeObj.kind && <Chip label={typeObj.kind} color="success" />}
+          <hr />
         </>
       );
     }
     if (typeof type == 'object') {
       return (
-        <>
-          <TreeItem nodeId={type.name} label={type.name}>
-            {type.description && renderData(type.description)}
-            <hr />
-            {type.kind && <Chip label={type.kind} color="success" />}
-            {type.fields && (
-              <TreeItem label="Fields" nodeId={type.name + 'FIELDS'}>
-                {renderData(type.fields)}
-              </TreeItem>
-            )}
-          </TreeItem>
-        </>
+        <TreeItem nodeId={type.name} label={type.name}>
+          {type.description && renderData(type.description)}
+          {type.kind && <Chip label={type.kind} color="success" />}
+          {type.fields && (
+            <TreeItem label="Fields" nodeId={type.name + 'FIELDS'}>
+              {renderData(type.fields)}
+            </TreeItem>
+          )}
+          <hr />
+        </TreeItem>
       );
     }
     return <span>*exception*</span>;
@@ -179,8 +176,13 @@ const Schema: FC<Props> = ({ data }) => {
     if (Array.isArray(data)) {
       console.log(data);
       const render: ReactNode[] = data.map((el) => {
+        if (el.name && el.description && el.args && el.args.length > 0) return renderQuery(el);
+        if (el.name && el.description == '' && el.args && el.args.length == 0)
+          return renderData(el.name);
         if (el.name && el.description && el.args) return renderQuery(el);
-        if (el.name.includes('__')) return null;
+        // if (el.name && el.kind && el.description && !el.args) return <p>GGG</p>;
+        // if (el.name && el.kind && el.description && !el.args) return renderType(el);
+        if (el.name.includes('__')) return;
         if (el.name && el.kind) return renderType(el);
         return renderData(el);
       });
@@ -188,6 +190,7 @@ const Schema: FC<Props> = ({ data }) => {
     }
 
     if (typeof data == 'object' && !Array.isArray(data)) {
+      if (data.name && data.description && data.kind && data.kind > 0) return renderQuery(el);
       return Object.entries(data).map(([key, value]) => (
         <TreeItem nodeId={key} key={key}>
           {key}: {renderData(value)}
@@ -201,9 +204,9 @@ const Schema: FC<Props> = ({ data }) => {
       <h1>Documentation</h1>
       <TreeView
         aria-label="file system navigator"
-        defaultCollapseIcon={<ExpandMoreIcon />}
+        defaultCollapseIcon={<ExpandMoreIcon color="action" />}
         defaultExpandIcon={<ChevronRightIcon />}
-        sx={{ height: 400, flexGrow: 1, maxWidth: 800, overflowY: 'auto' }}
+        sx={{ height: 400, flexGrow: 1, width: 800, overflowY: 'auto' }}
       >
         <TreeItem nodeId="queries" label="Queries">
           {renderData(queryNames)}
