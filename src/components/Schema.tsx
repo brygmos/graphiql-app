@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { Chip, CircularProgress } from '@mui/material';
 import TreeView from '@mui/lab/TreeView';
 import { TreeItem } from '@mui/lab';
@@ -7,10 +7,6 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 type Props = {
   data: SchemaServerResponce;
-};
-
-type Expanded = {
-  [key: string]: boolean;
 };
 
 type Query = {
@@ -28,7 +24,6 @@ type ArgObj = {
 
 type ArgTypeObj = {
   // [key: string]: string | object | ReactNode;
-  // name: string | null;
   name: string;
   kind: string;
   ofType: ArgNameTypeObj;
@@ -37,7 +32,6 @@ type ArgTypeObj = {
 type ArgNameTypeObj = {
   // [key: string]: string | object | ReactNode;
   name: string | null;
-  // ofType: null | string;
   kind: string | null;
 };
 
@@ -109,15 +103,12 @@ const Schema: FC<Props> = ({ data }) => {
                 );
               }
               if (argObj.type.kind) {
-                // return renderData(argObj.type.kind);
                 return (
                   <>
-                    {/*<TreeItem nodeId={argObj.type.kind} label={argObj.type.kind} />*/}
                     {argObj.type.kind && <Chip label={argObj.type.kind} color="success" />}
                     <br />
                     {argObj.type.ofType.kind && (
                       <Chip label={argObj.type.ofType.kind} color="success" />
-                      // <TreeItem nodeId={argObj.type.ofType.kind} label={argObj.type.ofType.kind} />
                     )}
                   </>
                 );

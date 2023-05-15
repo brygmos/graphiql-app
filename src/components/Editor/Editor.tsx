@@ -10,10 +10,9 @@ import Button from '@mui/material/Button';
 import { Alert, CircularProgress, Snackbar } from '@mui/material';
 import HeadersEditor from '../HeadersEditor/HeadersEditor';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
-import IconButton from '@mui/material/IconButton';
 import { SchemaServerResponce } from '../Schema';
 
-export const Editor = () => {
+const Editor = () => {
   const [response, setResponse] = useState<string | void | object>();
   const [theme, setTheme] = useState(ThemeType.light);
   const [varsVisibility, setVarsVisibility] = useState(false);
@@ -24,7 +23,6 @@ export const Editor = () => {
   const [modalTextType, setModalTextType] = useState(ImodalTextType.neutral);
   const [vars, setVars] = useState({ page: 1, filter: { name: 'beth' } } as object);
   const [introspectionResponse, setIntrospectionResponse] = useState<unknown>(null);
-  // const [introspectionResponse, setIntrospectionResponse] = useState<ReactNode>(null);
   const [varsString, setVarsString] = useState(
     '{\n  "page": 1,\n  "filter": {\n    "name": "beth"\n  }\n}'
   );
@@ -40,11 +38,6 @@ export const Editor = () => {
   useEffect(() => {
     prefersDarkMode ? setTheme(ThemeType.dark) : setTheme(ThemeType.light);
   }, [prefersDarkMode]);
-
-  // useEffect(() => {
-  //   const ttt = fetchQuery(schemaQuery);
-  //   setIntrospectionResponse(ttt as object);
-  // }, []);
 
   const extractQueryName = (query: string) => {
     const text = query;
@@ -73,7 +66,6 @@ export const Editor = () => {
     fetchQuery: string = query,
     fetchVars: object = {}
   ): Promise<ReactNode> {
-    // ): Promise<string | void | object> {
     setResponse('');
     if (parseError) return;
     const operationName = extractQueryName(fetchQuery);
@@ -192,7 +184,7 @@ export const Editor = () => {
             <Button
               variant="contained"
               color={'success'}
-              // disabled={parseError}
+              disabled={!!parseError}
               onClick={handleSendClick}
             >
               Send
