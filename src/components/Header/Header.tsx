@@ -76,7 +76,8 @@ export const Header = (props: Props) => {
               </Button>
             </Box>
             <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-              <Button color="inherit">Login</Button>
+              <Button component={Link} to='/login' color="inherit">SignIn</Button>
+              <Button component={Link} to='/registration' color="inherit">SignUp</Button>
               <Language />
             </Box>
           

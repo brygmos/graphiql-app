@@ -7,12 +7,12 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 
 export const Language = () => {
-  const [language, setLanguage] = useState(() => {
+  const [languageDef, setLanguageDef] = useState(() => {
     return localStorage.getItem('language') ?? 'en';
   });
   const { t, i18n } = useTranslation();
   const handleChange = (event: SelectChangeEvent) => {
-    setLanguage(event.target.value);
+    const language = event.target.value;
     i18n.changeLanguage(language);
     localStorage.setItem('language', language);
   };
@@ -25,12 +25,12 @@ export const Language = () => {
           labelId="lang"
           id="lang"
           label="Language"
-          defaultValue={language}
+          defaultValue={languageDef}
           onChange={handleChange}
         >
           <MenuItem value={'en'}>{t('lang.en')}</MenuItem>
-          <MenuItem value={'ru'}>{t('lang.ru')}</MenuItem>
           <MenuItem value={'by'}>{t('lang.by')}</MenuItem>
+          <MenuItem value={'ru'}>{t('lang.ru')}</MenuItem>
         </Select>
       </FormControl>
     </div>
