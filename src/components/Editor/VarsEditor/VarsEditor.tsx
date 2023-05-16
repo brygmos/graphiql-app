@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-import { ThemeType } from '../../types/ThemeType';
+import { ThemeType } from '../../../types/ThemeType';
 import { json } from '@codemirror/lang-json';
 import { Alert } from '@mui/material';
 

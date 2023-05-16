@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import cl from './styles/MyModal.module.css';
+import cl from '../styles/MyModal.module.css';
 
 type Props = {
   visible?: boolean;

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import Editor from '../components/Editor/Editor';
-import { removeUser } from '../store/slices/userSlice';
+import Editor from '../../components/Editor/Editor';
+import { removeUser } from '../../store/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -28,7 +28,9 @@ function EditorPage() {
   return (
     <div className="App">
       <h1>{t('editor.title')}</h1>
-      <button onClick={handleClick}>{t('editor.log')} {user.email}</button>
+      <button onClick={handleClick}>
+        {t('editor.log')} {user.email}
+      </button>
       <Editor />
     </div>
   );

@@ -5,26 +5,23 @@ import { TreeItem } from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-export type SchemaServerResponce = {
+export type SchemaServerResponse = {
   data: {
     __schema: {
       types: Type[];
     };
   };
 };
-
 type Props = {
-  data: SchemaServerResponce;
+  data: SchemaServerResponse;
 };
-
 type Query = {
   description: string;
   args: [];
 };
-
 type ArgObj = {
   name: string;
-  description: string | null;
+  description: string;
   type: ArgTypeObj;
 };
 type ArgTypeObj = {
@@ -36,14 +33,12 @@ type ArgNameTypeObj = {
   name: string | null;
   kind: string | null | [];
 };
-
 type Type = {
   name: string;
   description: string;
   kind: string | [];
   fields: Field[];
 };
-
 type Field = {
   name: string;
   description: string;
@@ -67,7 +62,7 @@ const Schema: FC<Props> = ({ data }) => {
     return Object.entries(data).map(([key, value]) => (
       <>
         {key == 'name' && (
-          <TreeItem nodeId={value} label={value}>
+          <TreeItem nodeId={value} label={value} key={value}>
             {renderExpandedQuery(data as Query)}
           </TreeItem>
         )}
@@ -78,14 +73,18 @@ const Schema: FC<Props> = ({ data }) => {
   function renderExpandedQuery(data: Query) {
     return (
       <>
-        <TreeItem nodeId="4" label={'*' + data.description + '*'} />
+        <TreeItem nodeId={data.description} label={'*' + data.description + '*'} />
         {data.args.length > 0 && (
           <TreeItem nodeId={data.description} label="arguments">
             {data.args.map((argObj: ArgObj, idx) => {
               const argName = argObj.name;
               if (argObj.type.name) {
                 return (
-                  <TreeItem nodeId={argName} key={idx} label={argName + ': ' + argObj.type.name}>
+                  <TreeItem
+                    nodeId={argObj.type.name}
+                    key={idx}
+                    label={argName + ':: ' + argObj.type.name}
+                  >
                     {renderType(argObj.type.name)}
                   </TreeItem>
                 );
@@ -94,8 +93,8 @@ const Schema: FC<Props> = ({ data }) => {
                 renderType(argObj.type.ofType.name);
                 return (
                   <TreeItem
-                    nodeId={argName}
-                    key={idx}
+                    nodeId={argObj.type.ofType.name}
+                    key={argObj.type.ofType.name}
                     label={argName + ': ' + argObj.type.ofType.name}
                   >
                     {renderType(argObj.type.ofType.name)}
@@ -113,15 +112,6 @@ const Schema: FC<Props> = ({ data }) => {
                   </>
                 );
               }
-              return (
-                <TreeItem
-                  nodeId={argName}
-                  key={idx}
-                  label={argName + ': ' + '*second level or array*'}
-                >
-                  <span>complex type</span>
-                </TreeItem>
-              );
             })}
           </TreeItem>
         )}
@@ -141,7 +131,7 @@ const Schema: FC<Props> = ({ data }) => {
       if (typeObj)
         return (
           <>
-            <TreeItem nodeId={typeObj.name} label={typeObj.description} />
+            <TreeItem nodeId={typeObj.description} label={typeObj.description} />
             {typeObj.kind && <Chip label={typeObj.kind} color="success" />}
             <hr />
           </>
@@ -168,7 +158,7 @@ const Schema: FC<Props> = ({ data }) => {
     data: string | ArgObj | Type | Type[] | ArgNameTypeObj | Field | Field[]
   ): ReactNode {
     if (!data) {
-      return <TreeItem nodeId="2" label="*data empty*"></TreeItem>;
+      return <TreeItem nodeId="nodata" label="*data empty*"></TreeItem>;
     }
     if (typeof data == 'string') {
       return <TreeItem nodeId={data + 'STRING'} label={data} />;
@@ -179,7 +169,8 @@ const Schema: FC<Props> = ({ data }) => {
         if ('args' in el) {
           if (el.name && el.description && el.args && el.args.length > 0) return renderQuery(el);
           if (el.name && el.description == '' && el.args && el.args.length == 0)
-            return renderData(el.name);
+            return <TreeItem nodeId={el.name} key={el.name} />;
+          // return renderData(el.name);
           if (el.name && el.description && el.args) return renderQuery(el);
         }
         if ('kind' in el) {

@@ -2,16 +2,16 @@ import React, { lazy, useEffect, useState, Suspense, ReactNode } from 'react';
 import cl from './Editor.module.css';
 import { useTranslation } from 'react-i18next';
 import { ImodalTextType } from '../../types/ImodalTextType';
-import MyModal from '../MyModal';
-import VarsEditor from '../VarsEditor/VarsEditor';
-import QueryEditor from '../QueryEditor/QueryEditor';
+import MyModal from '../Modal/MyModal';
+import VarsEditor from './VarsEditor/VarsEditor';
+import QueryEditor from './QueryEditor/QueryEditor';
 import { ThemeType } from '../../types/ThemeType';
-import ResponseWindow from '../ResponseWindow/ResponseWindow';
+import ResponseWindow from './ResponseWindow/ResponseWindow';
 import Button from '@mui/material/Button';
 import { Alert, CircularProgress, Snackbar } from '@mui/material';
 import HeadersEditor from '../HeadersEditor/HeadersEditor';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
-import { SchemaServerResponce } from '../Schema';
+import { SchemaServerResponse } from './Schema';
 
 const Editor = () => {
   const [response, setResponse] = useState<string | void | object>();
@@ -62,7 +62,7 @@ const Editor = () => {
     setModal(true, '', ImodalTextType.neutral);
   };
 
-  const LazySchema = lazy(() => import('../Schema'));
+  const LazySchema = lazy(() => import('./Schema'));
 
   async function fetchQuery(
     fetchQuery: string = query,
@@ -148,7 +148,7 @@ const Editor = () => {
             }}
           >
             <Suspense fallback={<CircularProgress color="success" />}>
-              <LazySchema data={introspectionResponse as SchemaServerResponce} />
+              <LazySchema data={introspectionResponse as SchemaServerResponse} />
             </Suspense>
           </MyModal>
         )}
@@ -231,7 +231,7 @@ const Editor = () => {
           <div className={cl.response}>
             <ResponseWindow
               theme={theme}
-              setResponce={(q) => {
+              setResponse={(q) => {
                 handleParse(q);
               }}
               response={response}

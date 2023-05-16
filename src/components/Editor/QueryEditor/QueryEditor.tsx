@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { useState } from 'react';
 import { graphql } from 'cm6-graphql';
-import { ThemeType } from '../../types/ThemeType';
+import { ThemeType } from '../../../types/ThemeType';
 import { useTranslation } from 'react-i18next';
 
 type Props = {

@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import { Welcome } from './pages/Welcome/Welcome';
 import { Layout } from './components/Layout/Layouut';
-import EditorPage from './pages/EditorPage';
+import EditorPage from './pages/Editor/EditorPage';
 import SignInPage from './pages/SignIn/SignInPage';
 import SignUpPage from './pages/SignUp/SignUpPage';
 import { useSelector } from 'react-redux';
