@@ -31,20 +31,17 @@ export const Header = (props: Props) => {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      
       <List>
-          <ListItem component={ Link } to="/"
-            sx={{ textTransform: 'uppercase' }}>
-              <ListItemButton sx={{ textAlign: 'center' }}>
-                  <ListItemText primary="Welcome" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem component={ Link } to="/editor"
-            sx={{ textTransform: 'uppercase' }}>
-              <ListItemButton sx={{ textAlign: 'center' }}>
-                  <ListItemText primary="Editor" />
-              </ListItemButton>
-          </ListItem>
+        <ListItem component={Link} to="/" sx={{ textTransform: 'uppercase' }}>
+          <ListItemButton sx={{ textAlign: 'center' }}>
+            <ListItemText primary="Welcome" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem component={Link} to="/editor" sx={{ textTransform: 'uppercase' }}>
+          <ListItemButton sx={{ textAlign: 'center' }}>
+            <ListItemText primary="Editor" />
+          </ListItemButton>
+        </ListItem>
       </List>
       <Divider />
     </Box>
@@ -66,21 +63,31 @@ export const Header = (props: Props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Box sx={{display: 'flex', justifyContent: 'space-around', width: '100%', alignItems: 'center'}}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-around',
+              width: '100%',
+              alignItems: 'center',
+            }}
+          >
             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-              <Button component={Link} to='/' sx={{ color: '#fff' }}>
+              <Button component={Link} to="/" sx={{ color: '#fff' }}>
                 Welcome
               </Button>
-              <Button component={Link} to='/editor' sx={{ color: '#fff' }}>
+              <Button component={Link} to="/editor" sx={{ color: '#fff' }}>
                 Editor
               </Button>
             </Box>
-            <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-              <Button component={Link} to='/login' color="inherit">SignIn</Button>
-              <Button component={Link} to='/registration' color="inherit">SignUp</Button>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Button component={Link} to="/login" color="inherit">
+                SignIn
+              </Button>
+              <Button component={Link} to="/registration" color="inherit">
+                SignUp
+              </Button>
               <Language />
             </Box>
-          
           </Box>
         </Toolbar>
       </AppBar>
@@ -101,7 +108,6 @@ export const Header = (props: Props) => {
           {drawer}
         </Drawer>
       </Box>
-
     </Box>
   );
-}
+};

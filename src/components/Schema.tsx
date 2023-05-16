@@ -5,9 +5,19 @@ import { TreeItem } from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
+export type SchemaServerResponce = {
+  data: {
+    __schema: {
+      types: Type[];
+    };
+  };
+};
+
 type Props = {
   data: SchemaServerResponce;
 };
+
+type TTT = string | ArgObj | Type | Type[] | ArgNameTypeObj | Field | Field[];
 
 type Query = {
   [key: string]: string | object | ReactNode;
@@ -16,38 +26,31 @@ type Query = {
 };
 
 type ArgObj = {
-  [key: string]: string | object | ReactNode;
   name: string;
-  description: string;
+  description: string | null;
   type: ArgTypeObj;
 };
-
 type ArgTypeObj = {
-  // [key: string]: string | object | ReactNode;
-  name: string;
+  name: string | null;
   kind: string;
   ofType: ArgNameTypeObj;
 };
-
 type ArgNameTypeObj = {
-  // [key: string]: string | object | ReactNode;
   name: string | null;
   kind: string | null;
 };
 
-export type SchemaServerResponce = {
-  data: {
-    __schema: {
-      types: SchemaType[];
-    };
-  };
+type Type = {
+  name: string;
+  description: string;
+  kind: string;
+  fields: Field[];
 };
 
-type SchemaType = {
-  description: string;
-  fields: [];
-  kind: string;
+type Field = {
   name: string;
+  description: string;
+  args: ArgObj[];
 };
 
 const Schema: FC<Props> = ({ data }) => {
@@ -60,8 +63,8 @@ const Schema: FC<Props> = ({ data }) => {
     );
   }
 
-  const queryNames: object = data.data.__schema.types[0].fields;
-  const graphQLTypes: SchemaType[] = data.data.__schema.types;
+  const queryNames: Field[] = data.data.__schema.types[0].fields;
+  const graphQLTypes: Type[] = data.data.__schema.types;
 
   function renderQuery(data: object) {
     return Object.entries(data).map(([key, value]) => (
@@ -136,16 +139,17 @@ const Schema: FC<Props> = ({ data }) => {
     return result;
   }
 
-  function renderType(type: string | object) {
+  function renderType(type: Type | string) {
     if (typeof type == 'string') {
-      const typeObj = findType(type);
-      return (
-        <>
-          <TreeItem nodeId={typeObj.name} label={typeObj.description} />
-          {typeObj.kind && <Chip label={typeObj.kind} color="success" />}
-          <hr />
-        </>
-      );
+      const typeObj: Type | undefined = findType(type as string);
+      if (typeObj)
+        return (
+          <>
+            <TreeItem nodeId={typeObj.name} label={typeObj.description} />
+            {typeObj.kind && <Chip label={typeObj.kind} color="success" />}
+            <hr />
+          </>
+        );
     }
     if (typeof type == 'object') {
       return (
@@ -164,15 +168,35 @@ const Schema: FC<Props> = ({ data }) => {
     return <span>*exception*</span>;
   }
 
-  function renderData(data: object | string | number): ReactNode {
+  function renderData(
+    data: string | ArgObj | Type | Type[] | ArgNameTypeObj | Field | Field[]
+  ): ReactNode {
     if (!data) {
       return <TreeItem nodeId="2" label="*data empty*"></TreeItem>;
     }
-    if (typeof data == 'string' || typeof data == 'number') {
+    if (typeof data == 'string') {
       return <TreeItem nodeId={data + 'STRING'} label={data} />;
     }
+    // if (Array.isArray(data)) {
+    //   const render: ReactNode[] = data.map((el) => {
+    //     const one = (el: Field) => {
+    //       if (el.name && el.description && el.args && el.args.length > 0) return renderQuery(el);
+    //       if (el.name && el.description == '' && el.args && el.args.length == 0)
+    //         return renderData(el.name);
+    //       if (el.name && el.description && el.args) return renderQuery(el);
+    //     };
+    //     const two = (el: Type) => {
+    //       if (el.name && el.kind) return renderType(el);
+    //     };
+    //     one(el as Field);
+    //     two(el as Type);
+    //     if (el.name.includes('__')) return;
+    //     return renderData(el);
+    //   });
+    //   return render as ReactNode;
+    // }
+
     if (Array.isArray(data)) {
-      console.log(data);
       const render: ReactNode[] = data.map((el) => {
         if (el.name && el.description && el.args && el.args.length > 0) return renderQuery(el);
         if (el.name && el.description == '' && el.args && el.args.length == 0)
@@ -186,13 +210,23 @@ const Schema: FC<Props> = ({ data }) => {
     }
 
     if (typeof data == 'object' && !Array.isArray(data)) {
+      // (data: Type) => {
       if (data.name && data.description && data.kind && data.kind > 0) return renderQuery(data);
+      // };
       return Object.entries(data).map(([key, value]) => (
         <TreeItem nodeId={key} key={key}>
           {key}: {renderData(value)}
         </TreeItem>
       ));
     }
+    // if (typeof data == 'object' && !Array.isArray(data)) {
+    //   if (data.name && data.description && data.kind && data.kind > 0) return renderQuery(data);
+    //   return Object.entries(data).map(([key, value]) => (
+    //     <TreeItem nodeId={key} key={key}>
+    //       {key}: {renderData(value)}
+    //     </TreeItem>
+    //   ));
+    // }
   }
 
   return (
