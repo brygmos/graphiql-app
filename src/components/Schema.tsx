@@ -17,10 +17,7 @@ type Props = {
   data: SchemaServerResponce;
 };
 
-type TTT = string | ArgObj | Type | Type[] | ArgNameTypeObj | Field | Field[];
-
 type Query = {
-  [key: string]: string | object | ReactNode;
   description: string;
   args: [];
 };
@@ -32,18 +29,18 @@ type ArgObj = {
 };
 type ArgTypeObj = {
   name: string | null;
-  kind: string;
+  kind: string | [];
   ofType: ArgNameTypeObj;
 };
 type ArgNameTypeObj = {
   name: string | null;
-  kind: string | null;
+  kind: string | null | [];
 };
 
 type Type = {
   name: string;
   description: string;
-  kind: string;
+  kind: string | [];
   fields: Field[];
 };
 
@@ -133,10 +130,9 @@ const Schema: FC<Props> = ({ data }) => {
   }
 
   function findType(typeName: string) {
-    const result = graphQLTypes.find((type) => {
+    return graphQLTypes.find((type) => {
       return typeName == type.name;
     });
-    return result;
   }
 
   function renderType(type: Type | string) {
@@ -177,56 +173,35 @@ const Schema: FC<Props> = ({ data }) => {
     if (typeof data == 'string') {
       return <TreeItem nodeId={data + 'STRING'} label={data} />;
     }
-    // if (Array.isArray(data)) {
-    //   const render: ReactNode[] = data.map((el) => {
-    //     const one = (el: Field) => {
-    //       if (el.name && el.description && el.args && el.args.length > 0) return renderQuery(el);
-    //       if (el.name && el.description == '' && el.args && el.args.length == 0)
-    //         return renderData(el.name);
-    //       if (el.name && el.description && el.args) return renderQuery(el);
-    //     };
-    //     const two = (el: Type) => {
-    //       if (el.name && el.kind) return renderType(el);
-    //     };
-    //     one(el as Field);
-    //     two(el as Type);
-    //     if (el.name.includes('__')) return;
-    //     return renderData(el);
-    //   });
-    //   return render as ReactNode;
-    // }
 
     if (Array.isArray(data)) {
       const render: ReactNode[] = data.map((el) => {
-        if (el.name && el.description && el.args && el.args.length > 0) return renderQuery(el);
-        if (el.name && el.description == '' && el.args && el.args.length == 0)
-          return renderData(el.name);
-        if (el.name && el.description && el.args) return renderQuery(el);
-        if (el.name.includes('__')) return;
-        if (el.name && el.kind) return renderType(el);
-        return renderData(el);
+        if ('args' in el) {
+          if (el.name && el.description && el.args && el.args.length > 0) return renderQuery(el);
+          if (el.name && el.description == '' && el.args && el.args.length == 0)
+            return renderData(el.name);
+          if (el.name && el.description && el.args) return renderQuery(el);
+        }
+        if ('kind' in el) {
+          if (el.name.includes('__')) return;
+          if (el.name && el.kind) return renderType(el);
+          return renderData(el);
+        }
       });
       return render as ReactNode;
     }
 
     if (typeof data == 'object' && !Array.isArray(data)) {
-      // (data: Type) => {
-      if (data.name && data.description && data.kind && data.kind > 0) return renderQuery(data);
-      // };
+      if ('kind' in data && 'description' in data) {
+        if (data.name && data.description && data.kind && data.kind.length > 0)
+          return renderQuery(data);
+      }
       return Object.entries(data).map(([key, value]) => (
         <TreeItem nodeId={key} key={key}>
           {key}: {renderData(value)}
         </TreeItem>
       ));
     }
-    // if (typeof data == 'object' && !Array.isArray(data)) {
-    //   if (data.name && data.description && data.kind && data.kind > 0) return renderQuery(data);
-    //   return Object.entries(data).map(([key, value]) => (
-    //     <TreeItem nodeId={key} key={key}>
-    //       {key}: {renderData(value)}
-    //     </TreeItem>
-    //   ));
-    // }
   }
 
   return (
