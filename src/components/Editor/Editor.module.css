@@ -2,7 +2,6 @@
     margin: 0 auto;
     display: flex;
     justify-content: center;
-    /*width: 90vw;*/
     width: 80vw;
     min-width: 320px;
     height: 80vh;
@@ -17,14 +16,12 @@
 
 .container__left{
     flex: 1;
-    /*background-color: green;*/
     min-width: 320px;
     padding: 20px;
 }
 
 .container__right{
     flex: 1;
-    /*background-color: red;*/
     min-width: 320px;
     padding: 20px;
 }

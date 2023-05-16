@@ -1,6 +1,6 @@
 import classes from './Footer.module.css';
 import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
+import Box from '@mui/material/Box/Box';
 import Image from 'mui-image';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
@@ -24,49 +24,49 @@ export const Footer = () => {
         sx={{
           py: 3,
           px: 2,
-          mt: 'auto'
+          mt: 'auto',
         }}
       >
-        <Container 
-        maxWidth="lg"
-        className={classes.links__wrap}
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
+        <Container
+          maxWidth="lg"
+          className={classes.links__wrap}
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
         >
           <Box className={classes.links}>
             <Link
-            href='https://github.com/brygmos'
-            underline='hover'
-            target='_blank'
-            rel='noopener'
-            sx={{mr: '15px'}}
+              href="https://github.com/brygmos"
+              underline="hover"
+              target="_blank"
+              rel="noopener"
+              sx={{ mr: '15px' }}
             >
               <IconGit /> {t('footer.danik')}
             </Link>
             <Link
-            href='https://github.com/sashagayko'
-            underline='hover'
-            target='_blank'
-            rel='noopener'
-            sx={{mr: '15px'}}
+              href="https://github.com/sashagayko"
+              underline="hover"
+              target="_blank"
+              rel="noopener"
+              sx={{ mr: '15px' }}
             >
               <IconGit /> {t('footer.sasha')}
             </Link>
             <Link
-            href='https://github.com/ksankakovsh'
-            underline='hover'
-            target='_blank'
-            rel='noopener'
-            sx={{mr: '15px'}}
+              href="https://github.com/ksankakovsh"
+              underline="hover"
+              target="_blank"
+              rel="noopener"
+              sx={{ mr: '15px' }}
             >
               <IconGit /> {t('footer.ksanka')}
             </Link>
           </Box>
           <Box>
-            <Link href='https://rs.school/react/' target='_blank' rel='noopener'>
+            <Link href="https://rs.school/react/" target="_blank" rel="noopener">
               <Image className={classes.img} src="https://rs.school/images/rs_school_js.svg" />
             </Link>
           </Box>
@@ -74,4 +74,4 @@ export const Footer = () => {
       </Box>
     </Box>
   );
-}
+};

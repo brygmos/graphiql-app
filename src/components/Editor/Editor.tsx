@@ -1,22 +1,45 @@
-import React from 'react';
-import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
-import { useState } from 'react';
+import React, { lazy, useEffect, useState, Suspense, ReactNode } from 'react';
 import cl from './Editor.module.css';
 import { useTranslation } from 'react-i18next';
+import { ImodalTextType } from '../../types/ImodalTextType';
+import MyModal from '../MyModal';
+import VarsEditor from '../VarsEditor/VarsEditor';
+import QueryEditor from '../QueryEditor/QueryEditor';
+import { ThemeType } from '../../types/ThemeType';
+import ResponseWindow from '../ResponseWindow/ResponseWindow';
+import Button from '@mui/material/Button';
+import { Alert, CircularProgress, Snackbar } from '@mui/material';
+import HeadersEditor from '../HeadersEditor/HeadersEditor';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import { SchemaServerResponce } from '../Schema';
 
-export const Editor = () => {
-  const [response, setResponse] = useState('');
+const Editor = () => {
+  const [response, setResponse] = useState<string | void | object>();
   const { t } = useTranslation();
-  const [query, setQuery] = useState(
-    'query AllCharacters {\n' +
-      '  characters {\n' +
-      '    results {\n' +
-      '      name\n' +
-      '    }\n' +
-      '  }\n' +
-      '}'
+  const [theme, setTheme] = useState(ThemeType.light);
+  const [varsVisibility, setVarsVisibility] = useState(false);
+  const [headersVisibility, setHeadersVisibility] = useState(false);
+  const [responseError, setResponseError] = useState('');
+  const [modalVisibility, setModalVisibility] = useState(false);
+  const [modalText, setModalText] = useState('');
+  const [modalTextType, setModalTextType] = useState(ImodalTextType.neutral);
+  const [vars, setVars] = useState({ page: 1, filter: { name: 'beth' } } as object);
+  const [introspectionResponse, setIntrospectionResponse] = useState<unknown>(null);
+  const [varsString, setVarsString] = useState(
+    '{\n  "page": 1,\n  "filter": {\n    "name": "beth"\n  }\n}'
   );
+  const [query, setQuery] = useState('');
+  const [parseError, setParseError] = useState<string | null>(null);
+
+  const prefersDarkMode =
+    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  const schemaQuery =
+    'query IntrospectionQuery {    __schema {        queryType {            name        }        types {            name            kind            description            fields {                name                description                args {                    name                    description                    type {                        name                        kind                        ofType {                            name                            kind                        }                    }                }            }        }    }}';
+
+  useEffect(() => {
+    prefersDarkMode ? setTheme(ThemeType.dark) : setTheme(ThemeType.light);
+  }, [prefersDarkMode]);
 
   const extractQueryName = (query: string) => {
     const text = query;
@@ -29,12 +52,33 @@ export const Editor = () => {
     }
   };
 
-  const fetchUserData = () => {
-    const operationName = extractQueryName(query);
+  function setModal(visible: boolean, text: string, type: ImodalTextType) {
+    setModalVisibility(visible);
+    setModalText(text);
+    setModalTextType(type);
+  }
+
+  const showModal = () => {
+    setModal(true, '', ImodalTextType.neutral);
+  };
+
+  const LazySchema = lazy(() => import('../Schema'));
+
+  async function fetchQuery(
+    fetchQuery: string = query,
+    fetchVars: object = {}
+  ): Promise<ReactNode> {
+    setResponse('');
+    if (parseError) return;
+    const operationName = extractQueryName(fetchQuery);
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ operationName: operationName, query: query }),
+      body: JSON.stringify({
+        operationName: operationName,
+        query: fetchQuery,
+        variables: fetchVars,
+      }),
     };
     fetch('https://rickandmortyapi.com/graphql', requestOptions)
       .then((response) => {
@@ -42,48 +86,161 @@ export const Editor = () => {
       })
       .then((data) => {
         setResponse(data);
+        setIntrospectionResponse(data);
+        data.errors && setResponseError(data.errors[0].message);
+        return data;
       });
+  }
+
+  const handleSendClick = () => {
+    const res = fetchQuery(query, vars);
+    setResponse(res);
   };
 
-  const handleClick = () => {
-    fetchUserData();
+  const handleParse = async (varsString: string) => {
+    let result;
+    try {
+      varsString == '' ? (result = {}) : (result = await JSON.parse(varsString));
+      setParseError(null);
+      setVars(result);
+      setVarsString(varsString);
+    } catch (error) {
+      if (error instanceof Error) {
+        setParseError(error.message);
+      }
+    }
+  };
+
+  const showSchemaHandler = async () => {
+    const res = await fetchQuery(schemaQuery);
+    setIntrospectionResponse(res);
+    showModal();
   };
 
   return (
-    <>
+    <div style={{ color: 'black' }}>
+      <Snackbar
+        open={!!responseError}
+        autoHideDuration={50000}
+        onClose={() => {
+          setResponseError('');
+        }}
+      >
+        <Alert
+          onClose={() => {
+            setResponseError('');
+          }}
+          severity="error"
+          sx={{ width: '100%' }}
+        >
+          {responseError}
+        </Alert>
+      </Snackbar>
+      <>
+        {modalVisibility && (
+          <MyModal
+            visible={modalVisibility}
+            modalText={modalText}
+            messageType={modalTextType}
+            style={{ textAlign: 'left' }}
+            setModalVisibility={() => {
+              setModalVisibility(false);
+            }}
+          >
+            <Suspense fallback={<CircularProgress color="success" />}>
+              <LazySchema data={introspectionResponse as SchemaServerResponce} />
+            </Suspense>
+          </MyModal>
+        )}
+      </>
       <div className={cl.container}>
         <div className={cl.container__left}>
           <div className={cl.editor}>
-            <label style={{ color: 'white' }}>{t('editor.query')}</label>
-            <CodeMirror
-              value={query}
-              height="200px"
-              theme={'light'}
-              autoFocus={true}
-              extensions={[javascript({ jsx: true })]}
-              onChange={(value) => {
-                setQuery(value);
+            <QueryEditor
+              setQuery={(q) => {
+                setQuery(q);
               }}
+              theme={theme}
             />
-            <button onClick={handleClick}>{t('editor.send')}</button>
+            {varsVisibility && (
+              <VarsEditor
+                setVarsToParent={(q) => {
+                  handleParse(q);
+                }}
+                theme={theme}
+                vars={varsString}
+                parseError={parseError}
+              />
+            )}
+            {headersVisibility && (
+              <HeadersEditor
+                setVarsToParent={(q) => {
+                  handleParse(q);
+                }}
+                theme={theme}
+                vars={varsString}
+                parseError={parseError}
+              />
+            )}
+            <br />
+            <Button
+              variant="contained"
+              color={'success'}
+              disabled={!!parseError}
+              onClick={handleSendClick}
+            >
+              {t('editor.send')}
+            </Button>
+            {/*<button onClick={handleClick}>{t('editor.send')}</button>*/}
+            <Button
+              variant="contained"
+              onClick={() => {
+                setVarsVisibility(!varsVisibility);
+              }}
+            >
+              Vars
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setHeadersVisibility(!headersVisibility);
+              }}
+            >
+              Headers
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                showSchemaHandler();
+              }}
+            >
+              Schema
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                theme == 'dark' ? setTheme(ThemeType.light) : setTheme(ThemeType.dark);
+              }}
+              startIcon={<Brightness4Icon />}
+            >
+              mode
+            </Button>
           </div>
         </div>
         <div className={cl.container__right}>
           <div className={cl.response}>
-            <CodeMirror
-              basicSetup={{ lineNumbers: false }}
-              value={JSON.stringify(response, null, 2)}
-              height="400px"
-              readOnly={true}
-              style={{ overflowY: 'scroll' }}
-              placeholder="here will be api response"
-              theme={'light'}
-              extensions={[javascript({ jsx: true })]}
+            <ResponseWindow
+              theme={theme}
+              setResponce={(q) => {
+                handleParse(q);
+              }}
+              response={response}
+              responseError={responseError}
             />
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
