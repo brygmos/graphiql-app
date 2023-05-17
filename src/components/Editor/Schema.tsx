@@ -60,29 +60,33 @@ const Schema: FC<Props> = ({ data }) => {
 
   function renderQuery(data: object) {
     return Object.entries(data).map(([key, value]) => (
-      <>
+      <div key={key}>
         {key == 'name' && (
-          <TreeItem nodeId={value} label={value} key={value}>
+          <TreeItem nodeId={value} label={value}>
             {renderExpandedQuery(data as Query)}
           </TreeItem>
         )}
-      </>
+      </div>
     ));
   }
 
   function renderExpandedQuery(data: Query) {
     return (
-      <>
-        <TreeItem nodeId={data.description} label={'*' + data.description + '*'} />
+      <div key={data.description}>
+        <TreeItem
+          nodeId={data.description}
+          label={'*' + data.description + '*'}
+          key={data.description + 'descr'}
+        />
         {data.args.length > 0 && (
-          <TreeItem nodeId={data.description} label="arguments">
+          <TreeItem nodeId={data.description} label="arguments" key={data.description}>
             {data.args.map((argObj: ArgObj, idx) => {
               const argName = argObj.name;
               if (argObj.type.name) {
                 return (
                   <TreeItem
                     nodeId={argObj.type.name}
-                    key={idx}
+                    key={idx + 'ghgggg'}
                     label={argName + ':: ' + argObj.type.name}
                   >
                     {renderType(argObj.type.name)}
@@ -103,19 +107,19 @@ const Schema: FC<Props> = ({ data }) => {
               }
               if (argObj.type.kind) {
                 return (
-                  <>
+                  <div key={idx}>
                     {argObj.type.kind && <Chip label={argObj.type.kind} color="success" />}
                     <br />
                     {argObj.type.ofType.kind && (
                       <Chip label={argObj.type.ofType.kind} color="success" />
                     )}
-                  </>
+                  </div>
                 );
               }
             })}
           </TreeItem>
         )}
-      </>
+      </div>
     );
   }
 
@@ -131,7 +135,11 @@ const Schema: FC<Props> = ({ data }) => {
       if (typeObj)
         return (
           <>
-            <TreeItem nodeId={typeObj.description} label={typeObj.description} />
+            <TreeItem
+              nodeId={typeObj.description}
+              label={typeObj.description}
+              key={typeObj.description}
+            />
             {typeObj.kind && <Chip label={typeObj.kind} color="success" />}
             <hr />
           </>
@@ -161,7 +169,7 @@ const Schema: FC<Props> = ({ data }) => {
       return <TreeItem nodeId="nodata" label="*data empty*"></TreeItem>;
     }
     if (typeof data == 'string') {
-      return <TreeItem nodeId={data + 'STRING'} label={data} />;
+      return <TreeItem nodeId={data + 'STRING'} label={data} key={data} />;
     }
 
     if (Array.isArray(data)) {
@@ -170,12 +178,11 @@ const Schema: FC<Props> = ({ data }) => {
           if (el.name && el.description && el.args && el.args.length > 0) return renderQuery(el);
           if (el.name && el.description == '' && el.args && el.args.length == 0)
             return <TreeItem nodeId={el.name} key={el.name} />;
-          // return renderData(el.name);
           if (el.name && el.description && el.args) return renderQuery(el);
         }
         if ('kind' in el) {
           if (el.name.includes('__')) return;
-          if (el.name && el.kind) return renderType(el);
+          if (el.name && el.kind) return <div key={el.name}>{renderType(el)}</div>;
           return renderData(el);
         }
       });
