@@ -3,24 +3,34 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { InputLabel } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 
 export const Language = () => {
-  const [language, setLanguage] = React.useState('');
-
+  const [languageDef, setLanguageDef] = useState(() => {
+    return localStorage.getItem('language') ?? 'en';
+  });
+  const { t, i18n } = useTranslation();
   const handleChange = (event: SelectChangeEvent) => {
-    setLanguage(event.target.value);
+    const language = event.target.value;
+    i18n.changeLanguage(language);
+    localStorage.setItem('language', language);
   };
 
   return (
     <div>
       <FormControl sx={{ m: 1, minWidth: 120 }}>
-      <InputLabel id="lang">Language</InputLabel>
+      <InputLabel id="lang">{t('lang.langs')}</InputLabel>
         <Select
-          value={language}
+          labelId="lang"
+          id="lang"
+          label="Language"
+          defaultValue={languageDef}
           onChange={handleChange}
         >
-          <MenuItem value={'en'}>English</MenuItem>
-          <MenuItem value={'ru'}>Russian</MenuItem>
+          <MenuItem value={'en'}>{t('lang.en')}</MenuItem>
+          <MenuItem value={'by'}>{t('lang.by')}</MenuItem>
+          <MenuItem value={'ru'}>{t('lang.ru')}</MenuItem>
         </Select>
       </FormControl>
     </div>

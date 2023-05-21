@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import { Welcome } from './pages/Welcome/Welcome';
 import { Layout } from './components/Layout/Layouut';
-import EditorPage from './pages/EditorPage';
+import EditorPage from './pages/Editor/EditorPage';
 import SignInPage from './pages/SignIn/SignInPage';
 import SignUpPage from './pages/SignUp/SignUpPage';
 import { useSelector } from 'react-redux';
@@ -26,7 +26,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Welcome />} />
-          <Route path="/editor" element={user.token ? <EditorPage /> : <SignInPage />} />
+          <Route path="/editor" element={<EditorPage />} />
+          {/*disabled for development*/}
+          {/*<Route path="/editor" element={user.token ? <EditorPage /> : <SignInPage />} />*/}
           <Route path="/login" element={<SignInPage />} />
           <Route path="/registration" element={<SignUpPage />} />
         </Route>

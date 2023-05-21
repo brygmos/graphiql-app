@@ -14,6 +14,8 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 interface User {
@@ -37,7 +39,7 @@ export default function SignInPage() {
   const [showUserAlert, setShowUserAlert] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const { t } = useTranslation();
   const signIn = (user: User) => {
     const auth = getAuth();
     signInWithEmailAndPassword(auth, user.email, user.password)
@@ -86,7 +88,7 @@ export default function SignInPage() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          {t('auth.in')}
         </Typography>
         <Box
           component="form"
@@ -102,7 +104,7 @@ export default function SignInPage() {
             margin="normal"
             fullWidth
             id="email"
-            label="Email Address"
+            label={t('auth.mail')}
             name="email"
             autoComplete="email"
             autoFocus
@@ -131,7 +133,7 @@ export default function SignInPage() {
             margin="normal"
             fullWidth
             name="password"
-            label="Password"
+            label={t('auth.password')}
             type="password"
             id="password"
             autoComplete="current-password"
@@ -143,12 +145,12 @@ export default function SignInPage() {
             </span>
           )}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Sign In
+            {t('auth.in')}
           </Button>
           <Grid container justifyContent="center">
             <Grid item>
               <Link href="registration" variant="body2">
-                {"Don't have an account? Sign Up"}
+                {t('auth.acc2')}
               </Link>
             </Grid>
           </Grid>

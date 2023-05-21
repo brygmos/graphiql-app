@@ -15,6 +15,7 @@ import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { setUser } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 interface User {
   email: string;
@@ -37,12 +38,12 @@ export default function SignUpPage() {
   const [showEmailIncorrect, setShowEmailIncorrect] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const signUp = (user: User) => {
     const auth = getAuth();
     createUserWithEmailAndPassword(auth, user.email, user.password)
       .then(({ user }) => {
-        console.log(user.refreshToken, user.uid, user.email);
         dispatch(
           setUser({
             email: user.email,
@@ -88,7 +89,7 @@ export default function SignUpPage() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign Up
+          {t('auth.up')}
         </Typography>
         <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -99,7 +100,7 @@ export default function SignUpPage() {
             margin="normal"
             fullWidth
             id="email"
-            label="Email Address"
+            label={t('auth.mail')}
             name="email"
             autoComplete="email"
             autoFocus
@@ -128,7 +129,7 @@ export default function SignUpPage() {
             margin="normal"
             fullWidth
             name="password"
-            label="Password"
+            label={t('auth.password')}
             type="password"
             id="password"
             autoComplete="current-password"
@@ -140,12 +141,12 @@ export default function SignUpPage() {
             </span>
           )}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Sign Up
+            {t('auth.up')}
           </Button>
           <Grid container justifyContent="center">
             <Grid item>
               <Link href="login" variant="body2">
-                Already have an account? Sign in
+                {t('auth.acc')}
               </Link>
             </Grid>
           </Grid>
