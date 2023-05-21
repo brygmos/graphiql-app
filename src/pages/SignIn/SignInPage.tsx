@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -13,26 +14,34 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 interface User {
   email: string;
   password: string;
 }
 
+type Inputs = {
+  email: string;
+  password: string;
+};
+
 export default function SignInPage() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  const [showEmailAlert, setShowEmailAlert] = useState(false);
+  const [showUserAlert, setShowUserAlert] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const user: User = {
-      email: data.get('email')!.toString(),
-      password: data.get('password')!.toString(),
-    };
+
+  const signIn = (user: User) => {
     const auth = getAuth();
     signInWithEmailAndPassword(auth, user.email, user.password)
       .then(({ user }) => {
-        console.log(user.refreshToken, user.uid, user.email);
         dispatch(
           setUser({
             email: user.email,
@@ -42,7 +51,24 @@ export default function SignInPage() {
         );
         navigate('/editor');
       })
-      .catch(console.error);
+      .catch((error) => {
+        console.log(error.message);
+        if (error.message == 'Firebase: Error (auth/user-not-found).') {
+          setShowEmailAlert(true);
+          setTimeout(() => setShowEmailAlert(false), 3000);
+        } else if (error.message == 'Firebase: Error (auth/wrong-password).') {
+          setShowUserAlert(true);
+          setTimeout(() => setShowUserAlert(false), 3000);
+        }
+      });
+  };
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    const user: User = {
+      email: data.email!.toString(),
+      password: data.password.toString(),
+    };
+    signIn(user);
   };
 
   return (
@@ -62,10 +88,18 @@ export default function SignInPage() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          position={'relative'}
+          onSubmit={handleSubmit(onSubmit)}
+          sx={{ mt: 1 }}
+        >
           <TextField
+            {...register('email', {
+              required: true,
+              pattern: /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g,
+            })}
             margin="normal"
-            required
             fullWidth
             id="email"
             label="Email Address"
@@ -73,9 +107,27 @@ export default function SignInPage() {
             autoComplete="email"
             autoFocus
           />
+          {errors.email && (
+            <span>
+              Email должен состоять из минимум 8 символов, минимум одна буква, одна цифра, один
+              специальный символ
+            </span>
+          )}
+          {showEmailAlert && (
+            <Alert severity="error" style={{ position: 'fixed', top: '20%', width: '26%' }}>
+              User not found
+            </Alert>
+          )}
+          {showUserAlert && (
+            <Alert severity="error" style={{ position: 'fixed', top: '20%', width: '26%' }}>
+              Wrong password
+            </Alert>
+          )}
           <TextField
+            {...register('password', {
+              pattern: /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g,
+            })}
             margin="normal"
-            required
             fullWidth
             name="password"
             label="Password"
@@ -83,6 +135,12 @@ export default function SignInPage() {
             id="password"
             autoComplete="current-password"
           />
+          {errors.password && (
+            <span>
+              Пароль должен состоять из минимум 8 символов, минимум одна буква, одна цифра, один
+              специальный символ
+            </span>
+          )}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign In
           </Button>
