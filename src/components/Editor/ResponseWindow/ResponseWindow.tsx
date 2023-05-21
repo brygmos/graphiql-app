@@ -1,18 +1,18 @@
 import React, { FC, useEffect, useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-import { ThemeType } from '../../types/ThemeType';
+import { ThemeType } from '../../../types/ThemeType';
 import { json } from '@codemirror/lang-json';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import Button from '@mui/material/Button';
 
 type Props = {
   theme?: ThemeType;
-  setResponce?: (arg0: string) => void;
+  setResponse?: (arg0: string) => void;
   response?: string | void | object;
   responseError?: string;
 };
 
-export const ResponseWindow: FC<Props> = ({ theme, response, responseError }) => {
+export const ResponseWindow: FC<Props> = ({ theme, response }) => {
   const [copyButtonText, setCopyButtonText] = useState('Copy');
 
   useEffect(() => {
