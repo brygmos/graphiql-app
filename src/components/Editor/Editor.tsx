@@ -30,10 +30,8 @@ const Editor = () => {
   const [modalTextType, setModalTextType] = useState(ImodalTextType.neutral);
   const [vars, setVars] = useState({ page: 1, filter: { name: 'beth' } });
   const [introspectionResponse, setIntrospectionResponse] = useState<string | void | object>();
-  const [varsString, setVarsString] = useState(
-    '{\n  "page": 1,\n  "filter": {\n    "name": "beth"\n  }\n}'
-  );
-  const [headersString, setHeadersString] = useState('{\n  "Content-Type": "application/json"\n}');
+  const varsString = '{\n  "page": 1,\n  "filter": {\n    "name": "beth"\n  }\n}';
+  const headersString = '{\n  "Content-Type": "application/json"\n}';
   const [query, setQuery] = useState('');
   const [headers, setHeaders] = useState<Headers>({ 'Content-Type': 'application/json' });
   const [varsParseError, setVarsParseError] = useState<string | null>(null);
