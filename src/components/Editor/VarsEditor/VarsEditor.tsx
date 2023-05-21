@@ -19,7 +19,6 @@ export const VarsEditor: FC<Props> = ({ theme, setVarsToParent, vars, parseError
   return (
     <div>
       <label style={{ color: 'white' }}>Variables editor:</label>
-      {/*{parseError && <span style={{ color: 'brown' }}> {parseError}</span>}*/}
       {parseError && (
         <Alert icon={false} severity="error">
           {parseError}

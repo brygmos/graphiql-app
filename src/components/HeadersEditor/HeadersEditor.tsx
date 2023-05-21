@@ -19,7 +19,6 @@ export const HeadersEditor: FC<Props> = ({ theme, setVarsToParent, vars, parseEr
   return (
     <div>
       <label style={{ color: 'white' }}>Headers editor:</label>
-      {/*{parseError && <span style={{ color: 'brown' }}> {parseError}</span>}*/}
       {parseError && (
         <Alert icon={false} severity="error">
           {parseError}
