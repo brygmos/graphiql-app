@@ -26,13 +26,13 @@ export const HeadersEditor: FC<Props> = ({ theme, setVarsToParent, vars, parseEr
         </Alert>
       )}
       <CodeMirror
-        value={'headers'}
-        // value={vars}
+        value={vars}
         height="200px"
         theme={theme}
         extensions={[json()]}
         onChange={(vars) => {
           handleChange(vars);
+          console.log(vars);
         }}
       />
     </div>

@@ -13,35 +13,51 @@ import HeadersEditor from '../HeadersEditor/HeadersEditor';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import { SchemaServerResponse } from './Schema';
 
+type Headers = {
+  'Content-Type': string;
+  [key: string]: string;
+};
+
 const Editor = () => {
   const [response, setResponse] = useState<string | void | object>();
   const { t } = useTranslation();
   const [theme, setTheme] = useState(ThemeType.light);
-  const [varsVisibility, setVarsVisibility] = useState(false);
+  const [varsVisibility, setVarsVisibility] = useState(true);
   const [headersVisibility, setHeadersVisibility] = useState(false);
   const [responseError, setResponseError] = useState('');
   const [modalVisibility, setModalVisibility] = useState(false);
   const [modalText, setModalText] = useState('');
   const [modalTextType, setModalTextType] = useState(ImodalTextType.neutral);
-  const [vars, setVars] = useState({ page: 1, filter: { name: 'beth' } } as object);
-  const [introspectionResponse, setIntrospectionResponse] = useState<unknown>(null);
+  const [vars, setVars] = useState({ page: 1, filter: { name: 'beth' } });
+  const [introspectionResponse, setIntrospectionResponse] = useState<string | void | object>();
   const [varsString, setVarsString] = useState(
     '{\n  "page": 1,\n  "filter": {\n    "name": "beth"\n  }\n}'
   );
+  const [headersString, setHeadersString] = useState('{\n  "Content-Type": "application/json"\n}');
   const [query, setQuery] = useState('');
-  const [parseError, setParseError] = useState<string | null>(null);
+  const [headers, setHeaders] = useState<Headers>({ 'Content-Type': 'application/json' });
+  const [varsParseError, setVarsParseError] = useState<string | null>(null);
+  const [headersParseError, setHeadersParseError] = useState<string | null>(null);
 
   const prefersDarkMode =
     window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
   const schemaQuery =
-    'query IntrospectionQuery {    __schema {        queryType {            name        }        types {            name            kind            description            fields {                name                description                args {                    name                    description                    type {                        name                        kind                        ofType {                            name                            kind                        }                    }                }            }        }    }}';
+    'query IntrospectionQuery {__schema {queryType { name } types { name kind description fields { name description args { name description type { name kind ofType { name kind } } } } } }}';
 
   useEffect(() => {
     prefersDarkMode ? setTheme(ThemeType.dark) : setTheme(ThemeType.light);
   }, [prefersDarkMode]);
 
-  const extractQueryName = (query: string) => {
+  useEffect(() => {
+    headers == null ||
+    !headers['Content-Type'] ||
+    (headers['Content-Type'] && headers['Content-Type'] !== 'application/json')
+      ? setHeadersParseError('"Content-Type": "application/json" should be declared')
+      : null;
+  }, [headers]);
+
+  function extractQueryName(query: string): string {
     const text = query;
     const regex = /query\s+(\w+)/;
     const match = text.match(regex);
@@ -50,7 +66,7 @@ const Editor = () => {
     } else {
       return 'query name not found';
     }
-  };
+  }
 
   function setModal(visible: boolean, text: string, type: ImodalTextType) {
     setModalVisibility(visible);
@@ -66,14 +82,16 @@ const Editor = () => {
 
   async function fetchQuery(
     fetchQuery: string = query,
-    fetchVars: object = {}
+    fetchVars: object = {},
+    fetchHeaders: Headers = headers
   ): Promise<ReactNode> {
     setResponse('');
-    if (parseError) return;
+    if (varsParseError) return;
     const operationName = extractQueryName(fetchQuery);
     const requestOptions = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: fetchHeaders,
+      // headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         operationName: operationName,
         query: fetchQuery,
@@ -93,27 +111,27 @@ const Editor = () => {
   }
 
   const handleSendClick = () => {
-    const res = fetchQuery(query, vars);
+    const res = fetchQuery(query, vars, headers);
     setResponse(res);
   };
 
-  const handleParse = async (varsString: string) => {
+  const handleParse = async (string: string) => {
     let result;
+    let parseError;
     try {
-      varsString == '' ? (result = {}) : (result = await JSON.parse(varsString));
-      setParseError(null);
-      setVars(result);
-      setVarsString(varsString);
+      string == '' ? (result = null) : (result = await JSON.parse(string));
     } catch (error) {
       if (error instanceof Error) {
-        setParseError(error.message);
+        parseError = error.message;
+        result = string;
       }
     }
+    return [result, parseError];
   };
 
   const showSchemaHandler = async () => {
-    const res = await fetchQuery(schemaQuery);
-    setIntrospectionResponse(res);
+    const res: ReactNode = await fetchQuery(schemaQuery);
+    setIntrospectionResponse(res as object);
     showModal();
   };
 
@@ -164,34 +182,37 @@ const Editor = () => {
             />
             {varsVisibility && (
               <VarsEditor
-                setVarsToParent={(q) => {
-                  handleParse(q);
+                setVarsToParent={async (q) => {
+                  const [result, error] = await handleParse(q);
+                  setVarsParseError(error);
+                  setVars(result);
                 }}
                 theme={theme}
                 vars={varsString}
-                parseError={parseError}
+                parseError={varsParseError}
               />
             )}
             {headersVisibility && (
               <HeadersEditor
-                setVarsToParent={(q) => {
-                  handleParse(q);
+                setVarsToParent={async (q) => {
+                  const [result, error] = await handleParse(q);
+                  setHeadersParseError(error);
+                  setHeaders(result);
                 }}
                 theme={theme}
-                vars={varsString}
-                parseError={parseError}
+                vars={headersString}
+                parseError={headersParseError}
               />
             )}
             <br />
             <Button
               variant="contained"
               color={'success'}
-              disabled={!!parseError}
+              disabled={!!varsParseError || !!headersParseError}
               onClick={handleSendClick}
             >
               {t('editor.send')}
             </Button>
-            {/*<button onClick={handleClick}>{t('editor.send')}</button>*/}
             <Button
               variant="contained"
               onClick={() => {
