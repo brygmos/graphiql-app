@@ -32,7 +32,6 @@ export const QueryEditor: FC<Props> = ({ theme, setQuery }) => {
         passToParent();
       }}
     >
-      {/*<label style={{ color: 'white' }}>Query editor:</label>*/}
       <label style={{ color: 'white' }}>{t('editor.query')}</label>
       <CodeMirror
         value={query}

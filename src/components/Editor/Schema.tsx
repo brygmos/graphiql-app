@@ -166,7 +166,7 @@ const Schema: FC<Props> = ({ data }) => {
     data: string | ArgObj | Type | Type[] | ArgNameTypeObj | Field | Field[]
   ): ReactNode {
     if (!data) {
-      return <TreeItem nodeId="nodata" label="*data empty*"></TreeItem>;
+      return <TreeItem nodeId="nodata" label="*empty data*"></TreeItem>;
     }
     if (typeof data == 'string') {
       return <TreeItem nodeId={data + 'STRING'} label={data} key={data} />;
@@ -177,7 +177,7 @@ const Schema: FC<Props> = ({ data }) => {
         if ('args' in el) {
           if (el.name && el.description && el.args && el.args.length > 0) return renderQuery(el);
           if (el.name && el.description == '' && el.args && el.args.length == 0)
-            return <TreeItem nodeId={el.name} key={el.name} />;
+            return <TreeItem nodeId={el.name} key={el.name} label={el.name} />;
           if (el.name && el.description && el.args) return renderQuery(el);
         }
         if ('kind' in el) {
