@@ -144,20 +144,21 @@ const Schema: FC<Props> = ({ data }) => {
                   </TreeItem>
                 );
               }
-              if (argObj.type.ofType.name) {
-                return (
-                  <TreeItem
-                    nodeId={argObj.type.ofType.name}
-                    key={argObj.type.ofType.name}
-                    label={argName + ': ' + argObj.type.ofType.name}
-                  >
-                    {renderType(argObj.type.ofType.name)}
-                  </TreeItem>
-                );
-              }
+              // if (argObj.type.ofType.name) {
+              //   return (
+              //     <TreeItem
+              //       nodeId={argObj.type.ofType.name}
+              //       key={argObj.type.ofType.name}
+              //       label={argName + ':>: ' + argObj.type.ofType.name}
+              //     >
+              //       {renderType(argObj.type.ofType.name)}
+              //     </TreeItem>
+              //   );
+              // }
               if (argObj.type.kind) {
                 return (
                   <div key={idx}>
+                    {argObj.type.ofType.name && renderType(argObj.type.ofType.name)}
                     {argObj.type.kind && <Chip label={argObj.type.kind} color="success" />}
                     <br />
                     {argObj.type.ofType.kind && (
@@ -210,7 +211,6 @@ const Schema: FC<Props> = ({ data }) => {
               <span>
                 {type.name} :--:{' '}
                 <Link
-                  href="#"
                   color="primary"
                   onClick={() => {
                     handleTypeClick(type.type.name as string);
@@ -297,7 +297,7 @@ const Schema: FC<Props> = ({ data }) => {
         Documentation
       </Typography>
       <Grid container spacing={2} alignItems="center" alignSelf="center">
-        <Grid xs={4} minWidth={10} flexGrow={1}>
+        <Grid xs={4} minWidth="250px" flexGrow={1}>
           <Paper>
             <Typography variant="h4" textAlign="center">
               Queries
@@ -312,7 +312,7 @@ const Schema: FC<Props> = ({ data }) => {
             </TreeView>
           </Paper>
         </Grid>
-        <Grid xs={4} hidden={!firstTypeVisibility}>
+        <Grid xs={4} minWidth="250px" hidden={!firstTypeVisibility}>
           <Paper>
             <Typography variant="h4" textAlign="center">
               {firstTypeActive}
@@ -324,11 +324,10 @@ const Schema: FC<Props> = ({ data }) => {
               sx={{ height: 400, flexGrow: 1, overflowY: 'auto' }}
             >
               {firstTypeActive && renderType(firstTypeActive)}
-              {/*{renderData(graphQLTypes)}*/}
             </TreeView>
           </Paper>
         </Grid>
-        <Grid xs={4} hidden={!secondTypeActive}>
+        <Grid xs={4} minWidth="250px" hidden={!secondTypeActive}>
           <Paper>
             <Typography variant="h4" textAlign="center">
               {secondTypeActive}
