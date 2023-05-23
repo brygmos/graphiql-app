@@ -1,9 +1,12 @@
-import React, { FC, ReactNode } from 'react';
-import { Chip, CircularProgress } from '@mui/material';
+import React, { FC, ReactNode, useState } from 'react';
+import { Chip, CircularProgress, Link, Paper } from '@mui/material';
 import TreeView from '@mui/lab/TreeView';
 import { TreeItem } from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import Grid from '@mui/material/Unstable_Grid2';
+import Typography from '@mui/material/Typography';
+import { ThemeType } from '../../types/ThemeType'; // Grid version 2
 
 export type SchemaServerResponse = {
   data: {
@@ -46,6 +49,11 @@ type Field = {
 };
 
 const Schema: FC<Props> = ({ data }) => {
+  const [firstTypeVisibility, setFirstTypeVisibility] = useState(false);
+  const [secondTypeVisibility, setSecondTypeVisibility] = useState(false);
+  const [firstTypeActive, setFirstTypeActive] = useState<string>();
+  const [secondTypeActive, setSecondTypeActive] = useState<string>();
+
   if (!data) {
     return (
       <>
@@ -57,6 +65,21 @@ const Schema: FC<Props> = ({ data }) => {
 
   const queryNames: Field[] = data.data.__schema.types[0].fields;
   const graphQLTypes: Type[] = data.data.__schema.types;
+
+  function handleTypeClick(typeName: string) {
+    console.log(typeName);
+    firstTypeVisibility ? handleSecondType(typeName) : handleFirstType(typeName);
+  }
+
+  function handleFirstType(typeName: string) {
+    setFirstTypeVisibility(true);
+    setFirstTypeActive(typeName);
+  }
+
+  function handleSecondType(typeName: string) {
+    setSecondTypeVisibility(true);
+    setSecondTypeActive(typeName);
+  }
 
   function renderQuery(data: object) {
     return Object.entries(data).map(([key, value]) => (
@@ -86,8 +109,21 @@ const Schema: FC<Props> = ({ data }) => {
                 return (
                   <TreeItem
                     nodeId={argObj.type.name}
-                    key={idx + 'ghgggg'}
-                    label={argName + ':: ' + argObj.type.name}
+                    key={idx + '*argObj*'}
+                    label={
+                      <span>
+                        {argName} ::{' '}
+                        <Link
+                          href="#"
+                          color="primary"
+                          onClick={() => {
+                            handleTypeClick(argObj.type.name as string);
+                          }}
+                        >
+                          {argObj.type.name}
+                        </Link>
+                      </span>
+                    }
                   >
                     {renderType(argObj.type.name)}
                   </TreeItem>
@@ -204,20 +240,59 @@ const Schema: FC<Props> = ({ data }) => {
 
   return (
     <div style={{ color: 'white' }}>
-      <h1>Documentation</h1>
-      <TreeView
-        aria-label="file system navigator"
-        defaultCollapseIcon={<ExpandMoreIcon color="action" />}
-        defaultExpandIcon={<ChevronRightIcon />}
-        sx={{ height: 400, flexGrow: 1, width: 800, overflowY: 'auto' }}
-      >
-        <TreeItem nodeId="queries" label="Queries">
-          {renderData(queryNames)}
-        </TreeItem>
-        <TreeItem nodeId="types" label="Types">
-          {renderData(graphQLTypes)}
-        </TreeItem>
-      </TreeView>
+      <Typography variant="h2" textAlign="center">
+        Documentation
+      </Typography>
+      <div>
+        <Grid container spacing={2}>
+          <Grid xs={4} minWidth={10}>
+            <Paper>
+              <Typography variant="h4" textAlign="center">
+                Queries
+              </Typography>
+              <TreeView
+                aria-label="file system navigator"
+                defaultCollapseIcon={<ExpandMoreIcon color="action" />}
+                defaultExpandIcon={<ChevronRightIcon />}
+                sx={{ height: 400, flexGrow: 1, overflowY: 'auto' }}
+              >
+                {renderData(queryNames)}
+              </TreeView>
+            </Paper>
+          </Grid>
+          <Grid xs={4} hidden={!firstTypeVisibility}>
+            <Paper>
+              <Typography variant="h4" textAlign="center">
+                {firstTypeActive}
+              </Typography>
+              <TreeView
+                aria-label="file system navigator"
+                defaultCollapseIcon={<ExpandMoreIcon color="action" />}
+                defaultExpandIcon={<ChevronRightIcon />}
+                sx={{ height: 400, flexGrow: 1, overflowY: 'auto' }}
+              >
+                {firstTypeActive && renderType(firstTypeActive)}
+                {/*{renderData(graphQLTypes)}*/}
+              </TreeView>
+            </Paper>
+          </Grid>
+          <Grid xs={4} hidden={!secondTypeActive}>
+            <Paper>
+              <Typography variant="h4" textAlign="center">
+                {secondTypeActive}
+              </Typography>
+              <TreeView
+                aria-label="file system navigator"
+                defaultCollapseIcon={<ExpandMoreIcon color="action" />}
+                defaultExpandIcon={<ChevronRightIcon />}
+                sx={{ height: 400, flexGrow: 1, overflowY: 'auto' }}
+              >
+                {secondTypeActive && renderType(secondTypeActive)}
+              </TreeView>
+            </Paper>
+          </Grid>
+        </Grid>
+      </div>
     </div>
   );
 };

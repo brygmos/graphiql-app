@@ -40,7 +40,7 @@ const Editor = () => {
   const prefersDarkMode =
     window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-  const schemaQuery2 = `query IntrospectionQuery {
+  const schemaQueryFromGraphQL = `query IntrospectionQuery {
       __schema {
         queryType { name }
         types {
@@ -124,8 +124,57 @@ const Editor = () => {
         }
       }
     }`;
-  const schemaQuery =
-    'query IntrospectionQuery {__schema {queryType { name } types { name kind description fields { name description type { name } args { name description type { name kind ofType { name kind } } } } } }}';
+  const schemaQuery = `query IntrospectionQuery {
+      __schema {
+        queryType { name }
+        types {
+          name
+          kind
+          description
+          fields {
+            name
+            description
+            type { name }
+            args {
+              name
+              description
+              type {
+                name
+                kind
+                ofType {
+                  name
+                  kind
+                  ofType {
+                    name
+                    kind
+                    ofType {
+                      name
+                      kind
+                    }
+                  }
+                }
+              }
+              defaultValue
+            }
+          }
+          inputFields {
+            name
+            type {
+              name
+              kind
+              ofType {
+                name
+                kind
+                ofType {
+                  name
+                  kind
+                }
+              }
+            }
+          }
+        }
+      }
+    }`;
 
   useEffect(() => {
     prefersDarkMode ? setTheme(ThemeType.dark) : setTheme(ThemeType.light);
