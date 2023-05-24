@@ -57,6 +57,29 @@ type inputField = {
   };
 };
 
+type DataType =
+  | string
+  | ArgObj
+  | Type
+  | Type[]
+  | ArgNameTypeObj
+  | Field
+  | Field[]
+  | inputField
+  | inputField[];
+
+type dataVariant =
+  | 'query'
+  | 'queryArr'
+  | 'argObj'
+  | 'type'
+  | 'typeArr'
+  | 'ArgNameTypeObj'
+  | 'field'
+  | 'fieldArr'
+  | 'inputField'
+  | 'inputFieldArr';
+
 const Schema: FC<Props> = ({ data }) => {
   const [firstTypeVisibility, setFirstTypeVisibility] = useState(false);
   const [secondTypeVisibility, setSecondTypeVisibility] = useState(false);
@@ -240,18 +263,7 @@ const Schema: FC<Props> = ({ data }) => {
     return <span>*exception*</span>;
   }
 
-  function renderData(
-    data:
-      | string
-      | ArgObj
-      | Type
-      | Type[]
-      | ArgNameTypeObj
-      | Field
-      | Field[]
-      | inputField
-      | inputField[]
-  ): ReactNode {
+  function renderData(data: DataType): ReactNode {
     if (!data) {
       return <TreeItem nodeId="nodata" label="*empty data*"></TreeItem>;
     }
@@ -285,7 +297,7 @@ const Schema: FC<Props> = ({ data }) => {
       }
       return Object.entries(data).map(([key, value]) => (
         <TreeItem nodeId={key} key={key}>
-          {key}:|: {renderData(value)}
+          {key} :|: {renderData(value)}
         </TreeItem>
       ));
     }
