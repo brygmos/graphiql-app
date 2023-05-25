@@ -6,83 +6,19 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
-
-export type SchemaServerResponse = {
-  data: {
-    __schema: {
-      types: Type[];
-    };
-  };
-};
-type Props = {
-  data: SchemaServerResponse;
-};
-type Query = {
-  name: string;
-  description: string;
-  args: ArgObj[];
-};
-type ArgObj = {
-  name: string;
-  description: string;
-  type: ArgTypeObj;
-};
-type ArgTypeObj = {
-  name: string | null;
-  kind: string | [];
-  ofType: ArgNameTypeObj;
-};
-type ArgNameTypeObj = {
-  name: string | null;
-  kind: string | null | [];
-};
-type Type = {
-  name: string;
-  description: string;
-  kind: string | [];
-  fields: Field[];
-  inputFields: inputField[];
-  // inputFields: inputField;
-  type: inputField;
-};
-type Field = {
-  name: string;
-  description: string;
-  args: ArgObj[];
-};
-type inputField = {
-  name: string;
-  type: {
-    kind: string;
-    name: string;
-    ofType: string;
-  };
-};
-
-type DataType =
-  | string
-  | ArgObj
-  | Type
-  | Type[]
-  | ArgNameTypeObj
-  | Field
-  | Field[]
-  | inputField
-  | inputField[];
-
-type DataVariant =
-  | 'string'
-  | 'query'
-  | 'queryArr'
-  | 'argObj'
-  | 'type'
-  | 'typeByString'
-  | 'typeArr'
-  | 'ArgNameTypeObj'
-  | 'field'
-  | 'fieldArr'
-  | 'inputField'
-  | 'inputFieldArr';
+import {
+  ArgObj,
+  ArgNameTypeObj,
+  Type,
+  ArgTypeObj,
+  DataType,
+  Query,
+  DataVariant,
+  inputField,
+  Field,
+  Props,
+  SchemaServerResponse,
+} from './Schema.types';
 
 const Schema: FC<Props> = ({ data }) => {
   const [firstTypeVisibility, setFirstTypeVisibility] = useState(false);
@@ -184,10 +120,6 @@ const Schema: FC<Props> = ({ data }) => {
     });
   }
 
-  function renderType(type: Type | string) {
-    return <span>*exception*</span>;
-  }
-
   function renderData(data: DataType, dataVariant: DataVariant): ReactNode {
     if (!data) {
       return <TreeItem nodeId="nodata" label="*empty data*"></TreeItem>;
@@ -195,41 +127,29 @@ const Schema: FC<Props> = ({ data }) => {
     // if (typeof data == 'string') {
     //   return <TreeItem nodeId={data + 'STRING'} label={data} key={data} />;
     // }
-    // if (typeof data == 'object' && !Array.isArray(data)) {
-    //   return Object.entries(data).map(([key, value]) => (
-    //     <TreeItem nodeId={key} key={key}>
-    //       {key} :|: {renderData(value, 'string')}
-    //     </TreeItem>
-    //   ));
-    // }
 
-    if (dataVariant == 'typeArr') {
-      data = data as Type[];
+    if (Array.isArray(data)) {
       const render: ReactNode[] = data.map((el) => {
-        if ('kind' in el) {
-          if (el.name.includes('__')) return;
+        if (el.name.includes('__')) return;
+        if (dataVariant == 'typeArr') {
+          el = el as Type;
           return <div key={el.name}>{renderData(el, 'type')}</div>;
+        }
+        if (dataVariant == 'inputFieldArr') {
+          el = el as inputField;
+          return renderData(el, 'inputField');
+        }
+        if (dataVariant == ('queryArr' || 'fieldArr')) {
+          el = el as Query;
+          return renderData(el, 'field');
         }
       });
       return render as ReactNode;
     }
+
     if (dataVariant == 'inputField') {
-      data = data as Query[];
-      return data.map((el) => {
-        return renderData(el, 'type');
-      });
-    }
-    if (dataVariant == 'inputFieldArr') {
-      data = data as Query[];
-      return data.map((el) => {
-        return renderData(el, 'inputField');
-      });
-    }
-    if (dataVariant == ('queryArr' || 'fieldArr')) {
-      data = data as Query[];
-      return data.map((el) => {
-        return renderData(el, 'field');
-      });
+      data = data as inputField;
+      return renderData(data, 'type');
     }
     if (dataVariant == 'field') {
       return Object.entries(data).map(([key, value]) => (
@@ -348,7 +268,6 @@ const Schema: FC<Props> = ({ data }) => {
               sx={{ height: 400, flexGrow: 1, overflowY: 'auto' }}
             >
               {secondTypeActive && renderData(secondTypeActive, 'typeByString')}
-              {/*{secondTypeActive && renderType(secondTypeActive)}*/}
             </TreeView>
           </Paper>
         </Grid>

@@ -150,6 +150,12 @@ const Editor = () => {
                     ofType {
                       name
                       kind
+                      name
+                      kind
+                      ofType {
+                        name
+                        kind
+                    }
                     }
                   }
                 }
