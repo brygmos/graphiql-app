@@ -264,9 +264,7 @@ const Schema: FC<Props> = ({ data }) => {
 
   return (
     <div style={{ color: 'white' }}>
-      <Typography variant="h2" textAlign="center">
-        Documentation
-      </Typography>
+      <h2 style={{ textAlign: 'center' }}>Documentation</h2>
       <Grid container spacing={2} alignItems="center" alignSelf="center">
         <Grid xs={4} minWidth="250px" flexGrow={1}>
           <Paper>
