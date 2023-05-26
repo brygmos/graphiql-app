@@ -8,16 +8,13 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import {
   ArgObj,
-  ArgNameTypeObj,
   Type,
-  ArgTypeObj,
   DataType,
   Query,
   DataVariant,
   inputField,
   Field,
   Props,
-  SchemaServerResponse,
 } from './Schema.types';
 
 const Schema: FC<Props> = ({ data }) => {
