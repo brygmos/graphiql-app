@@ -199,6 +199,10 @@ const Editor = () => {
     showModal();
   };
 
+  const throwError = () => {
+    throw new Error('This is a test error');
+  };
+
   return (
     <div style={{ color: 'black' }}>
       <Snackbar
@@ -325,6 +329,7 @@ const Editor = () => {
           </div>
         </div>
       </div>
+      <button onClick={throwError}>Throw Error</button>
     </div>
   );
 };
