@@ -243,7 +243,7 @@ const Schema: FC<Props> = ({ data }) => {
         return (
           <TreeItem
             nodeId={type.description + type.type.name}
-            key={type.description + type.type.name}
+            key={type.name + type.type.name}
             label={
               <span>
                 {type.name} :--:{' '}
