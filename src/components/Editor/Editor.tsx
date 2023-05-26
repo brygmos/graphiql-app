@@ -1,7 +1,7 @@
 import React, { lazy, useEffect, useState, Suspense, ReactNode } from 'react';
 import cl from './Editor.module.css';
 import { useTranslation } from 'react-i18next';
-import { ImodalTextType } from '../../types/ImodalTextType';
+import { ImodalTextType } from '../Modal/ImodalTextType';
 import MyModal from '../Modal/MyModal';
 import VarsEditor from './VarsEditor/VarsEditor';
 import QueryEditor from './QueryEditor/QueryEditor';
@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import { Alert, CircularProgress, Snackbar } from '@mui/material';
 import HeadersEditor from '../HeadersEditor/HeadersEditor';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
-import { SchemaServerResponse } from './Schema';
+import { SchemaServerResponse } from './Schema.types';
 
 type Headers = {
   'Content-Type': string;
@@ -134,7 +134,18 @@ const Editor = () => {
           fields {
             name
             description
-            type { name }
+            type { 
+              name
+              kind
+              ofType {
+                name
+                kind
+                ofType { 
+                  name
+                  kind 
+                }
+              }
+            }
             args {
               name
               description

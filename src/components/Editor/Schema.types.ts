@@ -12,6 +12,7 @@ export type Query = {
   name: string;
   description: string;
   args: ArgObj[];
+  type: ArgTypeObj;
 };
 export type ArgObj = {
   name: string;
@@ -20,8 +21,9 @@ export type ArgObj = {
 };
 export type ArgTypeObj = {
   name: string | null;
-  kind: string | [];
-  ofType: ArgNameTypeObj;
+  kind: string;
+  ofType: ArgTypeObj;
+  // ofType: ArgTypeObj | null;
 };
 export type ArgNameTypeObj = {
   name: string | null;
@@ -34,8 +36,6 @@ export type Type = {
   kind: string | [];
   fields: Field[];
   inputFields: inputField[];
-  // inputFields: inputField;
-  type: inputField;
 };
 export type Field = {
   name: string;
@@ -44,16 +44,18 @@ export type Field = {
 };
 export type inputField = {
   name: string;
+  // type: ArgTypeObj;
   type: {
+    name: string | null;
     kind: string;
-    name: string;
-    ofType: string;
+    ofType: ArgTypeObj;
   };
 };
 
 export type DataType =
   | string
   | ArgObj
+  | ArgObj[]
   | Type
   | Type[]
   | ArgNameTypeObj
@@ -67,6 +69,7 @@ export type DataVariant =
   | 'query'
   | 'queryArr'
   | 'argObj'
+  | 'argObjArr'
   | 'type'
   | 'typeByString'
   | 'typeArr'

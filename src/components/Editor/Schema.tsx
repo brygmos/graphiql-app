@@ -59,55 +59,71 @@ const Schema: FC<Props> = ({ data }) => {
     }
   }
 
+  function isNonNullType(argObj: ArgObj) {
+    if (argObj.type.kind) return argObj.type.kind == 'NON_NULL';
+    if (argObj.type.ofType.kind) return argObj.type.ofType.kind == 'NON_NULL';
+    return false;
+  }
+  function isList(argObj: ArgObj) {
+    return (
+      argObj.type.kind == 'LIST' ||
+      argObj.type.ofType?.kind == 'LIST' ||
+      argObj.type.ofType?.ofType?.kind == 'LIST' ||
+      argObj.type.ofType?.ofType?.ofType?.kind == 'LIST'
+    );
+  }
+
+  function renderLinkToType(typeText: string, typeName: string = typeText) {
+    return (
+      <Link
+        color="primary"
+        onClick={(e) => {
+          e.stopPropagation();
+          handleTypeClick(typeName as string);
+        }}
+      >
+        {typeText}
+      </Link>
+    );
+  }
+
   function renderExpandedQuery(data: Query) {
+    let typeName: string;
+    if (data.type.name != null) typeName = data.type.name;
+    else typeName = data.type.ofType.name || '';
+    let typeText: string = typeName;
+    if (isNonNullType(data as ArgObj)) typeText = typeName + '!';
+    if ((data.type.kind = 'LIST')) typeText = '[' + typeText + ']';
+
     return (
       <div key={data.description}>
         <TreeItem
-          nodeId={data.description}
+          nodeId={data.description + 'descrr'}
           label={'*' + data.description + '*'}
           key={data.description + 'descr'}
         />
-        {data.args.length > 0 && (
-          <TreeItem nodeId={data.description} label="arguments" key={data.description}>
-            {data.args.map((argObj: ArgObj, idx) => {
-              const argName = argObj.name;
-              if (argObj.type.name) {
-                return (
-                  <TreeItem
-                    nodeId={argObj.type.name}
-                    key={idx + argName}
-                    label={
-                      <span>
-                        {argName} ::{' '}
-                        <Link
-                          color="primary"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleTypeClick(argObj.type.name as string);
-                          }}
-                        >
-                          {argObj.type.name}
-                        </Link>
-                      </span>
-                    }
-                  >
-                    {renderData(argObj.type.name, 'string')}
-                  </TreeItem>
-                );
-              }
-              if (argObj.type.kind) {
-                return (
-                  <div key={idx}>
-                    {argObj.type.ofType.name && renderData(argObj.type.ofType.name, 'string')}
-                    {argObj.type.kind && <Chip label={argObj.type.kind} color="success" />}
-                    <br />
-                    {argObj.type.ofType.kind && (
-                      <Chip label={argObj.type.ofType.kind} color="success" />
-                    )}
-                  </div>
-                );
-              }
-            })}
+        {data.type.name && (
+          <TreeItem
+            nodeId={data.description + 'type'}
+            label={<span>Type :H: {renderLinkToType(data.type.name)}</span>}
+            key={data.description}
+          />
+        )}
+        {!data.type.name && data.type.ofType.name && (
+          <TreeItem
+            nodeId={data.description + 'typelink'}
+            // label={<span>Type :HH: {renderLinkToType(data.type.ofType.name as string)}</span>}
+            label={<span>Type :HH: {renderLinkToType(typeText, typeName as string)}</span>}
+            key={data.description}
+          />
+        )}
+        {data.args && (
+          <TreeItem
+            nodeId={data.description + 'aargs'}
+            label="arguments"
+            key={data.description + 'ARGS'}
+          >
+            {renderData(data.args, 'argObjArr')}
           </TreeItem>
         )}
       </div>
@@ -124,9 +140,6 @@ const Schema: FC<Props> = ({ data }) => {
     if (!data) {
       return <TreeItem nodeId="nodata" label="*empty data*"></TreeItem>;
     }
-    // if (typeof data == 'string') {
-    //   return <TreeItem nodeId={data + 'STRING'} label={data} key={data} />;
-    // }
 
     if (Array.isArray(data)) {
       const render: ReactNode[] = data.map((el) => {
@@ -139,9 +152,17 @@ const Schema: FC<Props> = ({ data }) => {
           el = el as inputField;
           return renderData(el, 'inputField');
         }
-        if (dataVariant == ('queryArr' || 'fieldArr')) {
+        if (dataVariant == 'queryArr') {
+          el = el as Query;
+          return renderData(el, 'query');
+        }
+        if (dataVariant == 'fieldArr') {
           el = el as Query;
           return renderData(el, 'field');
+        }
+        if (dataVariant == 'argObjArr') {
+          el = el as ArgObj;
+          return <div key={el.name + 'sss'}>{renderData(el, 'argObj')}</div>;
         }
       });
       return render as ReactNode;
@@ -153,6 +174,11 @@ const Schema: FC<Props> = ({ data }) => {
     }
     if (dataVariant == 'field') {
       return Object.entries(data).map(([key, value]) => (
+        <div key={key}>{key == 'name' && <TreeItem nodeId={value} label={value}></TreeItem>}</div>
+      ));
+    }
+    if (dataVariant == 'query') {
+      return Object.entries(data).map(([key, value]) => (
         <div key={key}>
           {key == 'name' && (
             <TreeItem nodeId={value} label={value}>
@@ -161,6 +187,30 @@ const Schema: FC<Props> = ({ data }) => {
           )}
         </div>
       ));
+    }
+    if (dataVariant == 'argObj') {
+      data = data as ArgObj;
+
+      let typeName: string | null;
+      if (data.type.name != null) typeName = data.type.name;
+      else if (data.type.ofType.name != null) typeName = data.type.ofType.name;
+      else if (data.type.ofType.ofType.name != null) typeName = data.type.ofType.ofType.name;
+      else typeName = data.type.ofType.ofType.ofType?.name;
+
+      let typeText: string | null = typeName;
+      if (isNonNullType(data as ArgObj)) typeText = typeName + '!';
+      if (isList(data as ArgObj)) typeText = '[' + typeText + ']';
+      return (
+        <TreeItem
+          label={
+            <span>
+              {data.name} :I:{' '}
+              {typeText && <span>{renderLinkToType(typeText, typeName as string)}</span>}
+            </span>
+          }
+          nodeId={data.name + 'FIELDS'}
+        />
+      );
     }
     if (dataVariant == 'typeByString') {
       const typeObj: Type | undefined = findType(data as string);
@@ -178,17 +228,22 @@ const Schema: FC<Props> = ({ data }) => {
                 {renderData(typeObj.inputFields, 'inputFieldArr')}
               </TreeItem>
             )}
+            {typeObj.fields && (
+              <TreeItem label="Fields" nodeId={typeObj.name + 'FIELDSss'}>
+                {renderData(typeObj.fields, 'inputFieldArr')}
+              </TreeItem>
+            )}
             <hr />
           </>
         );
     }
     if (dataVariant == 'type') {
-      const type = data as Type;
+      const type = data as Query;
       if (type.type.name) {
         return (
           <TreeItem
-            nodeId={type.type.name}
-            key={type.type.name + type.name}
+            nodeId={type.description + type.type.name}
+            key={type.description + type.type.name}
             label={
               <span>
                 {type.name} :--:{' '}
@@ -202,21 +257,11 @@ const Schema: FC<Props> = ({ data }) => {
                 </Link>
               </span>
             }
-          ></TreeItem>
+          >
+            {type.description && <span>{type.description}</span>}
+          </TreeItem>
         );
       }
-      return (
-        <TreeItem nodeId={type.name} label={type.name + ' :,,: ' + type.type.name}>
-          {type.description && renderData(type.description, 'string')}
-          {type.kind && <Chip label={type.kind} color="success" />}
-          {type.fields && (
-            <TreeItem label="Fields" nodeId={type.name + 'FIELDS'}>
-              {renderData(type.fields, 'fieldArr')}
-            </TreeItem>
-          )}
-          <hr />
-        </TreeItem>
-      );
     }
   }
 
