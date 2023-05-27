@@ -4,7 +4,7 @@
     justify-content: center;
     width: 80vw;
     min-width: 320px;
-    height: 80vh;
+    /* height: 80vh; */
     /*max-height: 100vh;*/
     /*background-color: #3d3d3d;*/
     /*padding: 20px;*/
@@ -44,7 +44,12 @@
     padding: 20px;
     box-sizing: border-box;
 }
-
+.button_bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
 /*.response pre {*/
 /*    color: #3d3d3d;*/
 /*    background-color: white;*/

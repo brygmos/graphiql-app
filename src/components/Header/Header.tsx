@@ -14,6 +14,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import { Language } from '../Languages/Languages';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   window?: () => Window;
@@ -24,7 +25,7 @@ const drawerWidth = 240;
 export const Header = (props: Props) => {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
+  const { t } = useTranslation();
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
@@ -34,12 +35,12 @@ export const Header = (props: Props) => {
       <List>
         <ListItem component={Link} to="/" sx={{ textTransform: 'uppercase' }}>
           <ListItemButton sx={{ textAlign: 'center' }}>
-            <ListItemText primary="Welcome" />
+            <ListItemText primary={t('header.main')} />
           </ListItemButton>
         </ListItem>
         <ListItem component={Link} to="/editor" sx={{ textTransform: 'uppercase' }}>
           <ListItemButton sx={{ textAlign: 'center' }}>
-            <ListItemText primary="Editor" />
+            <ListItemText primary={t('header.editor')} />
           </ListItemButton>
         </ListItem>
       </List>
@@ -73,18 +74,18 @@ export const Header = (props: Props) => {
           >
             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
               <Button component={Link} to="/" sx={{ color: '#fff' }}>
-                Welcome
+              {t('header.main')}
               </Button>
               <Button component={Link} to="/editor" sx={{ color: '#fff' }}>
-                Editor
+                {t('header.editor')}
               </Button>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <Button component={Link} to="/login" color="inherit">
-                SignIn
+              {t('header.in')}
               </Button>
               <Button component={Link} to="/registration" color="inherit">
-                SignUp
+              {t('header.up')}
               </Button>
               <Language />
             </Box>

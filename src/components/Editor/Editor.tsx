@@ -205,47 +205,50 @@ const Editor = () => {
               />
             )}
             <br />
-            <Button
-              variant="contained"
-              color={'success'}
-              disabled={!!varsParseError || !!headersParseError}
-              onClick={handleSendClick}
-            >
-              {t('editor.send')}
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                setVarsVisibility(!varsVisibility);
-              }}
-            >
-              Vars
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                setHeadersVisibility(!headersVisibility);
-              }}
-            >
-              Headers
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                showSchemaHandler();
-              }}
-            >
-              Schema
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                theme == 'dark' ? setTheme(ThemeType.light) : setTheme(ThemeType.dark);
-              }}
-              startIcon={<Brightness4Icon />}
-            >
-              mode
-            </Button>
+            <div className={cl.button_bar}>
+                <Button
+                variant="contained"
+                color={'success'}
+                disabled={!!varsParseError || !!headersParseError}
+                onClick={handleSendClick}
+              >
+                {t('editor.send')}
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setVarsVisibility(!varsVisibility);
+                }}
+              >
+                {t('editor.var')}
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setHeadersVisibility(!headersVisibility);
+                }}
+              >
+                {t('editor.head')}
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  showSchemaHandler();
+                }}
+              >
+                {t('editor.schema')}
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  theme == 'dark' ? setTheme(ThemeType.light) : setTheme(ThemeType.dark);
+                }}
+                startIcon={<Brightness4Icon />}
+              >
+                {t('editor.mode')}
+              </Button>
+            </div>
+            
           </div>
         </div>
         <div className={cl.container__right}>

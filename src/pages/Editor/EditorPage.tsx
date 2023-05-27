@@ -4,6 +4,7 @@ import { removeUser } from '../../store/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import classes from './EditorPage.module.css';
 
 interface User {
   email: string;
@@ -26,7 +27,7 @@ function EditorPage() {
     navigate('/');
   };
   return (
-    <div className="App">
+    <div className={classes.app}>
       <h1>{t('editor.title')}</h1>
       <button onClick={handleClick}>
         {t('editor.log')} {user.email}
