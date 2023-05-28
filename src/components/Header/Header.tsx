@@ -94,21 +94,36 @@ export const Header = (props: Props) => {
           >
             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
               <Button component={Link} to="/" sx={{ color: '#fff' }}>
-                {t('header.main')}
+                {t('header.welcome')}
               </Button>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               {user.token && (
-                <Button component={Link} to="/editor" sx={{ display: { xs: 'none', sm: 'block' } }} color="inherit">
+                <Button
+                  component={Link}
+                  to="/editor"
+                  sx={{ display: { xs: 'none', sm: 'block' } }}
+                  color="inherit"
+                >
                   {t('header.main')}
                 </Button>
               )}
               {!user.token && (
                 <>
-                  <Button component={Link} to="/login" sx={{ display: { xs: 'none', sm: 'block' } }} color="inherit">
+                  <Button
+                    component={Link}
+                    to="/login"
+                    sx={{ display: { xs: 'none', sm: 'block' } }}
+                    color="inherit"
+                  >
                     {t('header.login')}
                   </Button>
-                  <Button component={Link} to="/registration" sx={{ display: { xs: 'none', sm: 'block' } }} color="inherit">
+                  <Button
+                    component={Link}
+                    to="/registration"
+                    sx={{ display: { xs: 'none', sm: 'block' } }}
+                    color="inherit"
+                  >
                     {t('header.register')}
                   </Button>
                 </>

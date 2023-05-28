@@ -8,13 +8,13 @@ import SignUpPage from './pages/SignUp/SignUpPage';
 import { useSelector } from 'react-redux';
 import { Notfound } from './pages/Notfound/Notfound';
 
-interface User {
+export interface User {
   email: string;
   token: string;
   id: string;
 }
 
-interface Store {
+export interface Store {
   user: User;
 }
 
@@ -27,7 +27,9 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Welcome />} />
           <Route path="/editor" element={user.token ? <EditorPage /> : <SignInPage />} />
-          <Route path="/login" element={user.token ? <EditorPage /> : <SignInPage />} />
+          {/*<Route path="/login" element={user.token ? <EditorPage /> : <SignInPage />} />*/}
+          {user.token && <Route path="/login" element={<EditorPage />} />}
+          {!user.token && <Route path="/login" element={<SignInPage />} />}
           <Route path="/registration" element={user.token ? <EditorPage /> : <SignUpPage />} />
           <Route path="*" element={<Notfound />} />
         </Route>

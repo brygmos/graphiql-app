@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
@@ -11,12 +11,24 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+// import Store from '../../App';
+// import {User} as 'gg' from '../../App';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
+
+interface Store {
+  user: UserStore;
+}
+
+interface UserStore {
+  email: string;
+  token: string;
+  id: string;
+}
 
 interface User {
   email: string;
@@ -29,6 +41,7 @@ type Inputs = {
 };
 
 export default function SignInPage() {
+  const user = useSelector((state: Store) => state.user);
   const {
     register,
     handleSubmit,
@@ -40,6 +53,7 @@ export default function SignInPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+
   const signIn = (user: User) => {
     const auth = getAuth();
     signInWithEmailAndPassword(auth, user.email, user.password)
@@ -108,11 +122,7 @@ export default function SignInPage() {
             autoComplete="email"
             autoFocus
           />
-          {errors.email && (
-            <span>
-              {t('auth.errMail')}
-            </span>
-          )}
+          {errors.email && <span>{t('auth.errMail')}</span>}
           {showEmailAlert && (
             <Alert severity="error" style={{ position: 'fixed', top: '20%', width: '26%' }}>
               {t('auth.notUser')}
@@ -136,11 +146,7 @@ export default function SignInPage() {
             id="password"
             autoComplete="current-password"
           />
-          {errors.password && (
-            <span>
-              {t('auth.errPass')}
-            </span>
-          )}
+          {errors.password && <span>{t('auth.errPass')}</span>}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             {t('auth.in')}
           </Button>
