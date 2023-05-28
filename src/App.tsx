@@ -26,11 +26,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Welcome />} />
-          <Route path="/editor" element={<EditorPage />} />
-          {/*disabled for development*/}
-          {/*<Route path="/editor" element={user.token ? <EditorPage /> : <SignInPage />} />*/}
-          <Route path="/login" element={<SignInPage />} />
-          <Route path="/registration" element={<SignUpPage />} />
+          <Route path="/editor" element={user.token ? <EditorPage /> : <SignInPage />} />
+          <Route path="/login" element={user.token ? <Welcome /> : <SignInPage />} />
+          <Route path="/registration" element={user.token ? <Welcome /> : <SignUpPage />} />
           <Route path="*" element={<Notfound />} />
         </Route>
       </Routes>
