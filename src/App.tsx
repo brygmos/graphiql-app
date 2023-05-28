@@ -1,3 +1,4 @@
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import { Welcome } from './pages/Welcome/Welcome';
@@ -5,13 +6,14 @@ import { Layout } from './components/Layout/Layouut';
 import EditorPage from './pages/Editor/EditorPage';
 import SignInPage from './pages/SignIn/SignInPage';
 import SignUpPage from './pages/SignUp/SignUpPage';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Notfound } from './pages/Notfound/Notfound';
+import { setUser } from './store/slices/userSlice';
 
 interface User {
-  email: string;
-  token: string;
-  id: string;
+  email?: string | null;
+  token?: string | null;
+  id?: string | null;
 }
 
 interface Store {
@@ -19,6 +21,18 @@ interface Store {
 }
 
 function App() {
+  const dispatch = useDispatch();
+  const userStorage = JSON.parse(localStorage.getItem('user')!);
+  if (userStorage !== null) {
+    dispatch(
+      setUser({
+        email: userStorage!.email,
+        id: userStorage!.uid,
+        token: userStorage!.refreshToken,
+      })
+    );
+  }
+
   const user = useSelector((state: Store) => state.user);
 
   return (
@@ -26,9 +40,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Welcome />} />
-          <Route path="/editor" element={user.token ? <EditorPage /> : <SignInPage />} />
-          <Route path="/login" element={user.token ? <Welcome /> : <SignInPage />} />
-          <Route path="/registration" element={user.token ? <Welcome /> : <SignUpPage />} />
+          <Route path="/editor" element={user.id ? <EditorPage /> : <SignInPage />} />
+          <Route path="/login" element={user.id ? <Welcome /> : <SignInPage />} />
+          <Route path="/registration" element={user.id ? <Welcome /> : <SignUpPage />} />
           <Route path="*" element={<Notfound />} />
         </Route>
       </Routes>

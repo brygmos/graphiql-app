@@ -51,6 +51,7 @@ export default function SignUpPage() {
             token: user.refreshToken,
           })
         );
+        localStorage.setItem('user', JSON.stringify(user));
         navigate('/editor');
       })
       .catch((error) => {

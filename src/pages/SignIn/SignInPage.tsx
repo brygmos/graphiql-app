@@ -51,6 +51,7 @@ export default function SignInPage() {
             token: user.refreshToken,
           })
         );
+        localStorage.setItem('user', JSON.stringify(user));
         navigate('/editor');
       })
       .catch((error) => {

@@ -9,9 +9,9 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorBoundaryFallback } from '../../components/ErrorBoundaryFallback/ErrorBoundaryFallback';
 
 interface User {
-  email: string;
-  token: string;
-  id: string;
+  email?: string | null;
+  token?: string | null;
+  id?: string | null;
 }
 
 interface Store {
@@ -26,6 +26,12 @@ function EditorPage() {
 
   const handleClick = () => {
     dispatch(removeUser());
+    const user = {
+      email: '',
+      id: '',
+      token: '',
+    };
+    localStorage.setItem('user', JSON.stringify(user));
     navigate('/');
   };
   return (
