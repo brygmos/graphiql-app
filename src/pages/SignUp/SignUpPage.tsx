@@ -51,6 +51,7 @@ export default function SignUpPage() {
             token: user.refreshToken,
           })
         );
+        localStorage.setItem('user', JSON.stringify(user));
         navigate('/editor');
       })
       .catch((error) => {
@@ -75,7 +76,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <Container component="main" maxWidth="xs" sx={{minHeight: '80vh', marginTop: '90px'}}>
+    <Container component="main" maxWidth="xs" sx={{ minHeight: '80vh', marginTop: '90px' }}>
       <CssBaseline />
       <Box
         sx={{

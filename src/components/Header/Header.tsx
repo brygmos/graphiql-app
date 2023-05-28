@@ -62,10 +62,10 @@ export const Header = (props: Props) => {
           </ListItemButton>
         </ListItem>
         <Button component={Link} to="/login" color="inherit">
-              {t('header.in')}
+          {t('header.in')}
         </Button>
         <Button component={Link} to="/registration" color="inherit">
-              {t('header.up')}
+          {t('header.up')}
         </Button>
       </List>
       <Divider />
@@ -80,81 +80,81 @@ export const Header = (props: Props) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <motion.div style={{
-            backgroundColor: bgColor,
-          }}>
-        <AppBar component="nav" sx={{backgroundColor: 'inherit'}}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              width: '100%',
-              alignItems: 'center',
-            }}
-          >
-            <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
-              <Language />
-              <Button component={Link} to="/" sx={{ color: '#fff' }}>
-                {t('header.welcome')}
-              </Button>
-              
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              {user.token && (
-                <Button
-                  component={Link}
-                  to="/editor"
-                  sx={{ display: { xs: 'none', sm: 'block' } }}
-                  color="inherit"
-                >
-                  {t('header.editor')}
+      <motion.div
+        style={{
+          backgroundColor: bgColor,
+        }}
+      >
+        <AppBar component="nav" sx={{ backgroundColor: 'inherit' }}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '100%',
+                alignItems: 'center',
+              }}
+            >
+              <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
+                <Language />
+                <Button component={Link} to="/" sx={{ color: '#fff' }}>
+                  {t('header.welcome')}
                 </Button>
-              )}
-              {!user.token && (
-                <>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                {user.email && (
                   <Button
                     component={Link}
-                    to="/login"
+                    to="/editor"
                     sx={{ display: { xs: 'none', sm: 'block' } }}
                     color="inherit"
                   >
-                    {t('header.in')}
+                    {t('header.editor')}
                   </Button>
-                  <Button
-                    component={Link}
-                    to="/registration"
-                    sx={{ display: { xs: 'none', sm: 'block' } }}
-                    color="inherit"
-                  >
-                    {t('header.up')}
+                )}
+                {!user.email && (
+                  <>
+                    <Button
+                      component={Link}
+                      to="/login"
+                      sx={{ display: { xs: 'none', sm: 'block' } }}
+                      color="inherit"
+                    >
+                      {t('header.in')}
+                    </Button>
+                    <Button
+                      component={Link}
+                      to="/registration"
+                      sx={{ display: { xs: 'none', sm: 'block' } }}
+                      color="inherit"
+                    >
+                      {t('header.up')}
+                    </Button>
+                  </>
+                )}
+                {user.email && (
+                  <Button component={Link} to="/login" color="inherit" onClick={handleClick}>
+                    {t('editor.log')}
                   </Button>
-                </>
-              )}
-              {user.token && (
-                <Button component={Link} to="/login" color="inherit" onClick={handleClick}>
-                  {t('editor.log')}
-                </Button>
-              )}
-              
+                )}
+              </Box>
             </Box>
-          </Box>
-          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
               <Language />
             </Box>
-        </Toolbar>
-      </AppBar>
+          </Toolbar>
+        </AppBar>
       </motion.div>
-      
+
       <Box component="nav">
         <Drawer
           container={container}
