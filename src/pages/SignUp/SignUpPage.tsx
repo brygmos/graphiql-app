@@ -75,7 +75,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" sx={{minHeight: '80vh', marginTop: '90px'}}>
       <CssBaseline />
       <Box
         sx={{

@@ -31,7 +31,8 @@
         "mode": "mode",
         "varEdit": "Variables editor",
         "ex": "exception",
-        "doc": "Documentation"
+        "doc": "Documentation",
+        "docTitle": "Queries"
     },
     "auth": {
         "in": "Sign In",

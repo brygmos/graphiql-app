@@ -15,6 +15,7 @@ import Button from '@mui/material/Button';
 import { Language } from '../Languages/Languages';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 
 interface Props {
   window?: () => Window;
@@ -29,6 +30,10 @@ export const Header = (props: Props) => {
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
+  const { scrollY } = useScroll();
+  const bgColors = ['#1976d2', '#094887'];
+  const offsetY = [0, 100];
+  const bgColor = useTransform(scrollY, offsetY, bgColors);
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -49,6 +54,7 @@ export const Header = (props: Props) => {
         <Button component={Link} to="/registration" color="inherit">
               {t('header.up')}
         </Button>
+     
       </List>
       <Divider />
     </Box>
@@ -59,7 +65,10 @@ export const Header = (props: Props) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar component="nav">
+      <motion.div style={{
+            backgroundColor: bgColor,
+          }}>
+        <AppBar component="nav" sx={{backgroundColor: 'inherit'}}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -70,7 +79,7 @@ export const Header = (props: Props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Box
+            <Box
             sx={{
               display: 'flex',
               justifyContent: 'space-around',
@@ -78,13 +87,16 @@ export const Header = (props: Props) => {
               alignItems: 'center',
             }}
           >
-            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+            
+            <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
+              <Language />
               <Button component={Link} to="/" sx={{ color: '#fff' }}>
               {t('header.main')}
               </Button>
               <Button component={Link} to="/editor" sx={{ color: '#fff' }}>
                 {t('header.editor')}
               </Button>
+              
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Button component={Link} to="/login" sx={{ display: { xs: 'none', sm: 'block' } }} color="inherit">
@@ -93,11 +105,17 @@ export const Header = (props: Props) => {
               <Button component={Link} sx={{ display: { xs: 'none', sm: 'block' } }} to="/registration" color="inherit">
               {t('header.up')}
               </Button>
+              
+            </Box>
+            </Box>
+            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
               <Language />
             </Box>
-          </Box>
+            
         </Toolbar>
       </AppBar>
+      </motion.div>
+      
       <Box component="nav">
         <Drawer
           container={container}
