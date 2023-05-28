@@ -43,6 +43,12 @@ export const Header = (props: Props) => {
             <ListItemText primary={t('header.editor')} />
           </ListItemButton>
         </ListItem>
+        <Button component={Link} to="/login" color="inherit">
+              {t('header.in')}
+        </Button>
+        <Button component={Link} to="/registration" color="inherit">
+              {t('header.up')}
+        </Button>
       </List>
       <Divider />
     </Box>
@@ -80,11 +86,11 @@ export const Header = (props: Props) => {
                 {t('header.editor')}
               </Button>
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Button component={Link} to="/login" color="inherit">
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Button component={Link} to="/login" sx={{ display: { xs: 'none', sm: 'block' } }} color="inherit">
               {t('header.in')}
               </Button>
-              <Button component={Link} to="/registration" color="inherit">
+              <Button component={Link} sx={{ display: { xs: 'none', sm: 'block' } }} to="/registration" color="inherit">
               {t('header.up')}
               </Button>
               <Language />

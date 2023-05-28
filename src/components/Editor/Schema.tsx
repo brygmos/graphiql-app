@@ -4,6 +4,7 @@ import TreeView from '@mui/lab/TreeView';
 import { TreeItem } from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { useTranslation } from 'react-i18next';
 
 export type SchemaServerResponse = {
   data: {
@@ -54,7 +55,7 @@ const Schema: FC<Props> = ({ data }) => {
       </>
     );
   }
-
+  const { t } = useTranslation();
   const queryNames: Field[] = data.data.__schema.types[0].fields;
   const graphQLTypes: Type[] = data.data.__schema.types;
 
@@ -159,7 +160,7 @@ const Schema: FC<Props> = ({ data }) => {
         </TreeItem>
       );
     }
-    return <span>*exception*</span>;
+    return <span>*{t('editor.ex')}*</span>;
   }
 
   function renderData(
@@ -204,7 +205,7 @@ const Schema: FC<Props> = ({ data }) => {
 
   return (
     <div style={{ color: 'white' }}>
-      <h1>Documentation</h1>
+      <h1>{t('editor.doc')}</h1>
       <TreeView
         aria-label="file system navigator"
         defaultCollapseIcon={<ExpandMoreIcon color="action" />}

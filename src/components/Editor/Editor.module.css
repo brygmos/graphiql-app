@@ -27,7 +27,7 @@
 }
 
 .editor{
-    background-color: cornflowerblue;
+    background-color: #1976d2;
     border-radius: 10px;
     width: 100%;
     height: 100%;
@@ -37,7 +37,7 @@
 }
 
 .response{
-    background-color: cornflowerblue;
+    background-color: #1976d2;
     border-radius: 10px;
     width: 100%;
     height: 100%;
@@ -49,6 +49,7 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    gap: 15px;
 }
 /*.response pre {*/
 /*    color: #3d3d3d;*/

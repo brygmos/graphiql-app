@@ -1,7 +1,8 @@
 {
     "welcome": {
         "welcome": "Welcome to the request editor for",
-        "toUse": "To use the editor, please log in."
+        "toUse": "To use the editor, please log in.",
+        "nf": "Sorry, this page was not found"
     },
     "header": {
         "welcome": "Welcome",
@@ -28,7 +29,9 @@
         "head": "headers",
         "schema": "schema",
         "mode": "mode",
-        "varEdit": "Variables editor"
+        "varEdit": "Variables editor",
+        "ex": "exception",
+        "doc": "Documentation"
     },
     "auth": {
         "in": "Sign In",
