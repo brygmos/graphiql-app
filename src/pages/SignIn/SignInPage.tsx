@@ -109,20 +109,15 @@ export default function SignInPage() {
             autoComplete="email"
             autoFocus
           />
-          {errors.email && (
-            <span>
-              Email должен состоять из минимум 8 символов, минимум одна буква, одна цифра, один
-              специальный символ
-            </span>
-          )}
+          {errors.email && <span>{t('auth.errMail')}</span>}
           {showEmailAlert && (
             <Alert severity="error" style={{ position: 'fixed', top: '20%', width: '26%' }}>
-              User not found
+              {t('auth.notUser')}
             </Alert>
           )}
           {showUserAlert && (
             <Alert severity="error" style={{ position: 'fixed', top: '20%', width: '26%' }}>
-              Wrong password
+              {t('auth.badPass')}
             </Alert>
           )}
           <TextField
@@ -138,12 +133,7 @@ export default function SignInPage() {
             id="password"
             autoComplete="current-password"
           />
-          {errors.password && (
-            <span>
-              Пароль должен состоять из минимум 8 символов, минимум одна буква, одна цифра, один
-              специальный символ
-            </span>
-          )}
+          {errors.password && <span>{t('auth.errPass')}</span>}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             {t('auth.in')}
           </Button>

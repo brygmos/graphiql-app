@@ -105,20 +105,15 @@ export default function SignUpPage() {
             autoComplete="email"
             autoFocus
           />
-          {errors.email && (
-            <span>
-              Email должен состоять из минимум 8 символов, минимум одна буква, одна цифра, один
-              специальный символ
-            </span>
-          )}
+          {errors.email && <span>{t('auth.errMail')}</span>}
           {showEmailUse && (
             <Alert severity="error" style={{ position: 'fixed', top: '20%', width: '26%' }}>
-              Такой пользователь уже существует
+              {t('auth.user')}
             </Alert>
           )}
           {showEmailIncorrect && (
             <Alert severity="error" style={{ position: 'fixed', top: '20%', width: '26%' }}>
-              Некорректный email
+              {t('auth.badMail')}
             </Alert>
           )}
           <TextField
@@ -134,12 +129,7 @@ export default function SignUpPage() {
             id="password"
             autoComplete="current-password"
           />
-          {errors.password && (
-            <span>
-              Пароль должен состоять из минимум 8 символов, минимум одна буква, одна цифра, один
-              специальный символ
-            </span>
-          )}
+          {errors.password && <span>{t('auth.errPass')}</span>}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             {t('auth.up')}
           </Button>

@@ -5,6 +5,8 @@ import { json } from '@codemirror/lang-json';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import Button from '@mui/material/Button';
 
+import { useTranslation } from 'react-i18next';
+
 type Props = {
   theme?: ThemeType;
   setResponse?: (arg0: string) => void;
@@ -14,6 +16,7 @@ type Props = {
 
 export const ResponseWindow: FC<Props> = ({ theme, response }) => {
   const [copyButtonText, setCopyButtonText] = useState('Copy');
+  const { t } = useTranslation();
 
   useEffect(() => {
     setCopyButtonText('Copy');
@@ -26,7 +29,7 @@ export const ResponseWindow: FC<Props> = ({ theme, response }) => {
 
   return (
     <div style={{ color: 'black' }}>
-      <label style={{ color: 'white' }}>Server response:</label>
+      <label style={{ color: 'white' }}>{t('editor.queryServ')}</label>
       <CodeMirror
         basicSetup={{ lineNumbers: false }}
         value={JSON.stringify(response, null, 2)}
