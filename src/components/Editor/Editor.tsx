@@ -270,7 +270,7 @@ const Editor = () => {
             )}
             <br />
             <div className={cl.button_bar}>
-                <Button
+              <Button
                 variant="contained"
                 color={'success'}
                 disabled={!!varsParseError || !!headersParseError}
@@ -312,7 +312,6 @@ const Editor = () => {
                 {t('editor.mode')}
               </Button>
             </div>
-            
           </div>
         </div>
         <div className={cl.container__right}>

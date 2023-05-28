@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import { Welcome } from './pages/Welcome/Welcome';
 import { Layout } from './components/Layout/Layouut';
@@ -20,6 +20,7 @@ export interface Store {
 
 function App() {
   const user = useSelector((state: Store) => state.user);
+  console.log(user.token);
 
   return (
     <div className="App">
@@ -27,9 +28,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Welcome />} />
           <Route path="/editor" element={user.token ? <EditorPage /> : <SignInPage />} />
-          {/*<Route path="/login" element={user.token ? <EditorPage /> : <SignInPage />} />*/}
-          {user.token && <Route path="/login" element={<EditorPage />} />}
-          {!user.token && <Route path="/login" element={<SignInPage />} />}
+          <Route path="/login" element={user.token ? null : <SignInPage />} />
           <Route path="/registration" element={user.token ? <EditorPage /> : <SignUpPage />} />
           <Route path="*" element={<Notfound />} />
         </Route>
