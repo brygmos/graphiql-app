@@ -15,7 +15,7 @@ export const Footer = () => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '25vh',
+        marginTop: 'auto'
       }}
     >
       <CssBaseline />
@@ -25,6 +25,7 @@ export const Footer = () => {
           py: 3,
           px: 2,
           mt: 'auto',
+          backgroundColor: '#c9cacb'
         }}
       >
         <Container

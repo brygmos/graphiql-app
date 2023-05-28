@@ -16,6 +16,7 @@ import { Language } from '../Languages/Languages';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { removeUser } from '../../store/slices/userSlice';
 
 interface Props {
@@ -44,6 +45,10 @@ export const Header = (props: Props) => {
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
+  const { scrollY } = useScroll();
+  const bgColors = ['#1976d2', '#094887'];
+  const offsetY = [0, 100];
+  const bgColor = useTransform(scrollY, offsetY, bgColors);
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -58,6 +63,12 @@ export const Header = (props: Props) => {
             <ListItemText primary="Editor" />
           </ListItemButton>
         </ListItem>
+        <Button component={Link} to="/login" color="inherit">
+              {t('header.in')}
+        </Button>
+        <Button component={Link} to="/registration" color="inherit">
+              {t('header.up')}
+        </Button>
       </List>
       <Divider />
     </Box>
@@ -73,7 +84,10 @@ export const Header = (props: Props) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar component="nav">
+      <motion.div style={{
+            backgroundColor: bgColor,
+          }}>
+        <AppBar component="nav" sx={{backgroundColor: 'inherit'}}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -84,7 +98,7 @@ export const Header = (props: Props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Box
+            <Box
             sx={{
               display: 'flex',
               justifyContent: 'flex-end',
@@ -92,10 +106,13 @@ export const Header = (props: Props) => {
               alignItems: 'center',
             }}
           >
-            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+            
+            <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
+              <Language />
               <Button component={Link} to="/" sx={{ color: '#fff' }}>
                 {t('header.welcome')}
               </Button>
+              
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               {user.token && (
@@ -135,9 +152,11 @@ export const Header = (props: Props) => {
               )}
               <Language />
             </Box>
-          </Box>
+            
         </Toolbar>
       </AppBar>
+      </motion.div>
+      
       <Box component="nav">
         <Drawer
           container={container}

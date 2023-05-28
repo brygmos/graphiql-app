@@ -17,7 +17,7 @@ import {
   Props,
 } from './Schema.types';
 import { useTranslation } from 'react-i18next';
-
+import classes from './Editor.module.css';
 
 const Schema: FC<Props> = ({ data }) => {
   const [firstTypeVisibility, setFirstTypeVisibility] = useState(false);
@@ -25,6 +25,7 @@ const Schema: FC<Props> = ({ data }) => {
   const [firstTypeActive, setFirstTypeActive] = useState<string>();
   const [secondTypeActive, setSecondTypeActive] = useState<string>();
   const { t } = useTranslation();
+
   if (!data) {
     return (
       <>
@@ -33,6 +34,7 @@ const Schema: FC<Props> = ({ data }) => {
       </>
     );
   }
+  
   const queryNames: Field[] = data.data.__schema.types[0].fields;
   const graphQLTypes: Type[] = data.data.__schema.types;
 
@@ -265,12 +267,12 @@ const Schema: FC<Props> = ({ data }) => {
 
   return (
     <div style={{ color: 'white' }}>
-      <h2 style={{ textAlign: 'center' }}>{t('editor.doc')}</h2>
+      <h2 style={{ textAlign: 'center' }} >{t('editor.doc')}</h2>
       <Grid container spacing={2} alignItems="center" alignSelf="center">
         <Grid xs={4} minWidth="250px" flexGrow={1}>
           <Paper>
-            <Typography variant="h4" textAlign="center">
-              Queries
+            <Typography variant="h5" textAlign="center">
+            {t('editor.docTitle')}
             </Typography>
             <TreeView
               aria-label="file system navigator"
