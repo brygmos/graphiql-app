@@ -109,8 +109,7 @@ const Schema: FC<Props> = ({ data }) => {
         {!data.type.name && data.type.ofType.name && (
           <TreeItem
             nodeId={data.description + 'typelink'}
-            // label={<span>Type :HH: {renderLinkToType(data.type.ofType.name as string)}</span>}
-            label={<span>Type :HH: {renderLinkToType(typeText, typeName as string)}</span>}
+            label={<span>Type : {renderLinkToType(typeText, typeName as string)}</span>}
             key={data.description}
           />
         )}
@@ -201,7 +200,7 @@ const Schema: FC<Props> = ({ data }) => {
         <TreeItem
           label={
             <span>
-              {data.name} :I:{' '}
+              {data.name} :{' '}
               {typeText && <span>{renderLinkToType(typeText, typeName as string)}</span>}
             </span>
           }
@@ -243,7 +242,7 @@ const Schema: FC<Props> = ({ data }) => {
             key={type.name + type.type.name}
             label={
               <span>
-                {type.name} :--:{' '}
+                {type.name} :{' '}
                 <Link
                   color="primary"
                   onClick={() => {

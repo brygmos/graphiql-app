@@ -13,10 +13,23 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import { Language } from '../Languages/Languages';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { removeUser } from '../../store/slices/userSlice';
 
 interface Props {
   window?: () => Window;
+}
+
+interface User {
+  email: string;
+  token: string;
+  id: string;
+}
+
+interface Store {
+  user: User;
 }
 
 const drawerWidth = 240;
@@ -24,7 +37,10 @@ const drawerWidth = 240;
 export const Header = (props: Props) => {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
+  const user = useSelector((state: Store) => state.user);
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
@@ -49,6 +65,11 @@ export const Header = (props: Props) => {
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
+  const handleClick = () => {
+    dispatch(removeUser());
+    navigate('/');
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -66,7 +87,7 @@ export const Header = (props: Props) => {
           <Box
             sx={{
               display: 'flex',
-              justifyContent: 'space-around',
+              justifyContent: 'flex-end',
               width: '100%',
               alignItems: 'center',
             }}
@@ -75,17 +96,28 @@ export const Header = (props: Props) => {
               <Button component={Link} to="/" sx={{ color: '#fff' }}>
                 Welcome
               </Button>
-              <Button component={Link} to="/editor" sx={{ color: '#fff' }}>
-                Editor
-              </Button>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Button component={Link} to="/login" color="inherit">
-                SignIn
-              </Button>
-              <Button component={Link} to="/registration" color="inherit">
-                SignUp
-              </Button>
+              {user.token && (
+                <Button component={Link} to="/editor" color="inherit">
+                  {t('header.main')}
+                </Button>
+              )}
+              {!user.token && (
+                <>
+                  <Button component={Link} to="/login" color="inherit">
+                    {t('header.login')}
+                  </Button>
+                  <Button component={Link} to="/registration" color="inherit">
+                    {t('header.register')}
+                  </Button>
+                </>
+              )}
+              {user.token && (
+                <Button component={Link} to="/login" color="inherit" onClick={handleClick}>
+                  {t('editor.log')}
+                </Button>
+              )}
               <Language />
             </Box>
           </Box>

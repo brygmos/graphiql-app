@@ -18,21 +18,10 @@ interface Store {
 }
 
 function EditorPage() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { t } = useTranslation();
-  const user = useSelector((state: Store) => state.user);
-
-  const handleClick = () => {
-    dispatch(removeUser());
-    navigate('/');
-  };
   return (
     <div className="App">
       <h1>{t('editor.title')}</h1>
-      <button onClick={handleClick}>
-        {t('editor.log')} {user.email}
-      </button>
       <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
         <Editor />
       </ErrorBoundary>

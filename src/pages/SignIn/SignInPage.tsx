@@ -99,7 +99,6 @@ export default function SignInPage() {
           <TextField
             {...register('email', {
               required: true,
-              pattern: /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g,
             })}
             margin="normal"
             fullWidth
