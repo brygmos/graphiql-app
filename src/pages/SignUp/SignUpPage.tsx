@@ -104,11 +104,7 @@ export default function SignUpPage() {
             autoComplete="email"
             autoFocus
           />
-          {errors.email && (
-            <span>
-              {t('auth.errMail')}
-            </span>
-          )}
+          {errors.email && <span>{t('auth.errMail')}</span>}
           {showEmailUse && (
             <Alert severity="error" style={{ position: 'fixed', top: '20%', width: '26%' }}>
               {t('auth.user')}
@@ -132,11 +128,7 @@ export default function SignUpPage() {
             id="password"
             autoComplete="current-password"
           />
-          {errors.password && (
-            <span>
-              {t('auth.errPass')}
-            </span>
-          )}
+          {errors.password && <span>{t('auth.errPass')}</span>}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             {t('auth.up')}
           </Button>
