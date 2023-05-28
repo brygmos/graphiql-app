@@ -14,15 +14,14 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import { Language } from '../Languages/Languages';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { removeUser } from '../../store/slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface Props {
   window?: () => Window;
 }
-
 interface User {
   email: string;
   token: string;
@@ -32,7 +31,6 @@ interface User {
 interface Store {
   user: User;
 }
-
 const drawerWidth = 240;
 
 export const Header = (props: Props) => {
@@ -55,12 +53,12 @@ export const Header = (props: Props) => {
       <List>
         <ListItem component={Link} to="/" sx={{ textTransform: 'uppercase' }}>
           <ListItemButton sx={{ textAlign: 'center' }}>
-            <ListItemText primary="Welcome" />
+            <ListItemText primary={t('header.main')} />
           </ListItemButton>
         </ListItem>
         <ListItem component={Link} to="/editor" sx={{ textTransform: 'uppercase' }}>
           <ListItemButton sx={{ textAlign: 'center' }}>
-            <ListItemText primary="Editor" />
+            <ListItemText primary={t('header.editor')} />
           </ListItemButton>
         </ListItem>
         <Button component={Link} to="/login" color="inherit">
@@ -75,12 +73,10 @@ export const Header = (props: Props) => {
   );
 
   const container = window !== undefined ? () => window().document.body : undefined;
-
   const handleClick = () => {
     dispatch(removeUser());
     navigate('/');
   };
-
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -98,15 +94,14 @@ export const Header = (props: Props) => {
           >
             <MenuIcon />
           </IconButton>
-            <Box
+          <Box
             sx={{
               display: 'flex',
-              justifyContent: 'flex-end',
+              justifyContent: 'space-between',
               width: '100%',
               alignItems: 'center',
             }}
           >
-            
             <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
               <Language />
               <Button component={Link} to="/" sx={{ color: '#fff' }}>
@@ -122,7 +117,7 @@ export const Header = (props: Props) => {
                   sx={{ display: { xs: 'none', sm: 'block' } }}
                   color="inherit"
                 >
-                  {t('header.main')}
+                  {t('header.editor')}
                 </Button>
               )}
               {!user.token && (
@@ -133,7 +128,7 @@ export const Header = (props: Props) => {
                     sx={{ display: { xs: 'none', sm: 'block' } }}
                     color="inherit"
                   >
-                    {t('header.login')}
+                    {t('header.in')}
                   </Button>
                   <Button
                     component={Link}
@@ -141,7 +136,7 @@ export const Header = (props: Props) => {
                     sx={{ display: { xs: 'none', sm: 'block' } }}
                     color="inherit"
                   >
-                    {t('header.register')}
+                    {t('header.up')}
                   </Button>
                 </>
               )}
@@ -150,9 +145,12 @@ export const Header = (props: Props) => {
                   {t('editor.log')}
                 </Button>
               )}
+              
+            </Box>
+          </Box>
+          <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
               <Language />
             </Box>
-            
         </Toolbar>
       </AppBar>
       </motion.div>

@@ -105,15 +105,14 @@ const Schema: FC<Props> = ({ data }) => {
         {data.type.name && (
           <TreeItem
             nodeId={data.description + 'type'}
-            label={<span>Type :H: {renderLinkToType(data.type.name)}</span>}
+            label={<span>Type: {renderLinkToType(data.type.name)}</span>}
             key={data.description}
           />
         )}
         {!data.type.name && data.type.ofType.name && (
           <TreeItem
             nodeId={data.description + 'typelink'}
-            // label={<span>Type :HH: {renderLinkToType(data.type.ofType.name as string)}</span>}
-            label={<span>Type :HH: {renderLinkToType(typeText, typeName as string)}</span>}
+            label={<span>Type: {renderLinkToType(typeText, typeName as string)}</span>}
             key={data.description}
           />
         )}
@@ -267,12 +266,12 @@ const Schema: FC<Props> = ({ data }) => {
 
   return (
     <div style={{ color: 'white' }}>
-      <h2 style={{ textAlign: 'center' }} >{t('editor.doc')}</h2>
+      <h2 style={{ textAlign: 'center' }}>{t('editor.doc')}</h2>
       <Grid container spacing={2} alignItems="center" alignSelf="center">
         <Grid xs={4} minWidth="250px" flexGrow={1}>
           <Paper>
             <Typography variant="h5" textAlign="center">
-            {t('editor.docTitle')}
+              {t('editor.docTitle')}
             </Typography>
             <TreeView
               aria-label="file system navigator"
