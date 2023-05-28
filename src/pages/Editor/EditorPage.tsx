@@ -4,6 +4,8 @@ import { removeUser } from '../../store/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundaryFallback } from '../../components/ErrorBoundaryFallback/ErrorBoundaryFallback';
 
 interface User {
   email: string;
@@ -31,7 +33,9 @@ function EditorPage() {
       <button onClick={handleClick}>
         {t('editor.log')} {user.email}
       </button>
-      <Editor />
+      <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+        <Editor />
+      </ErrorBoundary>
     </div>
   );
 }

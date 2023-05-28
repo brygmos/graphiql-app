@@ -1,7 +1,7 @@
 import React, { lazy, useEffect, useState, Suspense, ReactNode } from 'react';
 import cl from './Editor.module.css';
 import { useTranslation } from 'react-i18next';
-import { ImodalTextType } from '../../types/ImodalTextType';
+import { ImodalTextType } from '../Modal/ImodalTextType';
 import MyModal from '../Modal/MyModal';
 import VarsEditor from './VarsEditor/VarsEditor';
 import QueryEditor from './QueryEditor/QueryEditor';
@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import { Alert, CircularProgress, Snackbar } from '@mui/material';
 import HeadersEditor from '../HeadersEditor/HeadersEditor';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
-import { SchemaServerResponse } from './Schema';
+import { SchemaServerResponse } from './Schema.types';
 
 type Headers = {
   'Content-Type': string;
@@ -30,10 +30,8 @@ const Editor = () => {
   const [modalTextType, setModalTextType] = useState(ImodalTextType.neutral);
   const [vars, setVars] = useState({ page: 1, filter: { name: 'beth' } });
   const [introspectionResponse, setIntrospectionResponse] = useState<string | void | object>();
-  const [varsString, setVarsString] = useState(
-    '{\n  "page": 1,\n  "filter": {\n    "name": "beth"\n  }\n}'
-  );
-  const [headersString, setHeadersString] = useState('{\n  "Content-Type": "application/json"\n}');
+  const varsString = '{\n  "page": 1,\n  "filter": {\n    "name": "beth"\n  }\n}';
+  const headersString = '{\n  "Content-Type": "application/json"\n}';
   const [query, setQuery] = useState('');
   const [headers, setHeaders] = useState<Headers>({ 'Content-Type': 'application/json' });
   const [varsParseError, setVarsParseError] = useState<string | null>(null);
@@ -42,8 +40,74 @@ const Editor = () => {
   const prefersDarkMode =
     window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-  const schemaQuery =
-    'query IntrospectionQuery {__schema {queryType { name } types { name kind description fields { name description args { name description type { name kind ofType { name kind } } } } } }}';
+  const schemaQuery = `query IntrospectionQuery {
+      __schema {
+        queryType { name }
+        types {
+          name
+          kind
+          description
+          fields {
+            name
+            description
+            type { 
+              name
+              kind
+              ofType {
+                name
+                kind
+                ofType { 
+                  name
+                  kind 
+                }
+              }
+            }
+            args {
+              name
+              description
+              type {
+                name
+                kind
+                ofType {
+                  name
+                  kind
+                  ofType {
+                    name
+                    kind
+                    ofType {
+                      name
+                      kind
+                      name
+                      kind
+                      ofType {
+                        name
+                        kind
+                    }
+                    }
+                  }
+                }
+              }
+              defaultValue
+            }
+          }
+          inputFields {
+            name
+            type {
+              name
+              kind
+              ofType {
+                name
+                kind
+                ofType {
+                  name
+                  kind
+                }
+              }
+            }
+          }
+        }
+      }
+    }`;
 
   useEffect(() => {
     prefersDarkMode ? setTheme(ThemeType.dark) : setTheme(ThemeType.light);
