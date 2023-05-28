@@ -75,6 +75,12 @@ export const Header = (props: Props) => {
   const container = window !== undefined ? () => window().document.body : undefined;
   const handleClick = () => {
     dispatch(removeUser());
+    const user: User = {
+      email: '',
+      id: '',
+      token: '',
+    };
+    localStorage.setItem('user', JSON.stringify(user));
     navigate('/');
   };
   return (
