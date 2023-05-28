@@ -21,7 +21,7 @@
     /*background-color: #161616;*/
     background-color: cornflowerblue;
     color: black;
-    overflow-y: scroll;
+    position: relative;
 
 }
 
@@ -35,4 +35,12 @@
 
 .neutral{
     color: white;
+}
+.close {
+    cursor: pointer;
+    font-size: 2rem;
+    position: absolute;
+    right: 5%;
+    top: 5%;
+    color: ghostwhite;
 }

@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorBoundaryFallback } from '../../components/ErrorBoundaryFallback/ErrorBoundaryFallback';
+import classes from './EditorPage.module.css';
 
 interface User {
   email: string;
@@ -20,7 +21,7 @@ interface Store {
 function EditorPage() {
   const { t } = useTranslation();
   return (
-    <div className="App">
+    <div className={classes.app}>
       <h1>{t('editor.title')}</h1>
       <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
         <Editor />

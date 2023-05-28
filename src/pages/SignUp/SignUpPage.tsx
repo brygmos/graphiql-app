@@ -106,18 +106,17 @@ export default function SignUpPage() {
           />
           {errors.email && (
             <span>
-              Email должен состоять из минимум 8 символов, минимум одна буква, одна цифра, один
-              специальный символ
+              {t('auth.errMail')}
             </span>
           )}
           {showEmailUse && (
             <Alert severity="error" style={{ position: 'fixed', top: '20%', width: '26%' }}>
-              Такой пользователь уже существует
+              {t('auth.user')}
             </Alert>
           )}
           {showEmailIncorrect && (
             <Alert severity="error" style={{ position: 'fixed', top: '20%', width: '26%' }}>
-              Некорректный email
+              {t('auth.badMail')}
             </Alert>
           )}
           <TextField
@@ -135,8 +134,7 @@ export default function SignUpPage() {
           />
           {errors.password && (
             <span>
-              Пароль должен состоять из минимум 8 символов, минимум одна буква, одна цифра, один
-              специальный символ
+              {t('auth.errPass')}
             </span>
           )}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>

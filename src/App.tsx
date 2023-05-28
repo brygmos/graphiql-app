@@ -6,6 +6,7 @@ import EditorPage from './pages/Editor/EditorPage';
 import SignInPage from './pages/SignIn/SignInPage';
 import SignUpPage from './pages/SignUp/SignUpPage';
 import { useSelector } from 'react-redux';
+import { Notfound } from './pages/Notfound/Notfound';
 
 interface User {
   email: string;
@@ -28,6 +29,7 @@ function App() {
           <Route path="/editor" element={user.token ? <EditorPage /> : <SignInPage />} />
           <Route path="/login" element={user.token ? <EditorPage /> : <SignInPage />} />
           <Route path="/registration" element={user.token ? <EditorPage /> : <SignUpPage />} />
+          <Route path="*" element={<Notfound />} />
         </Route>
       </Routes>
     </div>
