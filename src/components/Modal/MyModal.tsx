@@ -33,6 +33,9 @@ const MyModal: FC<Props> = ({
               e.stopPropagation();
             }}
           >
+            <div className={cl.close} onClick={() => {
+              setModalVisibility();
+            }}>&#10006;</div>
             <h1 className={cl[messageType]}>{modalText}</h1>
             {children}
           </div>

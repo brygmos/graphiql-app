@@ -1,12 +1,14 @@
 {
     "welcome": {
         "welcome": "Welcome to the request editor for",
-        "toUse": "To use the editor, please log in."
+        "toUse": "To use the editor, please log in.",
+        "nf": "Sorry, this page was not found"
     },
     "header": {
         "welcome": "Welcome",
         "editor": "Editor",
-        "login": "Login",
+        "in": "Sign In",
+        "up": "Sign Up",
         "main": "Main"
     },
     "footer": {
@@ -18,8 +20,18 @@
         "send": "Send",
         "title": "Editor Page",
         "log": "Log out from",
+        "copy": "Copy",
+        "copied": "Copied",
         "query": "Enter your query:",
-        "res": "here will be api response"
+        "queryServ": "Server response:",
+        "res": "here will be api response",
+        "var": "vars",
+        "head": "headers",
+        "schema": "schema",
+        "mode": "mode",
+        "varEdit": "Variables editor",
+        "ex": "exception",
+        "doc": "Documentation"
     },
     "auth": {
         "in": "Sign In",
@@ -27,7 +39,13 @@
         "acc": "Already have an account? Sign in",
         "mail": "Email Address",
         "password": "Password",
-        "acc2": "Don't have an account? Sign Up"
+        "acc2": "Don't have an account? Sign Up",
+        "errMail": "Email must be at least 8 characters, at least one letter, one number, one special character",
+        "errPass": "Password must be at least 8 characters, at least one letter, one number, one special character",
+        "notUser": "User not found",
+        "badPass": "Wrong password",
+        "user": "This user already exists",
+        "badMail": "Invalid email"
     },
     "lang": {
         "langs": "Languages",

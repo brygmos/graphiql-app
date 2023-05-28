@@ -14,14 +14,12 @@
 
 .container{
     max-width: 90%;
-    width: 70%;
-    max-height: 90%;
     padding: 20px;
     border-radius: 10px;
     /*background-color: #161616;*/
     background-color: cornflowerblue;
     color: black;
-    overflow-y: scroll;
+    position: relative;
 
 }
 
@@ -35,4 +33,12 @@
 
 .neutral{
     color: white;
+}
+.close {
+    cursor: pointer;
+    font-size: 2rem;
+    position: absolute;
+    right: 5%;
+    top: 5%;
+    color: ghostwhite;
 }

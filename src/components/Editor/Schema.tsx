@@ -4,8 +4,6 @@ import TreeView from '@mui/lab/TreeView';
 import { TreeItem } from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography';
 import {
   ArgObj,
   Type,
@@ -16,13 +14,17 @@ import {
   Field,
   Props,
 } from './Schema.types';
+import Grid from '@mui/material/Unstable_Grid2';
+import Typography from '@mui/material/Typography';
+import { useTranslation } from 'react-i18next';
+
 
 const Schema: FC<Props> = ({ data }) => {
   const [firstTypeVisibility, setFirstTypeVisibility] = useState(false);
   const [secondTypeVisibility, setSecondTypeVisibility] = useState(false);
   const [firstTypeActive, setFirstTypeActive] = useState<string>();
   const [secondTypeActive, setSecondTypeActive] = useState<string>();
-
+  const { t } = useTranslation();
   if (!data) {
     return (
       <>
@@ -31,7 +33,7 @@ const Schema: FC<Props> = ({ data }) => {
       </>
     );
   }
-
+  
   const queryNames: Field[] = data.data.__schema.types[0].fields;
   const graphQLTypes: Type[] = data.data.__schema.types;
 
