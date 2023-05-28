@@ -2,14 +2,17 @@
     "welcome": {
         "welcome": "Welcome to the request editor for",
         "toUse": "To use the editor, please log in.",
+        "aboutCourse": "This course is aimed to the students of the RS School which passed RS School stage #2 and for the new students, which have experience with JS, TS, WebPack and so on...",
         "nf": "Sorry, this page was not found"
     },
     "header": {
         "welcome": "Welcome",
-        "editor": "Editor",
+        "editor": "Go to Main page",
+        "login": "Sign in",
+        "register": "Sign up",
+        "main": "Go to Main page",
         "in": "Sign In",
-        "up": "Sign Up",
-        "main": "Main"
+        "up": "Sign Up"
     },
     "footer": {
         "danik": "Daniil Russkikh",
@@ -19,19 +22,22 @@
     "editor": {
         "send": "Send",
         "title": "Editor Page",
-        "log": "Log out from",
+        "log": "Log out",
         "copy": "Copy",
         "copied": "Copied",
         "query": "Enter your query:",
-        "queryServ": "Server response:",
         "res": "here will be api response",
+        "vars": "Vars Editor",
+        "headers": "Headers Editor",
+        "queryServ": "Server response:",
         "var": "vars",
         "head": "headers",
         "schema": "schema",
         "mode": "mode",
         "varEdit": "Variables editor",
         "ex": "exception",
-        "doc": "Documentation"
+        "doc": "Documentation",
+        "docTitle": "Queries"
     },
     "auth": {
         "in": "Sign In",

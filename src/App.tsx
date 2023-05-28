@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import { Welcome } from './pages/Welcome/Welcome';
@@ -11,12 +10,12 @@ import { Notfound } from './pages/Notfound/Notfound';
 import { setUser } from './store/slices/userSlice';
 
 interface User {
-  email?: string | null;
-  token?: string | null;
-  id?: string | null;
+  email: string;
+  token: string;
+  id: string;
 }
 
-interface Store {
+export interface Store {
   user: User;
 }
 
@@ -41,8 +40,8 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Welcome />} />
           <Route path="/editor" element={user.id ? <EditorPage /> : <SignInPage />} />
-          <Route path="/login" element={user.id ? <Welcome /> : <SignInPage />} />
-          <Route path="/registration" element={user.id ? <Welcome /> : <SignUpPage />} />
+          <Route path="/login" element={user.id ? <EditorPage /> : <SignInPage />} />
+          <Route path="/registration" element={user.id ? <EditorPage /> : <SignUpPage />} />
           <Route path="*" element={<Notfound />} />
         </Route>
       </Routes>

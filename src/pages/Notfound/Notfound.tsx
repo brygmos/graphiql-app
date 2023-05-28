@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 export const Notfound = () => {
     const { t } = useTranslation();
     return (
-        <>
+        <div className={classes.wrap}>
         <Typography align='center' className={classes.title} >
         404
         </Typography>
@@ -14,6 +14,6 @@ export const Notfound = () => {
         <Typography className={classes.text} color="text.secondary">
         {t('welcome.nf')}
         </Typography>
-        </>
+        </div>
     );
 }

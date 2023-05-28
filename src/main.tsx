@@ -8,14 +8,13 @@ import { store } from './store';
 import './firebase';
 import './i18n';
 
-
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
         <Suspense fallback="loading">
           <App />
-        </Suspense> 
+        </Suspense>
       </Provider>
     </BrowserRouter>
   </React.StrictMode>
