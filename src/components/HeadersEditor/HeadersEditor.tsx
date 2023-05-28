@@ -31,7 +31,6 @@ export const HeadersEditor: FC<Props> = ({ theme, setVarsToParent, vars, parseEr
         extensions={[json()]}
         onChange={(vars) => {
           handleChange(vars);
-          console.log(vars);
         }}
       />
     </div>
