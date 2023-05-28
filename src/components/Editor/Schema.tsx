@@ -16,13 +16,15 @@ import {
   Field,
   Props,
 } from './Schema.types';
+import { useTranslation } from 'react-i18next';
+
 
 const Schema: FC<Props> = ({ data }) => {
   const [firstTypeVisibility, setFirstTypeVisibility] = useState(false);
   const [secondTypeVisibility, setSecondTypeVisibility] = useState(false);
   const [firstTypeActive, setFirstTypeActive] = useState<string>();
   const [secondTypeActive, setSecondTypeActive] = useState<string>();
-
+  const { t } = useTranslation();
   if (!data) {
     return (
       <>
@@ -31,7 +33,6 @@ const Schema: FC<Props> = ({ data }) => {
       </>
     );
   }
-
   const queryNames: Field[] = data.data.__schema.types[0].fields;
   const graphQLTypes: Type[] = data.data.__schema.types;
 
@@ -109,7 +110,8 @@ const Schema: FC<Props> = ({ data }) => {
         {!data.type.name && data.type.ofType.name && (
           <TreeItem
             nodeId={data.description + 'typelink'}
-            label={<span>Type : {renderLinkToType(typeText, typeName as string)}</span>}
+            // label={<span>Type :HH: {renderLinkToType(data.type.ofType.name as string)}</span>}
+            label={<span>Type :HH: {renderLinkToType(typeText, typeName as string)}</span>}
             key={data.description}
           />
         )}
@@ -200,7 +202,7 @@ const Schema: FC<Props> = ({ data }) => {
         <TreeItem
           label={
             <span>
-              {data.name} :{' '}
+              {data.name} :I:{' '}
               {typeText && <span>{renderLinkToType(typeText, typeName as string)}</span>}
             </span>
           }
@@ -263,7 +265,7 @@ const Schema: FC<Props> = ({ data }) => {
 
   return (
     <div style={{ color: 'white' }}>
-      <h2 style={{ textAlign: 'center' }}>Documentation</h2>
+      <h2 style={{ textAlign: 'center' }}>{t('editor.doc')}</h2>
       <Grid container spacing={2} alignItems="center" alignSelf="center">
         <Grid xs={4} minWidth="250px" flexGrow={1}>
           <Paper>
