@@ -15,8 +15,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-// import Store from '../../App';
-// import {User} as 'gg' from '../../App';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 

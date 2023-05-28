@@ -17,11 +17,11 @@
     width: 100%;
     padding: 20px;
     border-radius: 10px;
-    /*background-color: #161616;*/
     background-color: cornflowerblue;
     color: black;
     position: relative;
-
+    height: 80vh;
+    overflow-y: scroll;
 }
 
 .warning{
