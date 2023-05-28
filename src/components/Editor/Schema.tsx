@@ -4,6 +4,8 @@ import TreeView from '@mui/lab/TreeView';
 import { TreeItem } from '@mui/lab';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import Grid from '@mui/material/Unstable_Grid2';
+import Typography from '@mui/material/Typography';
 import {
   ArgObj,
   Type,
@@ -14,8 +16,6 @@ import {
   Field,
   Props,
 } from './Schema.types';
-import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 
 
@@ -33,7 +33,6 @@ const Schema: FC<Props> = ({ data }) => {
       </>
     );
   }
-  
   const queryNames: Field[] = data.data.__schema.types[0].fields;
   const graphQLTypes: Type[] = data.data.__schema.types;
 
@@ -245,7 +244,7 @@ const Schema: FC<Props> = ({ data }) => {
             key={type.name + type.type.name}
             label={
               <span>
-                {type.name} :--:{' '}
+                {type.name} :{' '}
                 <Link
                   color="primary"
                   onClick={() => {
@@ -266,7 +265,7 @@ const Schema: FC<Props> = ({ data }) => {
 
   return (
     <div style={{ color: 'white' }}>
-      <h2 style={{ textAlign: 'center' }}>Documentation</h2>
+      <h2 style={{ textAlign: 'center' }}>{t('editor.doc')}</h2>
       <Grid container spacing={2} alignItems="center" alignSelf="center">
         <Grid xs={4} minWidth="250px" flexGrow={1}>
           <Paper>

@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import { Welcome } from './pages/Welcome/Welcome';
 import { Layout } from './components/Layout/Layouut';
@@ -8,13 +8,13 @@ import SignUpPage from './pages/SignUp/SignUpPage';
 import { useSelector } from 'react-redux';
 import { Notfound } from './pages/Notfound/Notfound';
 
-interface User {
+export interface User {
   email: string;
   token: string;
   id: string;
 }
 
-interface Store {
+export interface Store {
   user: User;
 }
 

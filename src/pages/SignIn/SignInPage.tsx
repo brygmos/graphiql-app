@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
@@ -11,12 +11,24 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+// import Store from '../../App';
+// import {User} as 'gg' from '../../App';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
+
+interface Store {
+  user: UserStore;
+}
+
+interface UserStore {
+  email: string;
+  token: string;
+  id: string;
+}
 
 interface User {
   email: string;
@@ -29,6 +41,7 @@ type Inputs = {
 };
 
 export default function SignInPage() {
+  const user = useSelector((state: Store) => state.user);
   const {
     register,
     handleSubmit,
@@ -40,6 +53,7 @@ export default function SignInPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+
   const signIn = (user: User) => {
     const auth = getAuth();
     signInWithEmailAndPassword(auth, user.email, user.password)
@@ -99,7 +113,6 @@ export default function SignInPage() {
           <TextField
             {...register('email', {
               required: true,
-              pattern: /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g,
             })}
             margin="normal"
             fullWidth

@@ -15,16 +15,16 @@ type Props = {
 };
 
 export const ResponseWindow: FC<Props> = ({ theme, response }) => {
-  const [copyButtonText, setCopyButtonText] = useState('Copy');
   const { t } = useTranslation();
+  const [copyButtonText, setCopyButtonText] = useState(t('editor.copy') as string);
 
   useEffect(() => {
-    setCopyButtonText('Copy');
-  }, [response]);
+    setCopyButtonText(t('editor.copy') as string);
+  }, [response, t]);
 
   const copyHandler = () => {
     response && navigator.clipboard.writeText(JSON.stringify(response, null, 2));
-    setCopyButtonText('Copied');
+    setCopyButtonText(t('editor.copied') as string);
   };
 
   return (
