@@ -169,7 +169,7 @@ const Editor = () => {
       .then((data) => {
         setResponse(data);
         setIntrospectionResponse(data);
-        data.errors && setResponseError(data.errors[0].message);
+        setResponseError(data?.errors[0]?.message);
         return data;
       });
   }

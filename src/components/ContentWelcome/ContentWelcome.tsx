@@ -10,7 +10,7 @@ export const ContentWelcome = () => {
       <Image className={classes.img} src="assets/ram1.png" />
       <Typography align="center" className={classes.title}>
         {t('welcome.welcome')}{' '}
-        <a href={'https://rickandmortyapi.com'} target={'_blank'} rel="noreferrer">
+        <a href={'https://rickandmortyapi.com'} target="_blank" rel="noreferrer">
           Rick and Morty API
         </a>
       </Typography>
