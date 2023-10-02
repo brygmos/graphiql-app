@@ -17,7 +17,6 @@ import {
   Props,
 } from './Schema.types';
 import { useTranslation } from 'react-i18next';
-import classes from './Editor.module.css';
 
 const Schema: FC<Props> = ({ data }) => {
   const [firstTypeVisibility, setFirstTypeVisibility] = useState(false);
@@ -34,7 +33,7 @@ const Schema: FC<Props> = ({ data }) => {
       </>
     );
   }
-  
+
   const queryNames: Field[] = data.data.__schema.types[0].fields;
   const graphQLTypes: Type[] = data.data.__schema.types;
 

@@ -37,9 +37,6 @@ function EditorPage() {
   return (
     <div className={classes.app}>
       <h1>{t('editor.title')}</h1>
-      <button onClick={handleClick}>
-        {t('editor.log')} {user.email}
-      </button>
       <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
         <Editor />
       </ErrorBoundary>
