@@ -1,0 +1,17 @@
+.img {
+    max-width: 400px; width: 100%; display: block; margin: 100px auto 50px;
+}
+.text {
+    font-size: 25px !important;
+}
+.title {
+    font-size: 35px !important;
+}
+@media (max-width: 520px) {
+    .title {
+        font-size: 20px !important;
+    }
+    .text {
+        font-size: 18px !important;
+    }
+}
